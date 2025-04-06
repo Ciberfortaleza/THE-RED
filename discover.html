@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discover - THE RED</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('fondo.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            height: 100vh;
+            color: white;
+        }
+
+        header {
+            background-color: rgba(51, 51, 51, 0.8);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            transition: top 0.3s;
+        }
+
+        header.hidden {
+            top: -80px;
+        }
+
+        .logo {
+            height: 60px;
+        }
+
+        .content {
+            padding-top: 80px;
+            height: 1500px;
+        }
+
+        .footer-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: rgba(51, 51, 51, 0.8);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+        }
+
+        .footer-nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .discover-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            margin-top: 80px;
+        }
+
+        .discover-image {
+            width: 40%;
+            text-align: center;
+        }
+
+        .discover-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .discover-image .subtext {
+            margin-top: 10px;
+            font-size: 14px;
+            color: blue;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .discover-text {
+            width: 55%;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+        }
+
+        .discover-text h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .discover-text p {
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .filter-bar {
+            display: flex;
+            overflow-x: auto;
+            padding: 10px 20px;
+            background-color: rgba(51, 51, 51, 0.8);
+            margin-top: 80px;
+        }
+
+        .filter-bar span {
+            margin-right: 20px;
+            font-size: 16px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .filter-bar span:hover {
+            color: #ffcc00;
+        }
+
+        .discover-title {
+            font-size: 24px;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header id="header">
+        <div style="display: flex; align-items: center;">
+            <img src="logo.png" alt="Logo" class="logo">
+            <span class="discover-title">Discover</span>
+        </div>
+    </header>
+
+    <div class="filter-bar">
+        <span>Worldwide</span>
+        <span>Circus</span>
+        <span>Technology</span>
+        <span>Art</span>
+        <span>Music</span>
+        <span>Science</span>
+        <span>Events</span>
+        <span>Sports</span>
+        <span>Food</span>
+        <span>Travel</span>
+    </div>
+
+    <div class="discover-container">
+        <div class="discover-image">
+            <img src="jarra.jpg" alt="Discover Image">
+            <div class="subtext" onclick="location.href='perfilusu.html'">
+                username o nombre empresa o raza.
+            </div>
+        </div>
+
+        <div class="discover-text">
+            <h2>Descubre lo que hacemos</h2>
+            <p>
+                En THE RED, nos dedicamos a conectar personas con intereses comunes a través de eventos, publicaciones y comunidades. Nuestra plataforma permite a los usuarios descubrir nuevas experiencias, aprender de expertos y participar en actividades que enriquecen sus vidas. Ya sea que estés interesado en tecnología, arte, música o ciencia, tenemos algo para ti.
+            </p>
+            <p>
+                Explora nuestros filtros para encontrar contenido relevante y únete a nuestras comunidades para compartir tus ideas y proyectos. ¡Bienvenido a THE RED, donde la conexión y la creatividad se encuentran!
+            </p>
+        </div>
+    </div>
+
+    <div class="footer-nav">
+        <a href="1pagin.html">Home</a>
+        <a href="discover.html">Discover</a>
+        <a href="myRed.html">My Red</a>
+        <a href="profile.html">Profile</a>
+    </div>
+
+    <script>
+        let lastScrollTop = 0;
+        const header = document.getElementById('header');
+
+        window.addEventListener('scroll', function() {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            if (scrollTop > lastScrollTop) {
+                header.classList.add('hidden');
+            } else {
+                header.classList.remove('hidden');
+            }
+            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+        });
+    </script>
+</body>
+</html>

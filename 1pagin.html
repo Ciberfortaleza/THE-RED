@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FRED</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('fondo.jpg'); /* Imagen de fondo */
+            background-size: cover; /* Ajusta la imagen al tamaño de la pantalla */
+            background-position: center; /* Centra la imagen */
+            background-repeat: no-repeat; /* Evita que se repita */
+            background-attachment: fixed; /* Fondo fijo */
+            height: 100vh; /* Asegura que el fondo cubra toda la pantalla */
+            color: white; /* Texto en blanco para contrastar con el fondo */
+        }
+
+        header {
+            background-color: rgba(51, 51, 51, 0.8); /* Fondo semi-transparente */
+            color: white;
+            padding: 15px 20px; /* Padding para el header */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            transition: top 0.3s;
+        }
+
+        header.hidden {
+            top: -80px; /* Ajusté este valor para que coincida con el nuevo tamaño del logo */
+        }
+
+        .logo {
+            height: 60px; /* Tamaño del logo */
+        }
+
+        .content {
+            padding-top: 80px; /* Aumenté el padding-top para que el contenido no se solape con el header */
+            height: 1500px; /* Solo para demostración */
+        }
+
+        .footer-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: rgba(51, 51, 51, 0.8); /* Fondo semi-transparente */
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+        }
+
+        .footer-nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        /* Estilos para las imágenes con mensajes */
+        .image-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            display: none; /* Oculto por defecto */
+            z-index: 1000;
+        }
+
+        .image-popup img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .image-popup .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+        }
+
+        .image-popup .message {
+            margin-top: 10px;
+            font-size: 18px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header id="header">
+        <img src="logo.png" alt="Logo" class="logo">
+        <!-- Eliminé los botones de navegación del header -->
+    </header>
+
+    <div class="content">
+        <!-- Contenido de la página -->
+        <h1>Bienvenido a THE RED</h1>
+    </div>
+
+    <!-- Navegación inferior -->
+    <div class="footer-nav">
+        <a href="1pagin.html">Home</a> <!-- Cambiado para redirigir a la página actual -->
+        <a href="discover.html">Discover</a>
+        <a href="myred.html">My Role</a>
+        <a href="profile.html">Profile</a>
+    </div>
+
+    <!-- Popups de imágenes con mensajes -->
+    <div id="popup1" class="image-popup">
+        <button class="close-btn" onclick="closePopup('popup1')">X</button>
+        <img src="logo.png" alt="Imagen 1">
+        <div class="message">WELCOME IN THE RED</div>
+    </div>
+
+    <div id="popup2" class="image-popup">
+        <button class="close-btn" onclick="closePopup('popup2')">X</button>
+        <img src="ciberforta.jpg" alt="Imagen 2">
+        <div class="message">NOSOTROS LO HICIMOS</div>
+    </div>
+
+    <div id="popup3" class="image-popup">
+        <button class="close-btn" onclick="closePopup('popup3')">X</button>
+        <img src="3.png" alt="Imagen 3">
+        <div class="message">DISFRUTA DE TU CONEXION</div>
+    </div>
+
+    <script>
+        // Función para mostrar los popups uno tras otro
+        function showPopups() {
+            const popups = ['popup1', 'popup2', 'popup3'];
+            let index = 0;
+
+            function showNextPopup() {
+                if (index < popups.length) {
+                    const popup = document.getElementById(popups[index]);
+                    popup.style.display = 'block';
+                    popup.style.animation = 'fadeIn 0.5s';
+
+                    // Cerrar el popup actual después de un tiempo
+                    setTimeout(() => {
+                        popup.style.animation = 'fadeOut 0.5s';
+                        setTimeout(() => {
+                            popup.style.display = 'none';
+                            index++;
+                            showNextPopup();
+                        }, 500);
+                    }, 3000); // Mostrar cada popup durante 3 segundos
+                }
+            }
+
+            showNextPopup();
+        }
+
+        // Función para cerrar un popup
+        function closePopup(popupId) {
+            const popup = document.getElementById(popupId);
+            popup.style.animation = 'fadeOut 0.5s';
+            setTimeout(() => {
+                popup.style.display = 'none';
+            }, 500);
+        }
+
+        // Mostrar los popups al cargar la página
+        window.onload = showPopups;
+
+        // Efecto de ocultar el header al hacer scroll
+        let lastScrollTop = 0;
+        const header = document.getElementById('header');
+
+        window.addEventListener('scroll', function() {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            if (scrollTop > lastScrollTop) {
+                // Scroll hacia abajo
+                header.classList.add('hidden');
+            } else {
+                // Scroll hacia arriba
+                header.classList.remove('hidden');
+            }
+            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // Para manejar el scroll en la parte superior
+        });
+    </script>
+</body>
+</html>

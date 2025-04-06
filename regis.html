@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Usuario</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .registro-form {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        .registro-form input, .registro-form select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .registro-form button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .registro-form button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <form class="registro-form">
+        <h2>Registro de Usuario</h2>
+        <label>Nombre de usuario</label>
+        <input type="text" name="username" required>
+        
+        <label>Modo anónimo</label>
+        <select name="anonimo">
+            <option value="si">Sí</option>
+            <option value="no">No</option>
+        </select>
+        
+        <label>Número de teléfono</label>
+        <input type="tel" name="telefono" required>
+        
+        <label>Correo electrónico</label>
+        <input type="email" name="correo" required>
+        
+        <label>Foto de perfil</label>
+        <input type="file" name="foto" accept="image/*">
+        
+        <label>Fecha de nacimiento</label>
+        <input type="date" name="fecha_nacimiento" required>
+        
+        <label>País</label>
+        <select name="pais">
+            <option value="">Seleccione un país</option>
+            <option value="mx">México</option>
+            <option value="es">España</option>
+            <option value="ar">Argentina</option>
+            <option value="co">Colombia</option>
+            <option value="cl">Chile</option>
+        </select>
+        
+        <button type="submit">Registrarse</button>
+    </form>
+</body>
+</html>
