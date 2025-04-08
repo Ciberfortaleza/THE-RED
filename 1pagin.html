@@ -3,194 +3,252 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FRED</title>
+    <title>THE RED</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        /* Estilos generales */
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
-            background-image: url('fondo.jpg'); /* Imagen de fondo */
-            background-size: cover; /* Ajusta la imagen al tamaño de la pantalla */
-            background-position: center; /* Centra la imagen */
-            background-repeat: no-repeat; /* Evita que se repita */
-            background-attachment: fixed; /* Fondo fijo */
-            height: 100vh; /* Asegura que el fondo cubra toda la pantalla */
-            color: white; /* Texto en blanco para contrastar con el fondo */
+            font-family: 'Roboto Flex', sans-serif;
+            background: url("D:/8 PROYECTOS/The Red/assets/background.png") no-repeat center center fixed;
+            background-size: cover;
+            color: white;
         }
 
         header {
-            background-color: rgba(51, 51, 51, 0.8); /* Fondo semi-transparente */
-            color: white;
-            padding: 15px 20px; /* Padding para el header */
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 10px 20px;
+            background-color: rgba(0, 0, 0, 0.5); /* Más transparente */
             position: fixed;
-            width: 100%;
             top: 0;
-            transition: top 0.3s;
+            width: 100%;
+            box-sizing: border-box;
+            transition: top 0.3s ease, background-color 0.3s ease; /* Transición suave */
         }
 
         header.hidden {
-            top: -80px; /* Ajusté este valor para que coincida con el nuevo tamaño del logo */
+            top: -80px; /* Oculta el header moviéndolo fuera de la vista */
         }
 
         .logo {
-            height: 60px; /* Tamaño del logo */
+            height: 50px;
         }
 
-        .content {
-            padding-top: 80px; /* Aumenté el padding-top para que el contenido no se solape con el header */
-            height: 1500px; /* Solo para demostración */
+        .language-selector {
+            display: flex;
+            align-items: center;
         }
 
-        .footer-nav {
+        .language-text {
+            margin-right: 10px;
+            font-size: 16px;
+            font-weight: 700; /* Roboto Flex en Bold para LANGUAGE */
+        }
+
+        .language-button {
+            padding: 5px 10px;
+            background-color: purple;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .language-button:hover {
+            background-color: darkviolet;
+        }
+
+        .scroll-wall {
+            margin-top: 80px;
+            height: calc(100vh - 210px); /* Ajuste para dar espacio a los botones inferiores */
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .post {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            color: white;
+            font-size: 14px;
+            line-height: 1.6;
+            background: none;
+            border: 1px solid rgba(255, 255, 255, 0.3); /* Líneas para simular el marco sin cuadro */
+            border-radius: 10px;
+        }
+
+        .post img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%; /* Imagen redondeada */
+            margin: 0 15px;
+        }
+
+        .post.left {
+            flex-direction: row; /* Imagen a la izquierda */
+        }
+
+        .post.right {
+            flex-direction: row-reverse; /* Imagen a la derecha */
+        }
+
+        .bottom-buttons {
             position: fixed;
             bottom: 0;
             width: 100%;
-            background-color: rgba(51, 51, 51, 0.8); /* Fondo semi-transparente */
+            background-color: rgba(0, 0, 0, 0.8);
             display: flex;
             justify-content: space-around;
+            align-items: center;
             padding: 10px 0;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.5);
         }
 
-        .footer-nav a {
-            color: white;
-            text-decoration: none;
-            font-size: 16px;
-        }
-
-        /* Estilos para las imágenes con mensajes */
-        .image-popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: rgba(0, 0, 0, 0.8);
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            display: none; /* Oculto por defecto */
-            z-index: 1000;
-        }
-
-        .image-popup img {
+        .bottom-buttons img {
             max-width: 100%;
             height: auto;
-            border-radius: 10px;
-        }
-
-        .image-popup .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: red;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
             cursor: pointer;
+            transition: transform 0.2s ease;
         }
 
-        .image-popup .message {
-            margin-top: 10px;
-            font-size: 18px;
-            color: white;
+        .bottom-buttons img:hover {
+            transform: scale(1.1);
         }
     </style>
 </head>
 <body>
     <header id="header">
         <img src="logo.png" alt="Logo" class="logo">
-        <!-- Eliminé los botones de navegación del header -->
+        <div class="language-selector">
+            <span class="language-text">LANGUAGE:</span>
+            <button class="language-button" onclick="toggleLanguage()">EN</button>
+        </div>
     </header>
 
-    <div class="content">
-        <!-- Contenido de la página -->
-        <h1>Bienvenido a THE RED</h1>
+    <div class="scroll-wall" id="scroll-wall">
+        <!-- Publicaciones intercaladas -->
+        <div class="post left">
+            <img src="jarra.jpg" alt="Bicicleta Melchor">
+            <div>
+                <p><strong>Bicicleta Melchor</strong> de <strong>@PINGÜINO</strong></p>
+                <p>Mérida 216, Roma Norte, CDMX</p>
+                <p>Tel: 55 4893 8707</p>
+                <p>Visita: <a href="https://pinguinomexico.com" target="_blank" style="color: lightblue;">pinguinomexico.com</a></p>
+                <p><strong>Precio: $215 USD</strong></p>
+            </div>
+        </div>
+        <div class="post right">
+            <div>
+                <p><strong>Patines Delta</strong> de <strong>@PINGÜINO</strong></p>
+                <p>San Luis Potosí 365, Condesa, CDMX</p>
+                <p>Tel: 55 9876 5432</p>
+                <p>Visita: <a href="https://pinguinomexico.com" target="_blank" style="color: lightblue;">pinguinomexico.com</a></p>
+                <p><strong>Precio: $120 USD</strong></p>
+            </div>
+            <img src="assets/patines.jpg" alt="Patines Delta">
+        </div>
+        <div class="post left">
+            <img src="assets/casco.jpg" alt="Casco Flash">
+            <div>
+                <p><strong>Casco Flash</strong> de <strong>@PINGÜINO</strong></p>
+                <p>Ámsterdam 240, Hipódromo, CDMX</p>
+                <p>Tel: 55 1234 5678</p>
+                <p>Visita: <a href="https://pinguinomexico.com" target="_blank" style="color: lightblue;">pinguinomexico.com</a></p>
+                <p><strong>Precio: $85 USD</strong></p>
+            </div>
+        </div>
+        <div class="post right">
+            <div>
+                <p><strong>Scooter Speedy</strong> de <strong>@PINGÜINO</strong></p>
+                <p>Insurgentes 145, Juárez, CDMX</p>
+                <p>Tel: 55 6543 8765</p>
+                <p>Visita: <a href="https://pinguinomexico.com" target="_blank" style="color: lightblue;">pinguinomexico.com</a></p>
+                <p><strong>Precio: $300 USD</strong></p>
+            </div>
+            <img src="assets/scooter.jpg" alt="Scooter Speedy">
+        </div>
+        <div class="post left">
+            <img src="assets/mochila.jpg" alt="Mochila Voyager">
+            <div>
+                <p><strong>Mochila Voyager</strong> de <strong>@PINGÜINO</strong></p>
+                <p>Coyoacán 220, CDMX</p>
+                <p>Tel: 55 8765 4321</p>
+                <p>Visita: <a href="https://pinguinomexico.com" target="_blank" style="color: lightblue;">pinguinomexico.com</a></p>
+                <p><strong>Precio: $75 USD</strong></p>
+            </div>
+        </div>
     </div>
 
-    <!-- Navegación inferior -->
-    <div class="footer-nav">
-        <a href="1pagin.html">Home</a> <!-- Cambiado para redirigir a la página actual -->
-        <a href="discover.html">Discover</a>
-        <a href="myred.html">My Role</a>
-        <a href="profile.html">Profile</a>
-    </div>
-
-    <!-- Popups de imágenes con mensajes -->
-    <div id="popup1" class="image-popup">
-        <button class="close-btn" onclick="closePopup('popup1')">X</button>
-        <img src="logo.png" alt="Imagen 1">
-        <div class="message">WELCOME IN THE RED</div>
-    </div>
-
-    <div id="popup2" class="image-popup">
-        <button class="close-btn" onclick="closePopup('popup2')">X</button>
-        <img src="ciberforta.jpg" alt="Imagen 2">
-        <div class="message">NOSOTROS LO HICIMOS</div>
-    </div>
-
-    <div id="popup3" class="image-popup">
-        <button class="close-btn" onclick="closePopup('popup3')">X</button>
-        <img src="3.png" alt="Imagen 3">
-        <div class="message">DISFRUTA DE TU CONEXION</div>
+            <!-- Botones inferiores -->
+    <div class="bottom-buttons">
+        <img id="page1-button" src="assets/page1_blue.png" alt="Botón Page 1">
+        <img id="page2-button" src="assets/page2_blue.png" alt="Botón Page 2">
+        <img id="page3-button" src="assets/page3_blue.png" alt="Botón Page 3">
+        <img id="page4-button" src="assets/page4_blue.png" alt="Botón Page 4">
     </div>
 
     <script>
-        // Función para mostrar los popups uno tras otro
-        function showPopups() {
-            const popups = ['popup1', 'popup2', 'popup3'];
-            let index = 0;
+        // Define los botones inferiores y sus respectivas páginas
+        const buttons = [
+            { id: 'home-button', page: 'home' },
+            { id: 'page1-button', page: 'page1' },
+            { id: 'page2-button', page: 'page2' },
+            { id: 'page3-button', page: 'page3' }
+        ];
 
-            function showNextPopup() {
-                if (index < popups.length) {
-                    const popup = document.getElementById(popups[index]);
-                    popup.style.display = 'block';
-                    popup.style.animation = 'fadeIn 0.5s';
+        // Define la página actual (puedes cambiarlo según sea necesario)
+        const currentPage = 'home'; // Cambia esto según la página activa
 
-                    // Cerrar el popup actual después de un tiempo
-                    setTimeout(() => {
-                        popup.style.animation = 'fadeOut 0.5s';
-                        setTimeout(() => {
-                            popup.style.display = 'none';
-                            index++;
-                            showNextPopup();
-                        }, 500);
-                    }, 3000); // Mostrar cada popup durante 3 segundos
+        // Función para aplicar clases y estilos a los botones
+        function updateButtonModes() {
+            buttons.forEach(button => {
+                const element = document.getElementById(button.id);
+                
+                if (button.page === currentPage) {
+                    // Cambiar imagen PNG y aplicar clase de activo
+                    element.src = `assets/${button.page}_orange.png`; // Imagen naranja
+                    element.classList.add('active');
+                } else {
+                    // Cambiar imagen PNG y aplicar clase de inactivo
+                    element.src = `assets/${button.page}_blue.png`; // Imagen azul
+                    element.classList.remove('active');
                 }
-            }
-
-            showNextPopup();
+            });
         }
 
-        // Función para cerrar un popup
-        function closePopup(popupId) {
-            const popup = document.getElementById(popupId);
-            popup.style.animation = 'fadeOut 0.5s';
-            setTimeout(() => {
-                popup.style.display = 'none';
-            }, 500);
-        }
-
-        // Mostrar los popups al cargar la página
-        window.onload = showPopups;
-
-        // Efecto de ocultar el header al hacer scroll
-        let lastScrollTop = 0;
-        const header = document.getElementById('header');
-
-        window.addEventListener('scroll', function() {
-            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            if (scrollTop > lastScrollTop) {
-                // Scroll hacia abajo
-                header.classList.add('hidden');
-            } else {
-                // Scroll hacia arriba
-                header.classList.remove('hidden');
-            }
-            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // Para manejar el scroll en la parte superior
-        });
+        // Ejecutar la función al cargar la página
+        updateButtonModes();
     </script>
 </body>
+
+<script>
+        // Efecto de ocultar el header al hacer scroll en el contenedor scroll-wall
+let lastScrollTop = 0;
+const header = document.getElementById('header');
+const scrollWall = document.getElementById('scroll-wall');
+
+// Añadir evento de scroll al contenedor scroll-wall
+scrollWall.addEventListener('scroll', function() {
+    const scrollTop = scrollWall.scrollTop;
+
+    // Comparar la posición actual del scroll con la anterior
+    if (scrollTop > lastScrollTop) {
+        header.classList.add('hidden'); // Oculta el header hacia arriba
+    } else {
+        header.classList.remove('hidden'); // Muestra el header hacia abajo
+    }
+
+    // Actualizar la posición anterior del scroll
+    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // Asegura que el valor nunca sea negativo
+});
+
+</script>
+</body>
 </html>
+ 
+//debemos realizar mas cAMBIOS AYUDEN para que se hagan mas
