@@ -237,57 +237,55 @@
             document.getElementById('login-form').style.display = 'none';
             document.getElementById('register-form').style.display = 'block';
         });
-
+    
         document.getElementById('show-login').addEventListener('click', (e) => {
             e.preventDefault();
             document.getElementById('register-form').style.display = 'none';
             document.getElementById('login-form').style.display = 'block';
         });
-
+    
         // Validación básica de Login
         document.getElementById('login-button').addEventListener('click', () => {
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
-
+    
             if (!email || !password) {
                 document.getElementById('login-error').textContent = 'Complete all fields.';
                 return;
             }
             
-            // Simular redirección
+            // Redirección a 1pagin.html
             document.getElementById('login-error').textContent = '';
-            window.location.href = '1pagin.html'; // Eliminar si no existe
+            window.location.href = '1pagin.html';
         });
-
+    
         // Validación básica de Registro
         document.getElementById('register-button').addEventListener('click', () => {
             const email = document.getElementById('register-email').value;
             const password = document.getElementById('register-password').value;
             const confirmPassword = document.getElementById('register-confirm-password').value;
-
+    
             if (!email || !password || !confirmPassword) {
                 document.getElementById('register-error').textContent = 'All fields are required.';
                 return;
             }
-
+    
             if (password !== confirmPassword) {
                 document.getElementById('register-error').textContent = 'Passwords do not match.';
                 return;
             }
-
+    
             if (password.length < 6) {
                 document.getElementById('register-error').textContent = 'Password must be at least 6 characters.';
                 return;
             }
-
-            // Simular registro
+    
+            // Simular registro y redirección
             document.getElementById('register-error').textContent = '';
             document.getElementById('register-success').textContent = 'Registration successful! Redirecting...';
             
             setTimeout(() => {
-                document.getElementById('register-form').style.display = 'none';
-                document.getElementById('login-form').style.display = 'block';
-                document.getElementById('register-success').textContent = '';
+                window.location.href = 'regis.html';
             }, 2000);
         });
     </script>
