@@ -3,339 +3,292 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Login</title>
+    <title>Sistema de Login - THE RED</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0); }
+        }
+    
+        @keyframes zoom {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.4); }
+        }
+    
+        /* Estilos generales */
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f5f5f5;
             margin: 0;
-            padding: 0;
+            font-family: 'Roboto Flex', sans-serif;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px;
+            box-sizing: border-box;
+            color: white;
+            overflow: hidden;
+            position: relative;
+        }
+    
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("background_Login.png") no-repeat center center;
+            background-size: cover;
+            animation: zoom 60s linear infinite;
+            z-index: -1;
+        }
+    
+        /* Contenedor del Logo */
+        .logo-container {
+            flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            color: #333;
+            margin-right: 60px;
+            padding: 150px;
+            opacity: 0;
+            animation: 
+                fadeIn 1s ease-in forwards,
+                float 3s ease-in-out infinite 1s;
+            z-index: 1;
         }
-        
-        .login-container {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            width: 350px;
-            padding: 30px;
+    
+        .logo-container img {
+            max-width: 80%;
+            height: auto;
+        }
+    
+        /* Contenedor del Formulario */
+        .form-container {
+            flex: 0 0 420px;
+            background-color: rgba(64, 0, 64, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            padding: 50px 40px;
             text-align: center;
+            color: white;
+            height: 450px;
+            opacity: 0;
+            animation: fadeIn 1s ease-in forwards 0.5s;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
-        
-        h1 {
-            color: #2c3e50;
+    
+        /* Elementos del formulario */
+        .form-container h1 {
+            font-size: 40px;
             margin-bottom: 30px;
-            font-size: 24px;
+            font-weight: bold;
+            line-height: 1.2;
         }
-        
+    
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             text-align: left;
         }
-        
+    
         label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             font-weight: bold;
-            color: #2c3e50;
+            font-size: 16px;
         }
-        
+    
         input {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            background-color: rgba(64, 0, 64, 0.8);
+            color: white;
+            border-radius: 10px;
             font-size: 16px;
             box-sizing: border-box;
+            margin-top: 5px;
         }
-        
+    
         button {
-            background-color: #3498db;
+            background-color: #4b6ea9;
             color: white;
             border: none;
-            padding: 12px 20px;
-            border-radius: 5px;
+            padding: 15px 20px;
+            border-radius: 15px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 18px;
             width: 100%;
             transition: background-color 0.3s;
+            margin-top: 15px;
         }
-        
+    
         button:hover {
-            background-color: #2980b9;
+            background-color: #365489;
         }
-        
+    
         .toggle-form {
             margin-top: 20px;
             font-size: 14px;
         }
-        
+    
         .toggle-form a {
-            color: #3498db;
+            color: #4b6ea9;
             text-decoration: none;
             cursor: pointer;
         }
-        
+    
         .toggle-form a:hover {
             text-decoration: underline;
         }
-        
-        .hidden {
-            display: none;
-        }
-        
-        .error-message {
+    
+        .messages {
             color: #e74c3c;
             font-size: 14px;
-            margin-top: 10px;
+            margin-top: 15px;
         }
-        
-        .success-message {
-            color: #2ecc71;
-            font-size: 14px;
-            margin-top: 10px;
+    
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+                padding: 20px;
+            }
+            
+            .logo-container {
+                margin-right: 0;
+                margin-bottom: 40px;
+                padding: 20px;
+            }
+            
+            .form-container {
+                width: 100%;
+                max-width: 400px;
+                height: auto;
+                min-height: 450px;
+                padding: 40px 30px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <!-- Formulario de Inicio de Sesión -->
+    <!-- Contenedor del Logo -->
+    <div class="logo-container">
+        <img src="logo.png" alt="THE RED Logo">
+    </div>
+
+    <!-- Contenedor del Formulario -->
+    <div class="form-container" id="form-container">
         <div id="login-form">
-            <h1>Iniciar Sesión</h1>
+            <h1>Glad to see Ya!</h1>
             <div class="form-group">
-                <label for="login-email">Correo Electrónico</label>
-                <input type="email" id="login-email" placeholder="Ingresa tu correo electrónico">
+                <label for="login-email">Email</label>
+                <input type="email" id="login-email" placeholder="Enter your email">
             </div>
             <div class="form-group">
-                <label for="login-password">Contraseña</label>
-                <input type="password" id="login-password" placeholder="Ingresa tu contraseña">
+                <label for="login-password">Password</label>
+                <input type="password" id="login-password" placeholder="Enter your password">
             </div>
-            <button id="login-button">Iniciar Sesión</button>
-            <div id="login-error" class="error-message"></div>
+            <button id="login-button">LOGIN</button>
+            <p id="login-error" class="messages"></p>
             <div class="toggle-form">
-                ¿No tienes una cuenta? <a id="show-register">Regístrate aquí</a>
+                Don't have an account? <a href="#" id="show-register">Register here</a>
             </div>
         </div>
-        
-        <!-- Formulario de Registro -->
-        <div id="register-form" class="hidden">
-            <h1>Registrarse</h1>
+
+        <div id="register-form" style="display: none;">
+            <h1>Create Your Account</h1>
             <div class="form-group">
-                <label for="register-email">Correo Electrónico</label>
-                <input type="email" id="register-email" placeholder="Ingresa tu correo electrónico">
+                <label for="register-email">Email</label>
+                <input type="email" id="register-email" placeholder="Enter your email">
             </div>
             <div class="form-group">
-                <label for="register-password">Contraseña</label>
-                <input type="password" id="register-password" placeholder="Crea una contraseña (mínimo 6 caracteres)">
+                <label for="register-password">Password</label>
+                <input type="password" id="register-password" placeholder="Enter your password">
             </div>
             <div class="form-group">
-                <label for="register-confirm-password">Confirmar Contraseña</label>
-                <input type="password" id="register-confirm-password" placeholder="Confirma tu contraseña">
+                <label for="register-confirm-password">Confirm Password</label>
+                <input type="password" id="register-confirm-password" placeholder="Confirm your password">
             </div>
-            <button id="register-button">Crear Cuenta</button>
-            <div id="register-error" class="error-message"></div>
-            <div id="register-success" class="success-message"></div>
+            <button id="register-button">CREATE ACCOUNT</button>
+            <p id="register-error" class="messages"></p>
+            <p id="register-success" class="messages" style="color: #2ecc71;"></p>
             <div class="toggle-form">
-                ¿Ya tienes una cuenta? <a id="show-login">Inicia sesión aquí</a>
+                Already have an account? <a href="#" id="show-login">Login here</a>
             </div>
         </div>
     </div>
 
-    <script type="module">
-        // Importaciones de Firebase (versión modular v9+)
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-        import { 
-            getAuth, 
-            createUserWithEmailAndPassword, 
-            signInWithEmailAndPassword,
-            onAuthStateChanged 
-        } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
-        import { 
-            getFirestore,
-            doc,
-            setDoc,
-            serverTimestamp
-        } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
-        import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-analytics.js";
-
-        // Configuración de Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyApU8UbfqfzBH1UPU3a1CQGf1p995Rf0y4",
-            authDomain: "the-red-loggin.firebaseapp.com",
-            projectId: "the-red-loggin",
-            storageBucket: "the-red-loggin.firebasestorage.app",
-            messagingSenderId: "40265573777",
-            appId: "1:40265573777:web:1651cb4119969010ea2630",
-            measurementId: "G-DPLC00RS2V"
-        };
-        
-        // Inicializar Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const analytics = getAnalytics(app);
-
-        // Referencias a elementos del DOM
-        const loginForm = document.getElementById('login-form');
-        const registerForm = document.getElementById('register-form');
-        const showRegister = document.getElementById('show-register');
-        const showLogin = document.getElementById('show-login');
-        const loginButton = document.getElementById('login-button');
-        const registerButton = document.getElementById('register-button');
-        const loginError = document.getElementById('login-error');
-        const registerError = document.getElementById('register-error');
-        const registerSuccess = document.getElementById('register-success');
-        
-        // Alternar entre formularios
-        showRegister.addEventListener('click', () => {
-            loginForm.classList.add('hidden');
-            registerForm.classList.remove('hidden');
-            clearMessages();
-            logEvent(analytics, 'show_register_form');
+    <script>
+        // Alternar formularios
+        document.getElementById('show-register').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('register-form').style.display = 'block';
         });
-        
-        showLogin.addEventListener('click', () => {
-            registerForm.classList.add('hidden');
-            loginForm.classList.remove('hidden');
-            clearMessages();
-            logEvent(analytics, 'show_login_form');
+
+        document.getElementById('show-login').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('register-form').style.display = 'none';
+            document.getElementById('login-form').style.display = 'block';
         });
-        
-        function clearMessages() {
-            loginError.textContent = '';
-            registerError.textContent = '';
-            registerSuccess.textContent = '';
-        }
-        
-        // Manejo de Login
-        loginButton.addEventListener('click', async () => {
+
+        // Validación básica de Login
+        document.getElementById('login-button').addEventListener('click', () => {
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
-            
+
             if (!email || !password) {
-                loginError.textContent = 'Por favor, completa todos los campos.';
-                logEvent(analytics, 'login_validation_error');
+                document.getElementById('login-error').textContent = 'Complete all fields.';
                 return;
             }
             
-            try {
-                await signInWithEmailAndPassword(auth, email, password);
-                logEvent(analytics, 'login_success', {
-                    method: 'email_password'
-                });
-                window.location.href = '1pagin.html';
-            } catch (error) {
-                logEvent(analytics, 'login_error', {
-                    error_code: error.code
-                });
-                handleLoginError(error);
-            }
+            // Simular redirección
+            document.getElementById('login-error').textContent = '';
+            window.location.href = '1pagin.html'; // Eliminar si no existe
         });
-        
-        function handleLoginError(error) {
-            let message;
-            switch (error.code) {
-                case 'auth/invalid-email':
-                    message = 'Correo electrónico no válido';
-                    break;
-                case 'auth/user-disabled':
-                    message = 'Cuenta deshabilitada';
-                    break;
-                case 'auth/user-not-found':
-                case 'auth/wrong-password':
-                    message = 'Correo o contraseña incorrectos';
-                    break;
-                default:
-                    message = 'Error al iniciar sesión';
-            }
-            loginError.textContent = message;
-        }
-        
-        // Manejo de Registro - CÓDIGO MEJORADO
-        registerButton.addEventListener('click', async () => {
-            const email = document.getElementById('register-email').value.trim();
+
+        // Validación básica de Registro
+        document.getElementById('register-button').addEventListener('click', () => {
+            const email = document.getElementById('register-email').value;
             const password = document.getElementById('register-password').value;
             const confirmPassword = document.getElementById('register-confirm-password').value;
-            
-            // Validaciones mejoradas
+
             if (!email || !password || !confirmPassword) {
-                registerError.textContent = 'Todos los campos son obligatorios';
-                logEvent(analytics, 'register_validation_error');
+                document.getElementById('register-error').textContent = 'All fields are required.';
                 return;
             }
-            
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                registerError.textContent = 'Ingresa un correo electrónico válido';
-                return;
-            }
-            
+
             if (password !== confirmPassword) {
-                registerError.textContent = 'Las contraseñas no coinciden';
-                logEvent(analytics, 'register_password_mismatch');
+                document.getElementById('register-error').textContent = 'Passwords do not match.';
                 return;
             }
-            
+
             if (password.length < 6) {
-                registerError.textContent = 'La contraseña debe tener al menos 6 caracteres';
-                logEvent(analytics, 'register_weak_password');
+                document.getElementById('register-error').textContent = 'Password must be at least 6 characters.';
                 return;
             }
+
+            // Simular registro
+            document.getElementById('register-error').textContent = '';
+            document.getElementById('register-success').textContent = 'Registration successful! Redirecting...';
             
-            try {
-                // 1. Crear usuario en Authentication
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                console.log("Usuario creado en Auth:", userCredential.user.uid);
-                
-                // 2. Guardar datos adicionales en Firestore
-                await setDoc(doc(db, "users", userCredential.user.uid), {
-                    email: email,
-                    createdAt: serverTimestamp(),
-                    lastLogin: serverTimestamp(),
-                    status: "active"
-                });
-                console.log("Datos guardados en Firestore");
-                
-                // 3. Mostrar mensaje de éxito
-                registerSuccess.textContent = '¡Registro exitoso! Redirigiendo...';
-                registerError.textContent = '';
-                
-                // 4. Redirigir después de 2 segundos
-                setTimeout(() => {
-                    window.location.href = 'regis.html';
-                }, 2000);
-                
-            } catch (error) {
-                console.error("Error completo:", error);
-                let errorMessage = "Error al registrarse. Intenta nuevamente.";
-                
-                if (error.code === 'auth/email-already-in-use') {
-                    errorMessage = 'Este correo ya está registrado';
-                } else if (error.code === 'auth/invalid-email') {
-                    errorMessage = 'Correo electrónico no válido';
-                } else if (error.code === 'auth/weak-password') {
-                    errorMessage = 'La contraseña debe tener al menos 6 caracteres';
-                } else if (error.code === 'auth/network-request-failed') {
-                    errorMessage = 'Error de conexión. Verifica tu internet';
-                }
-                
-                registerError.textContent = errorMessage;
-                logEvent(analytics, 'register_error', {
-                    error_code: error.code,
-                    error_message: error.message
-                });
-            }
-        });
-        
-        // Verificar si el usuario ya está autenticado
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                logEvent(analytics, 'auto_login_detected');
-                window.location.href = 'regis.html';
-            }
+            setTimeout(() => {
+                document.getElementById('register-form').style.display = 'none';
+                document.getElementById('login-form').style.display = 'block';
+                document.getElementById('register-success').textContent = '';
+            }, 2000);
         });
     </script>
 </body>
