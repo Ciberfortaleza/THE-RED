@@ -4,70 +4,111 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Login - THE RED</title>
-    <!-- Agregar Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0); }
+        }
+    
+        @keyframes zoom {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.4); }
+        }
+    
+        /* Estilos generales */
         body {
             margin: 0;
             font-family: 'Roboto Flex', sans-serif;
             height: 100vh;
-            background: url('assets/background_Login.png') no-repeat center center fixed;
-            background-size: cover;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 60px;
             box-sizing: border-box;
             color: white;
+            overflow: hidden;
+            position: relative;
         }
-
+    
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("D:/8 PROYECTOS/The Red/assets/background_Login.png") no-repeat center center;
+            background-size: cover;
+            animation: zoom 60s linear infinite;
+            z-index: -1;
+        }
+    
+        /* Contenedor del Logo */
         .logo-container {
             flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100%;
             margin-right: 60px;
             padding: 150px;
-            box-sizing: border-box;
+            opacity: 0;
+            animation: 
+                fadeIn 1s ease-in forwards,
+                float 3s ease-in-out infinite 1s;
+            z-index: 1;
         }
-
+    
         .logo-container img {
             max-width: 80%;
             height: auto;
         }
-
+    
+        /* Contenedor del Formulario - Estilo Original Mejorado */
         .form-container {
             flex: 0 0 420px;
             background-color: rgba(64, 0, 64, 0.9);
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-            padding: 50px;
+            padding: 50px 40px;
             text-align: center;
             color: white;
             height: 450px;
+            opacity: 0;
+            animation: fadeIn 1s ease-in forwards 0.5s;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
-
+    
+        /* Elementos del formulario */
         .form-container h1 {
-            color: white;
             font-size: 40px;
             margin-bottom: 30px;
             font-weight: bold;
+            line-height: 1.2;
         }
-
+    
         .form-group {
             margin-bottom: 25px;
             text-align: left;
         }
-
+    
         label {
             display: block;
             margin-bottom: 10px;
             font-weight: bold;
-            color: white;
             font-size: 16px;
         }
-
+    
         input {
             width: 100%;
             padding: 15px;
@@ -77,12 +118,9 @@
             border-radius: 10px;
             font-size: 16px;
             box-sizing: border-box;
+            margin-top: 5px;
         }
-
-        input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
-
+    
         button {
             background-color: #4b6ea9;
             color: white;
@@ -93,38 +131,61 @@
             font-size: 18px;
             width: 100%;
             transition: background-color 0.3s;
+            margin-top: 15px;
         }
-
+    
         button:hover {
             background-color: #365489;
         }
-
+    
         .toggle-form {
             margin-top: 20px;
             font-size: 14px;
         }
-
+    
         .toggle-form a {
             color: #4b6ea9;
             text-decoration: none;
             cursor: pointer;
         }
-
+    
         .toggle-form a:hover {
             text-decoration: underline;
         }
-
+    
         .messages {
             color: #e74c3c;
             font-size: 14px;
             margin-top: 15px;
+        }
+    
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+                padding: 20px;
+            }
+            
+            .logo-container {
+                margin-right: 0;
+                margin-bottom: 40px;
+                padding: 20px;
+            }
+            
+            .form-container {
+                width: 100%;
+                max-width: 400px;
+                height: auto;
+                min-height: 450px;
+                padding: 40px 30px;
+            }
         }
     </style>
 </head>
 <body>
     <!-- Contenedor del Logo -->
     <div class="logo-container">
-        <img src="assets/logo.png" alt="THE RED Logo">
+        <img src="D:/8 PROYECTOS/The Red/new logo/logo.png" alt="THE RED Logo">
     </div>
 
     <!-- Contenedor del Formulario -->
