@@ -1,0 +1,12 @@
+specVersion: "v1"
+serviceId: "paginamovil"
+location: "us-central1"
+schema:
+  source: "./schema"
+  datasource:
+    postgresql:
+      database: "fdcdb"
+      cloudSql:
+        instanceId: "paginamovil-fdc"
+      # schemaValidation: "COMPATIBLE"
+connectorDirs: ["./connector"]
