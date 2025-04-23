@@ -119,6 +119,60 @@
             .bottom-buttons img:hover {
                 transform: scale(1.1);
             }
+            .profile-section {
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        gap: 2em;
+        align-items: start;
+        margin-top: 2em;
+        padding: 20px; /* Espacio dentro del cuadro */
+        background-color: rgba(0, 0, 0, 0.3); /* Fondo negro transparente con 30% de opacidad */
+        border-radius: 15px; /* Bordes redondeados para darle un toque elegante */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Sombra para destacarlo ligeramente */
+    }
+
+    .description {
+        order: 2;
+        font-size: 1.1em;
+        line-height: 1.6;
+    }
+
+    .profile-photo {
+        order: 1;
+        text-align: center;
+        position: sticky;
+        top: 20px;
+    }
+
+    .profile-photo img {
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid white;
+        margin-bottom: 1.5em;
+    }
+
+    .contact {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8em;
+    }
+
+    .contact a {
+        color: white;
+        text-decoration: none;
+        padding: 10px 20px;
+        border: 1px solid #444;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+    }
+
+    .contact a:hover {
+        background: #222;
+        border-color: #666;
+    }
+
         </style>
     </head>
     <body>
@@ -250,5 +304,3 @@
     </script>
     </body>
     </html>
-    
-    // pero ahora como 
