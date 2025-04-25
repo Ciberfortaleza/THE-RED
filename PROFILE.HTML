@@ -69,28 +69,7 @@
     overflow-y: auto;
     padding: 20px;
     }
-    .bottom-buttons {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding: 10px 0;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.5);
-    }
-
-    .bottom-buttons img {
-    max-width: 100%;
-    height: auto;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-    }
-
-    .bottom-buttons img:hover {
-    transform: scale(1.1);
-    }
+    
     .carousel-container {
     position: relative;
     width: 100%;
@@ -218,6 +197,87 @@
         border-color: #666;
     }
 
+     /* === Botones Inferiores (Tamaño Grande) === */
+     .bottom-buttons {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0);
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            padding: 1rem 0;
+            gap: 2rem;
+            min-height: 100px;
+            backdrop-filter: blur(0px);
+            z-index: 1000;
+        }
+    
+        .nav-icon {
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+    
+        .nav-icon img {
+            width: 150px;
+            height: 80px;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+    
+        .nav-icon:hover {
+            transform: translateY(-5px);
+        }
+    
+        .nav-icon.active img {
+            filter: 
+                brightness(1.4)
+                drop-shadow(0 0 12px rgba(255, 165, 0, 0.8));
+            transform: scale(1.1);
+        }
+    
+        /* === Media Queries === */
+        @media (max-width: 768px) {
+            .nav-icon img {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .bottom-buttons {
+                gap: 1.5rem;
+                min-height: 90px;
+            }
+        }
+    
+        @media (max-width: 480px) {
+            .nav-icon img {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .bottom-buttons {
+                gap: 1rem;
+                min-height: 150px;
+                padding: 0.8rem 0;
+            }
+            
+            header {
+                padding: 10px 1rem;
+            }
+            
+            .language-text {
+                display: none;
+            }
+        }
+    
+        html, body {
+            overflow-x: hidden;
+        }
+    </style>
+
   </style>
 </head>
 <body>
@@ -272,44 +332,65 @@
 
              <!-- Botones inferiores -->
              <div class="bottom-buttons">
-                <img id="page1-button" src="assets/page1_blue.png" alt="Botón Page 1">
-                <img id="page2-button" src="assets/page2_blue.png" alt="Botón Page 2">
-                <img id="page3-button" src="assets/page3_blue.png" alt="Botón Page 3">
-                <img id="page4-button" src="assets/page4_blue.png" alt="Botón Page 4">
-            </div>
+              <button id="page1-button" class="nav-icon">
+                  <img src="BOTON_HOME.svg" alt="Home">
+              </button>
+              <button id="page2-button" class="nav-icon">
+                  <img src="BOTON_DISCOVER.svg" alt="Discover">
+              </button>
+              <button id="page3-button" class="nav-icon">
+                  <img src="BOTON_MYROLE.svg" alt="My Role">
+              </button>
+              <button id="page4-button" class="nav-icon">
+                  <img src="BOTON_PROFILE.svg" alt="Profile">
+              </button>
+          </div>
     
             <script>
-                // Define los botones inferiores y sus respectivas páginas
-                const buttons = [
-                    { id: 'home-button', page: 'home' },
-                    { id: 'page1-button', page: 'page1' },
-                    { id: 'page2-button', page: 'page2' },
-                    { id: 'page3-button', page: 'page3' }
-                ];
-    
-                // Define la página actual (puedes cambiarlo según sea necesario)
-                const currentPage = 'home'; // Cambia esto según la página activa
-    
-                // Función para aplicar clases y estilos a los botones
-                function updateButtonModes() {
-                    buttons.forEach(button => {
-                        const element = document.getElementById(button.id);
-                        
-                        if (button.page === currentPage) {
-                            // Cambiar imagen PNG y aplicar clase de activo
-                            element.src = `assets/${button.page}_orange.png`; // Imagen naranja
-                            element.classList.add('active');
-                        } else {
-                            // Cambiar imagen PNG y aplicar clase de inactivo
-                            element.src = `assets/${button.page}_blue.png`; // Imagen azul
-                            element.classList.remove('active');
-                        }
-                    });
-                }
-    
-                // Ejecutar la función al cargar la página
-                updateButtonModes();
-            </script>
+              // Configuración de navegación
+              const navigationConfig = [
+                  { id: 'page1-button', page: 'home', icon: 'BOTON_HOME' },
+                  { id: 'page2-button', page: 'discover', icon: 'BOTON_DISCOVER' },
+                  { id: 'page3-button', page: 'myrole', icon: 'BOTON_MYROLE' },
+                  { id: 'page4-button', page: 'profile', icon: 'BOTON_PROFILE' }
+              ];
+          
+              let currentPage = 'home';
+          
+              function handleNavigation(page) {
+                  currentPage = page;
+                  updateButtonModes();
+                  
+                  // Lógica de navegación
+                  switch(page) {
+                      case 'home':
+                          window.location.href = '1pagin.html';
+                          break;
+                      case 'profile':
+                          window.location.href = 'PROFILE.HTML';
+                          break;
+                      case 'discover':
+                          window.location.href = 'discover.html';
+                          break;
+                      case 'my-role':
+                          window.location.href = 'Myrole.html';
+                          break;
+                  }
+              }
+          
+              function updateButtonModes() {
+                  navigationConfig.forEach(({id, page, icon}) => {
+                      const button = document.getElementById(id);
+                      const isActive = page === currentPage;
+                      
+                      button.classList.toggle('active', isActive);
+                      button.onclick = () => handleNavigation(page);
+                  });
+              }
+          
+              // Inicializar
+              document.addEventListener('DOMContentLoaded', updateButtonModes);
+          </script>
         </body>
     
         <script>

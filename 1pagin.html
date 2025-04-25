@@ -1,283 +1,319 @@
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>THE RED</title>
-        <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400;700&display=swap" rel="stylesheet">
-        <style>
-            /* Estilos generales */
-            body {
-                margin: 0;
-                font-family: 'Roboto Flex', sans-serif;
-                background: url("background.png") no-repeat center center fixed;
-                background-size: cover;
-                color: white;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>THE RED</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="logo.png" type="image/x-icon">
+    
+    <style> 
+        /* === Estilos Generales === */
+        body {
+            margin: 0;
+            font-family: 'Roboto Flex', sans-serif;
+            background: url("background.png") no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            min-height: 100vh;
+        }
+    
+        /* === Header === */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 3vw;
+            background-color: rgba(0, 0, 0, 0.5);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+    
+        header.hidden {
+            top: -80px;
+        }
+    
+        .logo {
+            height: clamp(40px, 6vw, 50px);
+        }
+    
+        .language-selector {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    
+        .language-text {
+            font-size: clamp(0.8rem, 2vw, 1rem);
+            font-weight: 700;
+        }
+    
+        .language-button {
+            padding: 0.3rem 1rem;
+            background-color: purple;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+    
+        /* === Posts === */
+        .scroll-wall {
+            margin-top: 80px;
+            height: calc(100vh - 210px);
+            overflow-y: auto;
+            padding: 2rem;
+            display: grid;
+            gap: 1.5rem;
+        }
+    
+        .post {
+            display: flex;
+            align-items: center;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.00);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            backdrop-filter: blur(0.5px);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+            gap: 1.5rem;
+        }
+    
+        .post.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    
+        .post img {
+            width: clamp(80px, 15vw, 120px);
+            height: clamp(80px, 15vw, 120px);
+            object-fit: cover;
+            border-radius: 12px;
+            flex-shrink: 0;
+        }
+    
+        .post-content a {
+            color: #7ec8e3;
+            text-decoration: none;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+    
+        .post-content a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 0;
+            height: 1px;
+            background: currentColor;
+            transition: width 0.3s ease;
+        }
+    
+        .post-content a:hover::after {
+            width: 100%;
+        }
+    
+        .post-content a:hover {
+            color: #9ad4eb;
+        }
+    
+        /* === Botones Inferiores (Tamaño Grande) === */
+        .bottom-buttons {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0);
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            padding: 1rem 0;
+            gap: 2rem;
+            min-height: 100px;
+            backdrop-filter: blur(0px);
+            z-index: 1000;
+        }
+    
+        .nav-icon {
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+    
+        .nav-icon img {
+            width: 150px;
+            height: 80px;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+    
+        .nav-icon:hover {
+            transform: translateY(-5px);
+        }
+    
+        .nav-icon.active img {
+            filter: 
+                brightness(1.4)
+                drop-shadow(0 0 12px rgba(255, 165, 0, 0.8));
+            transform: scale(1.1);
+        }
+    
+        /* === Media Queries === */
+        @media (max-width: 768px) {
+            .nav-icon img {
+                width: 70px;
+                height: 70px;
             }
-
-            header {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 10px 20px;
-                background-color: rgba(0, 0, 0, 0.5); /* Más transparente */
-                position: fixed;
-                top: 0;
-                width: 100%;
-                box-sizing: border-box;
-                transition: top 0.3s ease, background-color 0.3s ease; /* Transición suave */
-            }
-
-            header.hidden {
-                top: -80px; /* Oculta el header moviéndolo fuera de la vista */
-            }
-
-            .logo {
-                height: 50px;
-            }
-
-            .language-selector {
-                display: flex;
-                align-items: center;
-            }
-
-            .language-text {
-                margin-right: 10px;
-                font-size: 16px;
-                font-weight: 700; /* Roboto Flex en Bold para LANGUAGE */
-            }
-
-            .language-button {
-                padding: 5px 10px;
-                background-color: purple;
-                color: white;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                font-weight: bold;
-            }
-
-            .language-button:hover {
-                background-color: darkviolet;
-            }
-
-            .scroll-wall {
-                margin-top: 80px;
-                height: calc(100vh - 210px); /* Ajuste para dar espacio a los botones inferiores */
-                overflow-y: auto;
-                padding: 20px;
-            }
-
-            .post {
-                display: flex;
-                align-items: center;
-                margin-bottom: 20px;
-                padding: 15px;
-                color: white;
-                font-size: 14px;
-                line-height: 1.6;
-                background: none;
-                border: 1px solid rgba(255, 255, 255, 0.3); /* Líneas para simular el marco sin cuadro */
-                border-radius: 10px;
-            }
-
-            .post img {
-                width: 100px;
-                height: 100px;
-                object-fit: cover;
-                border-radius: 50%; /* Imagen redondeada */
-                margin: 0 15px;
-            }
-
-            .post.left {
-                flex-direction: row; /* Imagen a la izquierda */
-            }
-
-            .post.right {
-                flex-direction: row-reverse; /* Imagen a la derecha */
-            }
-
+            
             .bottom-buttons {
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-                background-color: rgba(0, 0, 0, 0.8);
-                display: flex;
-                justify-content: space-around;
-                align-items: center;
-                padding: 10px 0;
-                box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.5);
+                gap: 1.5rem;
+                min-height: 90px;
             }
-
-            .bottom-buttons img {
-                max-width: 100%;
-                height: auto;
-                cursor: pointer;
-                transition: transform 0.2s ease;
+        }
+    
+        @media (max-width: 480px) {
+            .nav-icon img {
+                width: 60px;
+                height: 60px;
             }
-
-            .bottom-buttons img:hover {
-                transform: scale(1.1);
+            
+            .bottom-buttons {
+                gap: 1rem;
+                min-height: 150px;
+                padding: 0.8rem 0;
             }
-            .profile-section {
-        display: grid;
-        grid-template-columns: 300px 1fr;
-        gap: 2em;
-        align-items: start;
-        margin-top: 2em;
-        padding: 20px; /* Espacio dentro del cuadro */
-        background-color: rgba(0, 0, 0, 0.3); /* Fondo negro transparente con 30% de opacidad */
-        border-radius: 15px; /* Bordes redondeados para darle un toque elegante */
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Sombra para destacarlo ligeramente */
-    }
+            
+            header {
+                padding: 10px 1rem;
+            }
+            
+            .language-text {
+                display: none;
+            }
+        }
+    
+        html, body {
+            overflow-x: hidden;
+        }
+    </style>
 
-    .description {
-        order: 2;
-        font-size: 1.1em;
-        line-height: 1.6;
-    }
-
-    .profile-photo {
-        order: 1;
-        text-align: center;
-        position: sticky;
-        top: 20px;
-    }
-
-    .profile-photo img {
-        width: 200px;
-        height: 200px;
-        object-fit: cover;
-        border-radius: 50%;
-        border: 3px solid white;
-        margin-bottom: 1.5em;
-    }
-
-    .contact {
-        display: flex;
-        flex-direction: column;
-        gap: 0.8em;
-    }
-
-    .contact a {
-        color: white;
-        text-decoration: none;
-        padding: 10px 20px;
-        border: 1px solid #444;
-        border-radius: 25px;
-        transition: all 0.3s ease;
-    }
-
-    .contact a:hover {
-        background: #222;
-        border-color: #666;
-    }
-
-        </style>
     </head>
-    <body>
-        <header id="header">
-            <img src="logo.png" alt="Logo" class="logo">
-            <div class="language-selector">
-                <span class="language-text">LANGUAGE:</span>
-                <button class="language-button" onclick="toggleLanguage()">EN</button>
-            </div>
-        </header>
-
-        <div class="scroll-wall" id="scroll-wall">
-            <!-- Publicaciones intercaladas -->
-            <div class="post left">
-                <img src="jarra.jpg" alt="Bicicleta Melchor">
-                <div>
-                    <p><strong>Bicicleta Melchor</strong> de <strong>@PINGÜINO</strong></p>
-                    <p>Mérida 216, Roma Norte, CDMX</p>
-                    <p>Tel: 55 4893 8707</p>
-                    <p>Visita: <a href="https://pinguinomexico.com" target="_blank" style="color: lightblue;">pinguinomexico.com</a></p>
-                    <p><strong>Precio: $215 USD</strong></p>
-                </div>
-            </div>
-            <div class="post right">
-                <div>
-                    <p><strong>Patines Delta</strong> de <strong>@PINGÜINO</strong></p>
-                    <p>San Luis Potosí 365, Condesa, CDMX</p>
-                    <p>Tel: 55 9876 5432</p>
-                    <p>Visita: <a href="https://pinguinomexico.com" target="_blank" style="color: lightblue;">pinguinomexico.com</a></p>
-                    <p><strong>Precio: $120 USD</strong></p>
-                </div>
-                <img src="patines.jpg" alt="Patines Delta">
-            </div>
-            <div class="post left">
-                <img src="assets/casco.jpg" alt="Casco Flash">
-                <div>
-                    <p><strong>Casco Flash</strong> de <strong>@PINGÜINO</strong></p>
-                    <p>Ámsterdam 240, Hipódromo, CDMX</p>
-                    <p>Tel: 55 1234 5678</p>
-                    <p>Visita: <a href="https://pinguinomexico.com" target="_blank" style="color: lightblue;">pinguinomexico.com</a></p>
-                    <p><strong>Precio: $85 USD</strong></p>
-                </div>
-            </div>
-            <div class="post right">
-                <div>
-                    <p><strong>Scooter Speedy</strong> de <strong>@PINGÜINO</strong></p>
-                    <p>Insurgentes 145, Juárez, CDMX</p>
-                    <p>Tel: 55 6543 8765</p>
-                    <p>Visita: <a href="https://pinguinomexico.com" target="_blank" style="color: lightblue;">pinguinomexico.com</a></p>
-                    <p><strong>Precio: $300 USD</strong></p>
-                </div>
-                <img src="assets/scooter.jpg" alt="Scooter Speedy">
-            </div>
-            <div class="post left">
-                <img src="assets/mochila.jpg" alt="Mochila Voyager">
-                <div>
-                    <p><strong>Mochila Voyager</strong> de <strong>@PINGÜINO</strong></p>
-                    <p>Coyoacán 220, CDMX</p>
-                    <p>Tel: 55 8765 4321</p>
-                    <p>Visita: <a href="https://pinguinomexico.com" target="_blank" style="color: lightblue;">pinguinomexico.com</a></p>
-                    <p><strong>Precio: $75 USD</strong></p>
-                </div>
-            </div>
+   
+    <header id="header">
+        <img src="logo.png" alt="Logo" class="logo">
+        <img src="assets/new_button_blue.png" alt="Nuevo-post" class="nav-button">
+        <div class="language-selector">
+            <span class="language-text">LANGUAGE:</span>
+            <button class="language-button" onclick="toggleLanguage()">EN</button>
         </div>
+    </header>
+
+    
+        <div class="scroll-wall" id="scroll-wall">
+            <!-- Publicaciones -->
+
+            <div class="post">
+                <img src="jarra.jpg" alt="Bicicleta Melchor">
+                <div class="post-content">
+                    <h3 class="item-title">Bicicleta Melchor</h3>
+                    <p class="item-author">@PINGÜINO</p>
+                    <div class="item-details">
+                        <p class="location">Mérida 216, Roma Norte, CDMX</p>
+                        <p class="contact">Tel: 55 4893 8707</p>
+                        <a href="https://pinguinomexico.com" target="_blank" class="external-link">
+                            Visitar sitio web
+                        </a>
+                    </div>
+                    <p class="item-price">$215 USD</p>
+                </div>
+            </div>
+
+            <div class="post">
+                <img src="jarra.jpg" alt="Bicicleta Melchor">
+                <div class="post-content">
+                    <h3 class="item-title">Bicicleta Melchor</h3>
+                    <p class="item-author">@PINGÜINO</p>
+                    <div class="item-details">
+                        <p class="location">Mérida 216, Roma Norte, CDMX</p>
+                        <p class="contact">Tel: 55 4893 8707</p>
+                        <a href="https://pinguinomexico.com" target="_blank" class="external-link">
+                            Visitar sitio web
+                        </a>
+                    </div>
+                    <p class="item-price">$215 USD</p>
+                </div>
+            </div>            
 
                 <!-- Botones inferiores -->
-        <div class="bottom-buttons">
-            <img id="page1-button" src="assets/page1_blue.png" alt="Botón Page 1">
-            <img id="page2-button" src="assets/page2_blue.png" alt="Botón Page 2">
-            <img id="page3-button" src="assets/page3_blue.png" alt="Botón Page 3">
-            <img id="page4-button" src="assets/page4_blue.png" alt="Botón Page 4">
-        </div>
+                <div class="bottom-buttons">
+                    <button id="page1-button" class="nav-icon">
+                        <img src="BOTON_HOME.svg" alt="Home">
+                    </button>
+                    <button id="page2-button" class="nav-icon">
+                        <img src="BOTON_DISCOVER.svg" alt="Discover">
+                    </button>
+                    <button id="page3-button" class="nav-icon">
+                        <img src="BOTON_MYROLE.svg" alt="My Role">
+                    </button>
+                    <button id="page4-button" class="nav-icon">
+                        <img src="BOTON_PROFILE.svg" alt="Profile">
+                    </button>
+                </div>
 
-        <script>
-            // Define los botones inferiores y sus respectivas páginas
-            const buttons = [
-                { id: 'home-button', page: 'home' },
-                { id: 'page1-button', page: 'page1' },
-                { id: 'page2-button', page: 'page2' },
-                { id: 'page3-button', page: 'page3' }
-            ];
-
-            // Define la página actual (puedes cambiarlo según sea necesario)
-            const currentPage = 'home'; // Cambia esto según la página activa
-
-            // Función para aplicar clases y estilos a los botones
-            function updateButtonModes() {
-                buttons.forEach(button => {
-                    const element = document.getElementById(button.id);
-                    
-                    if (button.page === currentPage) {
-                        // Cambiar imagen PNG y aplicar clase de activo
-                        element.src = `assets/${button.page}_orange.png`; // Imagen naranja
-                        element.classList.add('active');
-                    } else {
-                        // Cambiar imagen PNG y aplicar clase de inactivo
-                        element.src = `assets/${button.page}_blue.png`; // Imagen azul
-                        element.classList.remove('active');
+                <script>
+                    // Configuración de navegación
+                    const navigationConfig = [
+                        { id: 'page1-button', page: 'home', icon: 'BOTON_HOME' },
+                        { id: 'page2-button', page: 'discover', icon: 'BOTON_DISCOVER' },
+                        { id: 'page3-button', page: 'myrole', icon: 'BOTON_MYROLE' },
+                        { id: 'page4-button', page: 'profile', icon: 'BOTON_PROFILE' }
+                    ];
+                
+                    let currentPage = 'home';
+                
+                    function handleNavigation(page) {
+                        currentPage = page;
+                        updateButtonModes();
+                        
+                        // Lógica de navegación
+                        switch(page) {
+                            case 'home':
+                                window.location.href = '1pagin.html';
+                                break;
+                            case 'profile':
+                                window.location.href = 'PROFILE.HTML';
+                                break;
+                            case 'discover':
+                                window.location.href = 'discover.html';
+                                break;
+                            case 'my-role':
+                                window.location.href = 'Myrole.html';
+                                break;
+                        }
                     }
-                });
-            }
-
-            // Ejecutar la función al cargar la página
-            updateButtonModes();
-        </script>
+                
+                    function updateButtonModes() {
+                        navigationConfig.forEach(({id, page, icon}) => {
+                            const button = document.getElementById(id);
+                            const isActive = page === currentPage;
+                            
+                            button.classList.toggle('active', isActive);
+                            button.onclick = () => handleNavigation(page);
+                        });
+                    }
+                
+                    // Inicializar
+                    document.addEventListener('DOMContentLoaded', updateButtonModes);
+                </script>
     </body>
 
     <script>
@@ -302,5 +338,20 @@
     });
 
     </script>
+    
+    <script>
+        // Añadir este nuevo script para la animación de los posts
+        document.addEventListener('DOMContentLoaded', function() {
+            const posts = document.querySelectorAll('.post');
+            
+            posts.forEach((post, index) => {
+                setTimeout(() => {
+                    post.classList.add('visible');
+                }, index * 600); // Ajusta el tiempo entre apariciones
+            });
+        });
+
+    </script>
+    </header>
     </body>
     </html>
