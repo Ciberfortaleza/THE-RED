@@ -234,6 +234,32 @@
       transform: scale(1.05);
       filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
     }
+    .upload-controls {
+  text-align: center;
+  margin: 15px 0;
+}
+
+.upload-controls input {
+  display: none; /* Opcional: ocultar el input por defecto */
+}
+
+.upload-controls button {
+  padding: 8px 15px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+} 
+.upload-controls button {
+  padding: 10px 20px;
+  background: #4285F4;
+  color: white;   /* mejoras del bpton pa de agregar fotos */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
   </style>
 </head>
 <body>
@@ -251,31 +277,235 @@
   <div class="scroll-wall" id="scroll-wall">
     
     <!-- Carrusel de imágenes -->
+    <!-- Contenedor del carrusel (usa tus clases CSS originales) -->
     <div class="carousel-container">
       <div class="arrow left-arrow" onclick="moveSlide(-1)">‹</div>
       <div class="carousel" id="carousel">
-        <img src="https://via.placeholder.com/800x400?text=Imagen+1" />
-        <img src="https://via.placeholder.com/800x400?text=Imagen+2" />
-        <img src="https://via.placeholder.com/800x400?text=Imagen+3" />
+        <!-- Las imágenes aparecerán aquí -->
       </div>
       <div class="arrow right-arrow" onclick="moveSlide(1)">›</div>
     </div>
-
+    
+    <!-- Input oculto + Botón visible (Versión Funcional) -->
+    <div class="upload-controls">
+      <input type="file" id="imageUpload" accept="image/*" multiple style="display:none">
+      <button onclick="triggerUpload()">Agregar fotos</button>
+    </div>
+    
+    <script>
+      // 1. Variables globales
+      let userImages = [];
+      let currentSlide = 0;
+    
+      // 2. Función para activar el input file
+      function triggerUpload() {
+        document.getElementById('imageUpload').click();
+      }
+    
+      // 3. Escuchar cuando se seleccionan archivos
+      document.getElementById('imageUpload').addEventListener('change', function(e) {
+        if (this.files.length > 0) {
+          processImages(this.files);
+        }
+      });
+    
+      // 4. Procesar cada imagen
+      function processImages(files) {
+        Array.from(files).forEach(file => {
+          if (!file.type.startsWith('image/')) {
+            alert('Solo se permiten archivos de imagen');
+            return;
+          }
+    
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            userImages.push(e.target.result);
+            updateCarousel();
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+    
+      // 5. Actualizar el carrusel con las nuevas imágenes
+      function updateCarousel() {
+        const carousel = document.getElementById('carousel');
+        carousel.innerHTML = ''; // Limpiar existentes
+        
+        userImages.forEach(imgSrc => {
+          const img = document.createElement('img');
+          img.src = imgSrc;
+          carousel.appendChild(img);
+        });
+    
+        // Mostrar la primera imagen
+        if (userImages.length > 0) {
+          showSlide(0);
+        }
+      }
+    
+      // Funciones de navegación (mantén las tuyas si ya las tienes)
+      function moveSlide(n) {
+        currentSlide += n;
+        showSlide(currentSlide);
+      }
+    
+      function showSlide(n) {
+        const slides = document.querySelectorAll('#carousel img');
+        if (slides.length === 0) return;
+        
+        // Ajustar índice si excede los límites
+        currentSlide = (n + slides.length) % slides.length;
+        
+        // Ocultar todas y mostrar la actual
+        slides.forEach(img => img.style.display = 'none');
+        slides[currentSlide].style.display = 'block';
+      }
+    </script>
     <!-- Sección de perfil del usuario -->
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+      <meta charset="UTF-8">
+      <title>Perfil de Usuario</title>
+      <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+      <link rel="stylesheet" href="descripcion.css">
+    </head>
+    <body>
+    
     <div class="profile-section">
       <div class="profile-photo">
         <img src="https://via.placeholder.com/200" alt="Foto de perfil" />
+    
         <div class="contact">
-          <a href="#">Email</a>
-          <a href="#">Instagram</a>
-          <a href="#">Facebook</a>
-          <a href="#">Whatsapp</a>
+          <a href="#" id="emailLink" target="_blank">Email</a>
+          <a href="#" id="instagramLink" target="_blank">Instagram</a>
+          <a href="#" id="facebookLink" target="_blank">Facebook</a>
+          <a href="#" id="whatsappLink" target="_blank">Whatsapp</a>
+          <a href="#" id="telefonoLink">Número de Teléfono</a>
+          <button onclick="toggleEnlaceEditor()">Editar enlaces</button>
+        </div>
+    
+        <div class="contact-inputs" id="contactInputs" style="display: none;">
+          <input type="url" id="emailInput" placeholder="Link de Email">
+          <input type="url" id="instagramInput" placeholder="Link de Instagram">
+          <input type="url" id="facebookInput" placeholder="Link de Facebook">
+          <input type="url" id="whatsappInput" placeholder="Link de WhatsApp">
+          <input type="text" id="telefonoInput" placeholder="Número de Teléfono">
+          <button onclick="guardarEnlaces()">Guardar enlaces</button>
         </div>
       </div>
+    
       <div class="description">
-        <p><strong>Rubén Adrián Zamora Alva</strong>, conocido como RAZA, es un artista de collage que construye sus piezas con recortes encontrados en sus viajes por el mundo, transformando lo ordinario en composiciones extraordinarias...</p>
+        <p id="descripcionTexto"></p>
+        <textarea id="descripcionInput" placeholder="Agregar descripción..." style="display: none;"></textarea>
+        <button id="editarDescripcionBtn" onclick="editarDescripcion()">Editar descripción</button>
+        <button id="guardarDescripcionBtn" onclick="guardarDescripcion()" style="display: none;">Guardar descripción</button>
       </div>
     </div>
+    
+    <script>
+      // Configura Firebase con tus credenciales
+      const firebaseConfig = {
+        apiKey: "TU_API_KEY",
+        authDomain: "TU_AUTH_DOMAIN",
+        projectId: "TU_PROJECT_ID",
+      };
+    
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+    
+      firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          const uid = user.uid;
+          db.collection("usuarios").doc(uid).get().then(doc => {
+            if (doc.exists) {
+              const data = doc.data();
+              // Asignando los enlaces de forma dinámica
+              if (data.email) {
+                document.getElementById("emailLink").href = data.email;
+                document.getElementById("emailLink").target = "_blank";
+              }
+              if (data.instagram) {
+                document.getElementById("instagramLink").href = data.instagram;
+                document.getElementById("instagramLink").target = "_blank";
+              }
+              if (data.facebook) {
+                document.getElementById("facebookLink").href = data.facebook;
+                document.getElementById("facebookLink").target = "_blank";
+              }
+              if (data.whatsapp) {
+                document.getElementById("whatsappLink").href = data.whatsapp;
+                document.getElementById("whatsappLink").target = "_blank";
+              }
+              if (data.telefono) {
+                document.getElementById("telefonoLink").textContent = data.telefono;
+              }
+    
+              // Los inputs se llenan con los datos guardados
+              document.getElementById("emailInput").value = data.email || "";
+              document.getElementById("instagramInput").value = data.instagram || "";
+              document.getElementById("facebookInput").value = data.facebook || "";
+              document.getElementById("whatsappInput").value = data.whatsapp || "";
+              document.getElementById("telefonoInput").value = data.telefono || "";
+    
+              // Descripción
+              document.getElementById("descripcionTexto").textContent = data.descripcion || "";
+              document.getElementById("descripcionInput").value = data.descripcion || "";
+            }
+          });
+        }
+      });
+    
+      function guardarEnlaces() {
+        const user = firebase.auth().currentUser;
+        if (!user) return;
+    
+        const data = {
+          email: document.getElementById("emailInput").value,
+          instagram: document.getElementById("instagramInput").value,
+          facebook: document.getElementById("facebookInput").value,
+          whatsapp: document.getElementById("whatsappInput").value,
+          telefono: document.getElementById("telefonoInput").value
+        };
+    
+        db.collection("usuarios").doc(user.uid).set(data, { merge: true }).then(() => {
+          alert("Enlaces guardados correctamente.");
+          location.reload();
+        });
+      }
+    
+      function guardarDescripcion() {
+        const user = firebase.auth().currentUser;
+        if (!user) return;
+    
+        const descripcion = document.getElementById("descripcionInput").value;
+    
+        db.collection("usuarios").doc(user.uid).set({ descripcion }, { merge: true }).then(() => {
+          document.getElementById("descripcionTexto").textContent = descripcion;
+          document.getElementById("descripcionInput").style.display = "none";
+          document.getElementById("guardarDescripcionBtn").style.display = "none";
+          document.getElementById("editarDescripcionBtn").style.display = "inline";
+        });
+      }
+    
+      function editarDescripcion() {
+        document.getElementById("descripcionInput").style.display = "block";
+        document.getElementById("guardarDescripcionBtn").style.display = "inline";
+        document.getElementById("editarDescripcionBtn").style.display = "none";
+      }
+    
+      function toggleEnlaceEditor() {
+        const editor = document.getElementById("contactInputs");
+        editor.style.display = editor.style.display === "none" ? "block" : "none";
+      }
+    </script>
+    
+    </body>
+    </html>
+    
+</script>
 
     <!-- Publicaciones del usuario -->
     <div class="user-posts">
@@ -343,5 +573,70 @@
   </script>
 
 </body>
+<script>
+  let userImages = []; // Almacena las imágenes subidas
+  let currentSlide = 0;
+
+  // Función para subir imágenes
+  function uploadImages() {
+    const input = document.getElementById('imageUpload');
+    const files = input.files;
+    
+    if (files.length === 0) {
+      alert('Selecciona al menos una imagen');
+      return;
+    }
+
+    // Procesar cada imagen seleccionada
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          userImages.push(e.target.result); // Guardar la imagen
+          updateCarousel(); // Actualizar el carrusel
+        };
+        reader.readAsDataURL(file); // Convertir a URL
+      }
+    }
+    input.value = ''; // Limpiar el input
+  }
+
+  // Actualiza el carrusel con las imágenes subidas
+  function updateCarousel() {
+    const carousel = document.getElementById('carousel');
+    carousel.innerHTML = ''; // Limpiar carrusel
+
+    userImages.forEach((imgSrc) => {
+      const img = document.createElement('img');
+      img.src = imgSrc;
+      carousel.appendChild(img);
+    });
+
+    showSlide(currentSlide); // Mostrar la primera imagen
+  }
+
+  // Funciones de navegación (usando tu CSS original)
+  function moveSlide(n) {
+    currentSlide += n;
+    showSlide(currentSlide);
+  }
+
+  function showSlide(n) {
+    const slides = document.querySelectorAll('#carousel img');
+    if (slides.length === 0) return;
+
+    // Ajustar índice si se pasa del límite
+    if (n >= slides.length) currentSlide = 0;
+    if (n < 0) currentSlide = slides.length - 1;
+
+    // Ocultar todas las imágenes y mostrar la actual
+    slides.forEach((img) => (img.style.display = 'none'));
+    slides[currentSlide].style.display = 'block';
+  }
+
+  // Inicializar carrusel vacío
+  updateCarousel();
+</script>
 </html>
   
