@@ -1,120 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THE RED</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        /* Estilos generales */
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>THE RED</title>
+  <link rel="icon" href="logo.png" type="image/x-icon" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    /* Estilo base del body, con imagen de fondo y texto blanco */
     body {
-        margin: 0;
-        font-family: 'Roboto Flex', sans-serif;
-        background: url("background.png") no-repeat center center fixed;
-        background-size: cover;
-        color: white;
-        padding-top: 80px; /* Agregar espacio equivalente a la altura del header */
-        box-sizing: border-box; /* Garantiza que el padding sea considerado en el tamaño total */
+      margin: 0;
+      font-family: 'Roboto Flex', sans-serif;
+      background: url('background.png') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      height: 100vh;
+      overflow: hidden;
     }
 
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            background-color: rgba(0, 0, 0, 0.5); /* Más transparente */
-            position: fixed;
-            top: 0;
-            width: 100%;
-            box-sizing: border-box;
-            transition: top 0.3s ease, background-color 0.3s ease; /* Transición suave */
-        }
-
-        header.hidden {
-            top: -80px; /* Oculta el header moviéndolo fuera de la vista */
-        }
-
-        .logo {
-            height: 50px;
-        }
-
-        .language-selector {
-            display: flex;
-            align-items: center;
-        }
-
-        .language-text {
-            margin-right: 10px;
-            font-size: 16px;
-            font-weight: 700; /* Roboto Flex en Bold para LANGUAGE */
-        }
-
-        .language-button {
-            padding: 5px 10px;
-            background-color: purple;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-      }
-
-    .language-button:hover {
-    background-color: darkviolet;
+    /* Estilo del encabezado, se fija en la parte superior */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: transparent;
     }
 
+    /* Logo con tamaño flexible */
+    .logo {
+      height: clamp(30px, 6vw, 60px);
+    }
+
+    /* Selector de idioma en la parte superior derecha */
+    .language-selector {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .language-text {
+      font-weight: bold;
+      font-size: 1rem;
+    }
+
+    .language-button {
+      background-color: #5c40c9;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 0.3rem 1rem;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-transform: uppercase;
+    }
+
+    /* Zona de contenido desplazable */
     .scroll-wall {
-    margin-top: 80px;
-    height: calc(100vh - 210px); /* Ajuste para dar espacio a los botones inferiores */
-    overflow-y: auto;
-    padding: 20px;
+      position: absolute;
+      top: 80px;
+      bottom: 120px;
+      left: 0;
+      right: 0;
+      overflow-y: auto;
+      padding: 2rem;
+      box-sizing: border-box;
     }
-    
+
+    /* Estilo del carrusel de imágenes */
     .carousel-container {
-    position: relative;
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto 2em;
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto 3rem;
     }
+
     .carousel {
       display: flex;
-      transition: transform 0.3s ease-in-out;
+      transition: transform 0.4s ease-in-out;
     }
+
     .carousel img {
       width: 100%;
       height: 400px;
       object-fit: cover;
+      border-radius: 15px;
     }
+
+    /* Flechas de navegación del carrusel */
     .arrow {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      font-size: 2.5em;
+      font-size: 2.5rem;
       background-color: rgba(0,0,0,0.5);
-      padding: 10px 15px;
+      padding: 0.5rem 1rem;
       border-radius: 50%;
       cursor: pointer;
+      user-select: none;
     }
-    .left-arrow { left: 20px; }
-    .right-arrow { right: 20px; }
+
+    .left-arrow { left: 10px; }
+    .right-arrow { right: 10px; }
+
+    /* Estilo de la sección de perfil del usuario */
     .profile-section {
+      max-width: 1100px;
+      margin: 0 auto;
       display: grid;
       grid-template-columns: 300px 1fr;
-      gap: 2em;
-      align-items: start;
-      margin-top: 2em;
+      gap: 2rem;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
-    .description {
-      order: 2;
-      font-size: 1.1em;
-      line-height: 1.6;
-    }
+
+    /* Foto de perfil redonda */
     .profile-photo {
-      order: 1;
       text-align: center;
-      position: sticky;
-      top: 20px;
     }
+
     .profile-photo img {
       width: 200px;
       height: 200px;
@@ -123,297 +133,215 @@
       border: 3px solid white;
       margin-bottom: 1.5em;
     }
+
+    /* Enlaces de contacto del perfil */
     .contact {
       display: flex;
       flex-direction: column;
-      gap: 0.8em;
+      gap: 0.7rem;
     }
+
     .contact a {
       color: white;
       text-decoration: none;
-      padding: 10px 20px;
-      border: 1px solid #444;
+      padding: 0.6rem 1.2rem;
+      border: 1px solid #555;
       border-radius: 25px;
-      transition: all 0.3s ease;
-    }
-    .contact a:hover {
-      background: #222;
-      border-color: #666;
-    }
-    .profile-section {
-        width: 80%; /* Ocupa el 80% del ancho del contenedor padre */
-        max-width: 1200px; /* Máximo de 1200px para pantallas grandes */
-        margin: 0 auto; /* Centra el cuadro horizontalmente */
-        display: grid;
-        grid-template-columns: 300px 1fr;
-        gap: 2em;
-        align-items: start;
-        margin-top: 2em;
-        padding: 20px; /* Espacio dentro del cuadro */
-        background-color: rgba(0, 0, 0, 0); /* Fondo negro transparente con 30% de opacidad */
-        border-radius: 15px; /* Bordes redondeados para darle un toque elegante */
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0); /* Sombra para destacarlo ligeramente */
+      transition: background 0.3s ease;
     }
 
+    .contact a:hover {
+      background-color: #222;
+    }
+
+    /* Descripción del usuario */
     .description {
-        order: 2;
-        font-size: 1.1em;
-        line-height: 1.6;
+      font-size: 1.1em;
+      line-height: 1.6;
     }
 
-    .profile-photo {
-        order: 1;
-        text-align: center;
-        position: sticky;
-        top: 20px;
+    /* Estilo de los posts del usuario */
+    .user-posts {
+      margin-top: 3rem;
     }
 
-    .profile-photo img {
-        width: 200px;
-        height: 200px;
-        object-fit: cover;
-        border-radius: 50%;
-        border: 3px solid white;
-        margin-bottom: 1.5em;
+    /* Estilo de cada post en la sección de publicaciones */
+    .post {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      margin-bottom: 1.5rem;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
     }
 
-    .contact {
-        display: flex;
-        flex-direction: column;
-        gap: 0.8em;
+    /* Encabezado del post (usuario y nombre) */
+    .post .post-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    .contact a {
-        color: white;
-        text-decoration: none;
-        padding: 10px 20px;
-        border: 1px solid #444;
-        border-radius: 25px;
-        transition: all 0.3s ease;
+    .post .post-header img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 1rem;
     }
 
-    .contact a:hover {
-        background: #222;
-        border-color: #666;
+    .post .post-header .user-name {
+      font-weight: bold;
+      font-size: 1.1em;
     }
 
-     /* === Botones Inferiores (Tamaño Grande) === */
-     .bottom-buttons {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background-color: rgba(0, 0, 0, 0);
-            display: flex;
-            justify-content: space-evenly;
-            align-items: center;
-            padding: 1rem 0;
-            gap: 2rem;
-            min-height: 100px;
-            backdrop-filter: blur(0px);
-            z-index: 1000;
-        }
-    
-        .nav-icon {
-            background: none;
-            border: none;
-            padding: 0;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-    
-        .nav-icon img {
-            width: 150px;
-            height: 80px;
-            object-fit: contain;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-        }
-    
-        .nav-icon:hover {
-            transform: translateY(-5px);
-        }
-    
-        .nav-icon.active img {
-            filter: 
-                brightness(1.4)
-                drop-shadow(0 0 12px rgba(255, 165, 0, 0.8));
-            transform: scale(1.1);
-        }
-    
-        /* === Media Queries === */
-        @media (max-width: 768px) {
-            .nav-icon img {
-                width: 70px;
-                height: 70px;
-            }
-            
-            .bottom-buttons {
-                gap: 1.5rem;
-                min-height: 90px;
-            }
-        }
-    
-        @media (max-width: 480px) {
-            .nav-icon img {
-                width: 60px;
-                height: 60px;
-            }
-            
-            .bottom-buttons {
-                gap: 1rem;
-                min-height: 150px;
-                padding: 0.8rem 0;
-            }
-            
-            header {
-                padding: 10px 1rem;
-            }
-            
-            .language-text {
-                display: none;
-            }
-        }
-    
-        html, body {
-            overflow-x: hidden;
-        }
-    </style>
+    /* Contenido del post */
+    .post .post-content {
+      font-size: 1em;
+      line-height: 1.5;
+    }
 
+    /* Barra de navegación inferior */
+    .bottom-nav {
+      position: fixed;
+      bottom: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 2rem;
+      padding: 0.8rem 1.2rem;
+      background: rgba(175, 19, 128, 0.11);
+      backdrop-filter: blur(1px);
+      border-radius: 24px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      z-index: 2000;
+    }
+
+    /* Botones de navegación con imágenes */
+    .nav-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .nav-button img {
+      height: 60px;
+    }
+
+    .nav-button:hover img,
+    .nav-button.active img {
+      transform: scale(1.05);
+      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
+    }
   </style>
 </head>
 <body>
-    <header>
-        <img src="logo.png" alt="Logo" class="logo">
-        <div class="language-selector">
-            <span class="language-text">LANGUAGE:</span>
-            <button class="language-button">EN</button>
-        </div>
-    </header>
-    <!-- CUERPO DE LA PAGINA -->
-    <body>
-       
-          <div class="carousel-container">
-            <div class="arrow left-arrow" onclick="moveSlide(-1)">‹</div>
-            <div class="carousel" id="carousel">
-              <img src="https://via.placeholder.com/800x400?text=Imagen+1" />
-              <img src="https://via.placeholder.com/800x400?text=Imagen+2" />
-              <img src="https://via.placeholder.com/800x400?text=Imagen+3" />
-            </div>
-            <div class="arrow right-arrow" onclick="moveSlide(1)">›</div>
-          </div>
-      
-          <div class="profile-section">
-            <div class="profile-photo">
-              <img src="https://via.placeholder.com/200" alt="Foto de perfil" />
-              <div class="contact">
-                <a href="#">Email</a>
-                <a href="#">Instagram</a>
-                <a href="#">Facebook</a>
-                <a href="#">Whatsapp</a>
-              </div>
-            </div>
-            <div class="description">
-              <p><strong>Rubén Adrián Zamora Alva</strong> es conocido como RAZA en el mundo del collage. Sus obras están hechas a mano con recortes encontrados al azar en distintas partes del mundo...</p>
-            </div>
-          </div>
-        </div>
-      
-        <script>
-          let currentSlide = 0;
-          function moveSlide(direction) {
-            const carousel = document.getElementById('carousel');
-            const slides = carousel.children.length;
-            currentSlide += direction;
-            if (currentSlide < 0) currentSlide = slides - 1;
-            if (currentSlide >= slides) currentSlide = 0;
-            carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
-          }
-        </script>
-      </body>
 
-             <!-- Botones inferiores -->
-             <div class="bottom-buttons">
-              <button id="page1-button" class="nav-icon">
-                  <img src="BOTON_HOME.svg" alt="Home">
-              </button>
-              <button id="page2-button" class="nav-icon">
-                  <img src="BOTON_DISCOVER.svg" alt="Discover">
-              </button>
-              <button id="page3-button" class="nav-icon">
-                  <img src="BOTON_MYROLE.svg" alt="My Role">
-              </button>
-              <button id="page4-button" class="nav-icon">
-                  <img src="BOTON_PROFILE.svg" alt="Profile">
-              </button>
-          </div>
+  <!-- Encabezado con el logo y selector de idioma -->
+  <header>
+    <img src="logo.png" alt="THE RED Logo" class="logo" />
+    <div class="language-selector">
+      <span class="language-text">LANGUAGE:</span>
+      <button class="language-button" onclick="toggleLanguage()">EN</button>
+    </div>
+  </header>
+
+  <!-- Zona principal de contenido -->
+  <div class="scroll-wall" id="scroll-wall">
     
-            <script>
-              // Configuración de navegación
-              const navigationConfig = [
-                  { id: 'page1-button', page: 'home', icon: 'BOTON_HOME' },
-                  { id: 'page2-button', page: 'discover', icon: 'BOTON_DISCOVER' },
-                  { id: 'page3-button', page: 'myrole', icon: 'BOTON_MYROLE' },
-                  { id: 'page4-button', page: 'profile', icon: 'BOTON_PROFILE' }
-              ];
-          
-              let currentPage = 'home';
-          
-              function handleNavigation(page) {
-                  currentPage = page;
-                  updateButtonModes();
-                  
-                  // Lógica de navegación
-                  switch(page) {
-                      case 'home':
-                          window.location.href = '1pagin.html';
-                          break;
-                      case 'profile':
-                          window.location.href = 'PROFILE.HTML';
-                          break;
-                      case 'discover':
-                          window.location.href = 'discover.html';
-                          break;
-                      case 'my-role':
-                          window.location.href = 'Myrole.html';
-                          break;
-                  }
-              }
-          
-              function updateButtonModes() {
-                  navigationConfig.forEach(({id, page, icon}) => {
-                      const button = document.getElementById(id);
-                      const isActive = page === currentPage;
-                      
-                      button.classList.toggle('active', isActive);
-                      button.onclick = () => handleNavigation(page);
-                  });
-              }
-          
-              // Inicializar
-              document.addEventListener('DOMContentLoaded', updateButtonModes);
-          </script>
-        </body>
-    
-        <script>
-                // Efecto de ocultar el header al hacer scroll en el contenedor scroll-wall
-        let lastScrollTop = 0;
-        const header = document.getElementById('header');
-        const scrollWall = document.getElementById('scroll-wall');
-    
-        // Añadir evento de scroll al contenedor scroll-wall
-        scrollWall.addEventListener('scroll', function() {
-            const scrollTop = scrollWall.scrollTop;
-    
-            // Comparar la posición actual del scroll con la anterior
-            if (scrollTop > lastScrollTop) {
-                header.classList.add('hidden'); // Oculta el header hacia arriba
-            } else {
-                header.classList.remove('hidden'); // Muestra el header hacia abajo
-            }
-    
-            // Actualizar la posición anterior del scroll
-            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // Asegura que el valor nunca sea negativo
-        });
-    
-        </script>
-        </body>
-        </html>
+    <!-- Carrusel de imágenes -->
+    <div class="carousel-container">
+      <div class="arrow left-arrow" onclick="moveSlide(-1)">‹</div>
+      <div class="carousel" id="carousel">
+        <img src="https://via.placeholder.com/800x400?text=Imagen+1" />
+        <img src="https://via.placeholder.com/800x400?text=Imagen+2" />
+        <img src="https://via.placeholder.com/800x400?text=Imagen+3" />
+      </div>
+      <div class="arrow right-arrow" onclick="moveSlide(1)">›</div>
+    </div>
+
+    <!-- Sección de perfil del usuario -->
+    <div class="profile-section">
+      <div class="profile-photo">
+        <img src="https://via.placeholder.com/200" alt="Foto de perfil" />
+        <div class="contact">
+          <a href="#">Email</a>
+          <a href="#">Instagram</a>
+          <a href="#">Facebook</a>
+          <a href="#">Whatsapp</a>
+        </div>
+      </div>
+      <div class="description">
+        <p><strong>Rubén Adrián Zamora Alva</strong>, conocido como RAZA, es un artista de collage que construye sus piezas con recortes encontrados en sus viajes por el mundo, transformando lo ordinario en composiciones extraordinarias...</p>
+      </div>
+    </div>
+
+    <!-- Publicaciones del usuario -->
+    <div class="user-posts">
+      <div class="post">
+        <div class="post-header">
+          <img src="https://via.placeholder.com/40" alt="Usuario 1" />
+          <span class="user-name">Usuario</span>
+        </div>
+        <div class="post-content">
+          <p>Este es un post de ejemplo sobre arte. Aquí, el usuario puede compartir pensamientos, imágenes o cualquier otra cosa relacionada con su actividad en la red social.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Barra de navegación inferior -->
+  <div class="bottom-nav">
+    <button class="nav-button" onclick="navigate('home')">
+      <img src="BOTON_HOME.svg" alt="Home" />
+    </button>
+    <button class="nav-button" onclick="navigate('discover')">
+      <img src="BOTON_DISCOVER.svg" alt="Discover" />
+    </button>
+    <button class="nav-button" onclick="navigate('myrole')">
+      <img src="BOTON_MYROLE.svg" alt="My Role" />
+    </button>
+    <button class="nav-button" onclick="navigate('profile')">
+      <img src="BOTON_PROFILE.svg" alt="Profile" />
+    </button>
+  </div>
+
+  <!-- Funciones JavaScript -->
+  <script>
+    let currentSlide = 0;
+
+    // Función para mover las diapositivas del carrusel
+    function moveSlide(direction) {
+      const carousel = document.getElementById('carousel');
+      const total = carousel.children.length;
+      currentSlide = (currentSlide + direction + total) % total;
+      carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
+    }
+
+    // Función para cambiar el idioma del botón
+    function toggleLanguage() {
+      const btn = document.querySelector('.language-button');
+      btn.textContent = btn.textContent === 'EN' ? 'ES' : 'EN';
+    }
+
+    // Función de navegación entre páginas
+    function navigate(page) {
+      const urls = {
+        home: 'home.html',
+        discover: 'discover.html',
+        myrole: 'myrole.html',
+        profile: 'profile.html'
+      };
+      if (urls[page]) {
+        window.location.href = urls[page];
+      } else {
+        console.error("Página no encontrada:", page);
+      }
+    }
+  </script>
+
+</body>
+</html>
+  
