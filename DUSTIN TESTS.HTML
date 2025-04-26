@@ -1,34 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>THE RED</title>
+  <title>THE RED - Perfil</title>
   <link rel="icon" href="logo.png" type="image/x-icon" />
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400;700&display=swap" rel="stylesheet" />
+  
+  <!-- Estilos -->
   <style>
+    /* Estilos generales del cuerpo */
     body {
-    margin: 0;
-    font-family: 'Roboto Flex', sans-serif;
-    background: url('background.png') no-repeat center center fixed;
-    background-size: cover;
-    color: white;
-    height: 100vh;
-    overflow-y: scroll;
-  }
+      margin: 0;
+      font-family: 'Roboto Flex', sans-serif;
+      background: url('background.png') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+    }
 
+    /* Encabezado superior */
     header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 1.5rem;
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      background: rgba(0, 0, 0, 0.3);
+      transition: background 0.3s;
       z-index: 1000;
-      background: transparent;
-      transition: top 0.3s ease; /* Para ocultar el header al hacer scroll */
+    }
+
+    header:hover {
+      background: rgba(0, 0, 0, 0.6);
     }
 
     .logo {
@@ -38,51 +44,293 @@
     .language-selector {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-    }
-
-    .language-text {
-      font-weight: bold;
-      font-size: 1rem;
+      gap: .5rem;
     }
 
     .language-button {
-      background-color: #5c40c9;
-      color: white;
+      background: #5c40c9;
+      color: #fff;
       border: none;
       border-radius: 12px;
-      padding: 0.3rem 1rem;
-      font-size: 0.9rem;
+      padding: .3rem 1rem;
       cursor: pointer;
       text-transform: uppercase;
+      transition: background .2s, transform .2s;
     }
 
+    .language-button:hover {
+      background: #764fd9;
+      transform: scale(1.05);
+    }
+
+    /* Área desplazable principal */
+    .scroll-wall {
+      position: absolute;
+      top: 80px;
+      bottom: 80px;
+      left: 0;
+      right: 0;
+      overflow-y: auto;
+      padding: 2rem;
+      box-sizing: border-box;
+    }
+
+    /* Carrusel de imágenes */
+    .carousel-container {
+      position: relative;
+      max-width: 800px;
+      height: 400px;
+      margin: 2rem auto;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 15px;
+      overflow: hidden;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .carousel {
+      display: flex;
+      height: 100%;
+      transition: transform .4s ease-in-out;
+    }
+
+    .carousel img {
+      flex: 0 0 100%;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      display: none;
+    }
+
+    .carousel img.active {
+      display: block;
+    }
+
+    .upload-controls {
+      text-align: center;
+      margin: 1rem auto;
+    }
+
+    .upload-button {
+      background: #5c40c9;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: .8rem 1.2rem;
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+
+    .upload-button:hover {
+      background: #764fd9;
+      transform: scale(1.05);
+    }
+
+    .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2.5rem;
+      background: rgba(0, 0, 0, 0.5);
+      padding: .5rem 1rem;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+      user-select: none;
+    }
+
+    .arrow:hover {
+      background: rgba(0, 0, 0, 0.8);
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .left-arrow {
+      left: 10px;
+    }
+
+    .right-arrow {
+      right: 10px;
+    }
+
+    /* Sección de perfil del usuario */
+    .profile-section {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      grid-template-rows: auto auto 1fr;
+      gap: 2rem;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 2rem;
+      border-radius: 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .profile-photo {
+      grid-row: 1 / span 2;
+      text-align: center;
+    }
+
+    .profile-photo img {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      margin-bottom: 1.5em;
+    }
+
+    .contact {
+      display: flex;
+      flex-direction: column;
+      gap: .7rem;
+    }
+
+    .contact a {
+      background: rgba(0, 0, 0, 0.2);
+      color: #fff;
+      text-decoration: none;
+      padding: .6rem 1.2rem;
+      border: 1px solid #555;
+      border-radius: 25px;
+      transition: background .2s, transform .2s;
+    }
+
+    .contact a:hover {
+      background: #222;
+      transform: scale(1.02);
+    }
+
+    .contact-inputs {
+      display: none;
+      flex-direction: column;
+      gap: .5rem;
+      margin-top: .5rem;
+    }
+
+    .contact-inputs input {
+      background: rgba(0, 0, 0, 0.3);
+      color: #fff;
+      padding: .6rem 1.2rem;
+      border: 1px solid #555;
+      border-radius: 25px;
+    }
+
+    .contact-inputs button {
+      align-self: flex-start;
+      background: #5c40c9;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: .6rem 1rem;
+      cursor: pointer;
+      transition: background .2s;
+    }
+
+    .contact-inputs button:hover {
+      background: #764fd9;
+    }
+
+    .description-box {
+      grid-column: 2;
+      grid-row: 1;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 1rem;
+    }
+
+    .description-box textarea {
+      width: 100%;
+      height: 100px;
+      border-radius: 8px;
+      border: 1px solid #555;
+      background: rgba(0, 0, 0, 0.2);
+      color: #fff;
+      padding: .5rem;
+      resize: vertical;
+    }
+
+    .actions {
+      grid-column: 2;
+      grid-row: 2;
+      display: flex;
+      gap: 1rem;
+    }
+
+    .actions button {
+      flex: 1;
+      padding: .8rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+      background: #5c40c9;
+      color: #fff;
+    }
+
+    .actions button:hover {
+      transform: scale(1.03);
+      background: #764fd9;
+    }
+
+    .actions .logout-button {
+      background: #e63946;
+    }
+
+    .actions .logout-button:hover {
+      background: #d62828;
+    }
+
+    .user-posts {
+      grid-column: 1 / -1;
+      grid-row: 3;
+      height: 300px;
+      overflow-y: auto;
+    }
+
+    .post {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .post-header {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .post-header img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+
+    /* Barra inferior de navegación */
     .bottom-nav {
       position: fixed;
       bottom: 1rem;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
-      justify-content: center;
-      align-items: center;
       gap: 2rem;
-      padding: 0.8rem 1.2rem;
-      background: rgba(175, 19, 128, 0.11); 
+      padding: .8rem 1.2rem;
+      background: rgba(175, 19, 128, 0.11);
       backdrop-filter: blur(1px);
       border-radius: 24px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-      z-index: 2000;
+      z-index: 1000;
     }
 
     .nav-button {
       background: none;
       border: none;
       cursor: pointer;
-      transition: transform 0.2s ease;
+      transition: transform .2s;
     }
 
     .nav-button img {
       height: 60px;
+      transition: transform .2s, filter .2s;
     }
 
     .nav-button:hover img,
@@ -90,373 +338,212 @@
       transform: scale(1.05);
       filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
     }
-
-    /* === Nuevo Post === */
-    .new-post-section {
-      margin-top: 80px;
-      padding: 2rem;
-      background-color: rgba(146, 16, 118, 0.103);
-      border-radius: 12px;
-      max-width: 800px;
-      width: 100%;
-      margin-left: auto;
-      margin-right: auto;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-      cursor: pointer;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: white;
-      font-size: 1.2rem;
-    }
-
-    .new-post-section:hover {
-      background-color: rgba(0, 0, 0, 0.9);
-    }
-
-    /* === Posts === */
-    .scroll-wall {
-    margin-top: 30px;
-    padding: 2rem;
-    display: grid;
-    gap: 1.5rem;
-  }
-
-    .post {
-      display: flex;
-      align-items: center;
-      padding: 1.5rem;
-      background: rgba(0, 0, 0, 0.00);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 15px;
-      backdrop-filter: blur(0.5px);
-      opacity: 0;
-      transform: translateY(20px);
-      transition: all 0.5s ease;
-      gap: 1.5rem;
-    }
-
-    .post.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .post img {
-      width: clamp(80px, 15vw, 120px);
-      height: clamp(80px, 15vw, 120px);
-      object-fit: cover;
-      border-radius: 12px;
-      flex-shrink: 0;
-    }
-
-    .post-content a {
-      color: #7ec8e3;
-      text-decoration: none;
-      position: relative;
-      transition: color 0.3s ease;
-    }
-
-    .post-content a::after {
-      content: '';
-      position: absolute;
-      left: 0;
-      bottom: -2px;
-      width: 0;
-      height: 1px;
-      background: currentColor;
-      transition: width 0.3s ease;
-    }
-
-    .post-content a:hover::after {
-      width: 100%;
-    }
-
-    .post-content a:hover {
-      color: #9ad4eb;
-    }
-
-    .post-container {
-      display: flex;
-      background-color: rgba(0, 0, 0, 0.7);
-      border-radius: 16px;
-      padding: 1rem;
-      max-width: 800px;
-      width: 100%;
-      gap: 1rem;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-    }
-
-    .post-image {
-      width: 500px;
-      height: 500px;
-      object-fit: cover;
-      border-radius: 12px;
-    }
-
-    .post-content {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .username {
-      font-weight: bold;
-      font-size: 1.2rem;
-    }
-
-    .product-title {
-      font-size: 1.5rem;
-      margin: 0.5rem 0;
-    }
-
-    .product-details {
-      font-size: 0.95rem;
-      opacity: 0.85;
-    }
-
-    .product-price {
-      font-size: 1.4rem;
-      font-weight: bold;
-      margin-top: 1rem;
-    }
-
-    /* === Pop-up === */
-    .popup {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.7);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 3000;
-    }
-
-    .popup-content {
-      background: #fff;
-      padding: 2rem;
-      border-radius: 10px;
-      width: 300px;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .popup input[type="file"] {
-      margin-bottom: 1rem;
-    }
-
-    .popup textarea {
-      padding: 1rem;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-      resize: none;
-    }
-
-    .popup button {
-      padding: 1rem;
-      background-color: #5c40c9;
-      color: white;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      font-size: 1.1rem;
-    }
-
-    .popup button:hover {
-      background-color: #4a2e92;
-    }
   </style>
 </head>
+
 <body>
 
+  <!-- Header -->
   <header>
     <img src="logo.png" alt="THE RED Logo" class="logo" />
     <div class="language-selector">
-      <span class="language-text">LANGUAGE:</span>
+      <span>LANGUAGE:</span>
       <button class="language-button" onclick="toggleLanguage()">EN</button>
     </div>
   </header>
 
-  <div class="new-post-section" onclick="openPopup()">
-    Crear un nuevo post
+  <!-- Contenido principal desplazable -->
+  <div class="scroll-wall">
+
+    <!-- Carrusel de fotos del usuario -->
+    <div class="carousel-container">
+      <div class="carousel" id="carousel"></div>
+      <div class="arrow left-arrow" onclick="moveSlide(-1)">‹</div>
+      <div class="arrow right-arrow" onclick="moveSlide(1)">›</div>
+    </div>
+
+    <!-- Botón para subir fotos -->
+    <div class="upload-controls">
+      <input type="file" id="imageUpload" accept="image/*" multiple style="display:none">
+      <button class="upload-button" onclick="triggerUpload()">Agregar fotos</button>
+    </div>
+
+    <!-- Sección del perfil -->
+    <div class="profile-section">
+
+      <!-- Foto de perfil y enlaces -->
+      <div class="profile-photo">
+        <img src="https://via.placeholder.com/200" alt="Foto de perfil" />
+        <div class="contact">
+          <a href="#" id="emailLink">Email</a>
+          <a href="#" id="instagramLink">Instagram</a>
+          <a href="#" id="facebookLink">Facebook</a>
+          <a href="#" id="whatsappLink">Whatsapp</a>
+          <a href="#" id="telefonoLink">Teléfono</a>
+
+          <!-- Editor de enlaces -->
+          <div class="contact-inputs" id="contactInputs">
+            <input type="url" id="emailInput" placeholder="Link de Email">
+            <input type="url" id="instagramInput" placeholder="Link de Instagram">
+            <input type="url" id="facebookInput" placeholder="Link de Facebook">
+            <input type="url" id="whatsappInput" placeholder="Link de WhatsApp">
+            <input type="text" id="telefonoInput" placeholder="Número de Teléfono">
+            <button onclick="guardarEnlaces()">Guardar enlaces</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Descripción -->
+      <div class="description-box">
+        <label for="descripcionInput">Descripción:</label>
+        <textarea id="descripcionInput" placeholder="Escribe tu descripción..."></textarea>
+      </div>
+
+      <!-- Botones de acción -->
+      <div class="actions">
+        <button class="edit-links" onclick="toggleEnlaceEditor()">Editar enlaces</button>
+        <button class="edit-desc" onclick="guardarDescripcion()">Editar descripción</button>
+        <button onclick="changeProfilePhoto()">Cambiar foto</button>
+        <button class="logout-button" onclick="logout()">Cerrar sesión</button>
+      </div>
+
+      <!-- Publicaciones del usuario -->
+      <div class="user-posts">
+        <div class="post">
+          <div class="post-header">
+            <img src="https://via.placeholder.com/40" alt="Usuario" />
+            <span class="user-name">Usuario</span>
+          </div>
+          <div class="post-content">
+            <p>Este es un post de ejemplo.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
 
-  <div class="scroll-wall" id="scroll-wall">
-    <!-- Publicaciones -->
-    <div class="post">
-      <img src="jarra.jpg" alt="Bicicleta Melchor">
-      <div class="post-content">
-        <h3 class="product-title">Bicicleta Melchor</h3>
-        <p class="username">@PINGÜINO</p>
-        <div class="product-details">
-          <p class="location">Mérida 216, Roma Norte, CDMX</p>
-          <p class="contact">Tel: 55 4893 8707</p>
-          <a href="https://pinguinomexico.com" target="_blank" class="external-link">
-            Visitar sitio web
-          </a>
-        </div>
-        <p class="product-price">$215 USD</p>
-      </div>
-    </div>
-
-    <div class="post">
-      <img src="jarra.jpg" alt="Bicicleta Melchor">
-      <div class="post-content">
-        <h3 class="product-title">Bicicleta Melchor</h3>
-        <p class="username">@PINGÜINO</p>
-        <div class="product-details">
-          <p class="location">Mérida 216, Roma Norte, CDMX</p>
-          <p class="contact">Tel: 55 4893 8707</p>
-          <a href="https://pinguinomexico.com" target="_blank" class="external-link">
-            Visitar sitio web
-          </a>
-        </div>
-        <p class="product-price">$215 USD</p>
-      </div>
-    </div>
-
-    <div class="post">
-      <img src="jarra.jpg" alt="Bicicleta Melchor">
-      <div class="post-content">
-        <h3 class="product-title">Bicicleta Melchor</h3>
-        <p class="username">@PINGÜINO</p>
-        <div class="product-details">
-          <p class="location">Mérida 216, Roma Norte, CDMX</p>
-          <p class="contact">Tel: 55 4893 8707</p>
-          <a href="https://pinguinomexico.com" target="_blank" class="external-link">
-            Visitar sitio web
-          </a>
-        </div>
-        <p class="product-price">$215 USD</p>
-      </div>
-    </div>
-
-    <div class="post">
-      <img src="jarra.jpg" alt="Bicicleta Melchor">
-      <div class="post-content">
-        <h3 class="product-title">Bicicleta Melchor</h3>
-        <p class="username">@PINGÜINO</p>
-        <div class="product-details">
-          <p class="location">Mérida 216, Roma Norte, CDMX</p>
-          <p class="contact">Tel: 55 4893 8707</p>
-          <a href="https://pinguinomexico.com" target="_blank" class="external-link">
-            Visitar sitio web
-          </a>
-        </div>
-        <p class="product-price">$215 USD</p>
-      </div>
-    </div>
-
-    <div class="post">
-      <img src="jarra.jpg" alt="Bicicleta Melchor">
-      <div class="post-content">
-        <h3 class="product-title">Bicicleta Melchor</h3>
-        <p class="username">@PINGÜINO</p>
-        <div class="product-details">
-          <p class="location">Mérida 216, Roma Norte, CDMX</p>
-          <p class="contact">Tel: 55 4893 8707</p>
-          <a href="https://pinguinomexico.com" target="_blank" class="external-link">
-            Visitar sitio web
-          </a>
-        </div>
-        <p class="product-price">$215 USD</p>
-      </div>
-    </div>
-
+  <!-- Barra inferior de navegación -->
   <div class="bottom-nav">
-    <button class="nav-button" onclick="navigate('home')">
-      <img src="BOTON_HOME.svg" alt="Home" />
-    </button>
-    <button class="nav-button" onclick="navigate('discover')">
-      <img src="BOTON_DISCOVER.svg" alt="Discover" />
-    </button>
-    <button class="nav-button" onclick="navigate('myrole')">
-      <img src="BOTON_MYROLE.svg" alt="My Role" />
-    </button>
-    <button class="nav-button" onclick="navigate('profile')">
-      <img src="BOTON_PROFILE.svg" alt="Profile" />
-    </button>
-  </div>
-  
-
-  
-
-  <!-- Pop-up para crear nuevo post -->
-  <div class="popup" id="popup">
-    <div class="popup-content">
-      <input type="file" id="image-upload" />
-      <textarea id="description" placeholder="Escribe tu descripción aquí..." rows="4"></textarea>
-      <button onclick="submitPost()">Subir Post</button>
-    </div>
+    <button class="nav-button" onclick="navigate('home')"><img src="BOTON_HOME.svg" alt="Home" /></button>
+    <button class="nav-button" onclick="navigate('discover')"><img src="BOTON_DISCOVER.svg" alt="Discover" /></button>
+    <button class="nav-button" onclick="navigate('myrole')"><img src="BOTON_MYROLE.svg" alt="My Role" /></button>
+    <button class="nav-button" onclick="navigate('profile')"><img src="BOTON_PROFILE.svg" alt="Profile" /></button>
   </div>
 
+  <!-- Scripts JS -->
   <script>
-    function toggleLanguage() {
-      const btn = document.querySelector('.language-button');
-      btn.textContent = btn.textContent === 'EN' ? 'ES' : 'EN';
+    let userImages = [];
+    let currentSlide = 0;
+
+    // Abre el selector de archivos para subir fotos
+    function triggerUpload() {
+      document.getElementById('imageUpload').click();
     }
 
-    function navigate(page) {
-      const urls = {
-        home: '1pagin.html',
-        discover: 'discover.html',
-        myrole: 'myrole.html',
-        profile: 'DUSTIN TESTS 2.HTML'
-      };
-      if (urls[page]) {
-        window.location.href = urls[page];
-      } else {
-        console.error("Página no encontrada:", page);
-      }
-    }
-
-    // Abrir pop-up para nuevo post
-    function openPopup() {
-      document.getElementById('popup').style.display = 'flex';
-    }
-
-    // Cerrar pop-up
-    function closePopup() {
-      document.getElementById('popup').style.display = 'none';
-    }
-
-    // Subir un nuevo post (solo por mostrar la funcionalidad, puedes agregar backend)
-    function submitPost() {
-      const image = document.getElementById('image-upload').files[0];
-      const description = document.getElementById('description').value;
-      if (image && description) {
-        alert('Post Subido: ' + description);
-        closePopup();
-      } else {
-        alert('Por favor, completa todos los campos.');
-      }
-    }
-
-    // Manejar el deslizamiento para ocultar el header
-    let lastScrollTop = 0;
-    window.addEventListener('scroll', function() {
-      let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
-      if (currentScroll > lastScrollTop) {
-        document.querySelector('header').style.top = '-100px'; // Oculta el header al hacer scroll hacia abajo
-      } else {
-        document.querySelector('header').style.top = '0'; // Muestra el header cuando se sube
-      }
-      lastScrollTop = currentScroll <= 0 ? 0 : currentScroll; // Para evitar valores negativos
-    });
-
-    // Mostrar posts con animación
-    document.addEventListener('DOMContentLoaded', function() {
-      const posts = document.querySelectorAll('.post');
-      posts.forEach((post, index) => {
-        setTimeout(() => {
-          post.classList.add('visible');
-        }, index * 600); // Ajusta el tiempo entre apariciones
+    // Maneja los archivos subidos y los convierte en imágenes
+    document.getElementById('imageUpload').addEventListener('change', e => {
+      Array.from(e.target.files).forEach(f => {
+        if (f.type.startsWith('image/')) {
+          let r = new FileReader();
+          r.onload = ev => addImageToCarousel(ev.target.result);
+          r.readAsDataURL(f);
+        }
       });
     });
-  </script>
 
+    // Agrega imagen al carrusel
+    function addImageToCarousel(src) {
+      const img = document.createElement('img');
+      img.src = src;
+      if (userImages.length === 0) img.classList.add('active');
+      userImages.push(src);
+      document.getElementById('carousel').appendChild(img);
+    }
+
+    // Cambia de imagen en el carrusel
+    function moveSlide(n) {
+      if (!userImages.length) return;
+      currentSlide = (currentSlide + n + userImages.length) % userImages.length;
+      updateCarouselDisplay();
+    }
+
+    // Muestra solo la imagen activa en el carrusel
+    function updateCarouselDisplay() {
+      document.querySelectorAll('#carousel img').forEach((img, i) =>
+        img.classList.toggle('active', i === currentSlide)
+      );
+    }
+
+    // Muestra/oculta el editor de enlaces
+    function toggleEnlaceEditor() {
+      const ci = document.getElementById('contactInputs');
+      ci.style.display = ci.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    // Guarda los enlaces personalizados del perfil
+    function guardarEnlaces() {
+      const email = document.getElementById('emailInput').value;
+      const instagram = document.getElementById('instagramInput').value;
+      const facebook = document.getElementById('facebookInput').value;
+      const whatsapp = document.getElementById('whatsappInput').value;
+      const telefono = document.getElementById('telefonoInput').value;
+
+      document.getElementById('emailLink').href = email || '#';
+      document.getElementById('instagramLink').href = instagram || '#';
+      document.getElementById('facebookLink').href = facebook || '#';
+      document.getElementById('whatsappLink').href = whatsapp || '#';
+      document.getElementById('telefonoLink').href = telefono ? 'tel:' + telefono : '#';
+      document.getElementById('telefonoLink').textContent = telefono || 'Teléfono';
+
+      alert('Enlaces actualizados');
+      document.getElementById('contactInputs').style.display = 'none';
+    }
+
+    // Guarda la descripción del perfil
+    function guardarDescripcion() {
+      const d = document.getElementById('descripcionInput').value;
+      console.log('Descripción:', d);
+      alert('Descripción guardada');
+    }
+
+    // Cambia la foto de perfil
+    function changeProfilePhoto() {
+      const inp = document.createElement('input');
+      inp.type = 'file';
+      inp.accept = 'image/*';
+      inp.onchange = e => {
+        const f = e.target.files[0];
+        if (f) {
+          const r = new FileReader();
+          r.onload = ev => document.querySelector('.profile-photo img').src = ev.target.result;
+          r.readAsDataURL(f);
+        }
+      };
+      inp.click();
+    }
+
+    // Cierra sesión (redirección)
+    function logout() {
+      window.location.href = 'loggin.html';
+    }
+
+    // Cambia el idioma (solo cambia el texto del botón por ahora)
+    function toggleLanguage() {
+      const b = document.querySelector('.language-button');
+      b.textContent = b.textContent === 'EN' ? 'ES' : 'EN';
+    }
+
+    // Navega a otras páginas
+    function navigate(p) {
+      const u = {
+        home: 'home.html',
+        discover: 'discover.html',
+        myrole: 'myrole.html',
+        profile: 'profile.html'
+      };
+      if (u[p]) window.location.href = u[p];
+    }
+  </script>
 </body>
 </html>

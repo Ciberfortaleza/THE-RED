@@ -1,70 +1,73 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>THE RED</title>
+  <title>THE RED - Perfil</title>
   <link rel="icon" href="logo.png" type="image/x-icon" />
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400;700&display=swap" rel="stylesheet" />
+  
+  <!-- Estilos -->
   <style>
-    /* Estilo base del body, con imagen de fondo y texto blanco */
+    /* Estilos generales del cuerpo */
     body {
       margin: 0;
       font-family: 'Roboto Flex', sans-serif;
       background: url('background.png') no-repeat center center fixed;
       background-size: cover;
       color: white;
-      height: 100vh;
-      overflow: hidden;
     }
 
-    /* Estilo del encabezado, se fija en la parte superior */
+    /* Encabezado superior */
     header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 1.5rem;
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      background: rgba(0, 0, 0, 0.3);
+      transition: background 0.3s;
       z-index: 1000;
-      background: transparent;
     }
 
-    /* Logo con tamaño flexible */
+    header:hover {
+      background: rgba(0, 0, 0, 0.6);
+    }
+
     .logo {
       height: clamp(30px, 6vw, 60px);
     }
 
-    /* Selector de idioma en la parte superior derecha */
     .language-selector {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-    }
-
-    .language-text {
-      font-weight: bold;
-      font-size: 1rem;
+      gap: .5rem;
     }
 
     .language-button {
-      background-color: #5c40c9;
-      color: white;
+      background: #5c40c9;
+      color: #fff;
       border: none;
       border-radius: 12px;
-      padding: 0.3rem 1rem;
-      font-size: 0.9rem;
+      padding: .3rem 1rem;
       cursor: pointer;
       text-transform: uppercase;
+      transition: background .2s, transform .2s;
     }
 
-    /* Zona de contenido desplazable */
+    .language-button:hover {
+      background: #764fd9;
+      transform: scale(1.05);
+    }
+
+    /* Área desplazable principal */
     .scroll-wall {
       position: absolute;
       top: 80px;
-      bottom: 120px;
+      bottom: 80px;
       left: 0;
       right: 0;
       overflow-y: auto;
@@ -72,56 +75,97 @@
       box-sizing: border-box;
     }
 
-    /* Estilo del carrusel de imágenes */
+    /* Carrusel de imágenes */
     .carousel-container {
       position: relative;
       max-width: 800px;
-      margin: 0 auto 3rem;
+      height: 400px;
+      margin: 2rem auto;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 15px;
+      overflow: hidden;
+      background: rgba(0, 0, 0, 0.2);
     }
 
     .carousel {
       display: flex;
-      transition: transform 0.4s ease-in-out;
+      height: 100%;
+      transition: transform .4s ease-in-out;
     }
 
     .carousel img {
-      width: 100%;
-      height: 400px;
-      object-fit: cover;
-      border-radius: 15px;
+      flex: 0 0 100%;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      display: none;
     }
 
-    /* Flechas de navegación del carrusel */
+    .carousel img.active {
+      display: block;
+    }
+
+    .upload-controls {
+      text-align: center;
+      margin: 1rem auto;
+    }
+
+    .upload-button {
+      background: #5c40c9;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: .8rem 1.2rem;
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+
+    .upload-button:hover {
+      background: #764fd9;
+      transform: scale(1.05);
+    }
+
     .arrow {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
       font-size: 2.5rem;
-      background-color: rgba(0,0,0,0.5);
-      padding: 0.5rem 1rem;
+      background: rgba(0, 0, 0, 0.5);
+      padding: .5rem 1rem;
       border-radius: 50%;
       cursor: pointer;
+      transition: background .2s, transform .2s;
       user-select: none;
     }
 
-    .left-arrow { left: 10px; }
-    .right-arrow { right: 10px; }
-
-    /* Estilo de la sección de perfil del usuario */
-    .profile-section {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 300px 1fr;
-      gap: 2rem;
-      background: rgba(0, 0, 0, 0.25);
-      padding: 2rem;
-      border-radius: 20px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    .arrow:hover {
+      background: rgba(0, 0, 0, 0.8);
+      transform: translateY(-50%) scale(1.1);
     }
 
-    /* Foto de perfil redonda */
+    .left-arrow {
+      left: 10px;
+    }
+
+    .right-arrow {
+      right: 10px;
+    }
+
+    /* Sección de perfil del usuario */
+    .profile-section {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      grid-template-rows: auto auto 1fr;
+      gap: 2rem;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 2rem;
+      border-radius: 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
     .profile-photo {
+      grid-row: 1 / span 2;
       text-align: center;
     }
 
@@ -130,79 +174,138 @@
       height: 200px;
       object-fit: cover;
       border-radius: 50%;
-      border: 3px solid white;
+      border: 3px solid #fff;
       margin-bottom: 1.5em;
     }
 
-    /* Enlaces de contacto del perfil */
     .contact {
       display: flex;
       flex-direction: column;
-      gap: 0.7rem;
+      gap: .7rem;
     }
 
     .contact a {
-      color: white;
+      background: rgba(0, 0, 0, 0.2);
+      color: #fff;
       text-decoration: none;
-      padding: 0.6rem 1.2rem;
+      padding: .6rem 1.2rem;
       border: 1px solid #555;
       border-radius: 25px;
-      transition: background 0.3s ease;
+      transition: background .2s, transform .2s;
     }
 
     .contact a:hover {
-      background-color: #222;
+      background: #222;
+      transform: scale(1.02);
     }
 
-    /* Descripción del usuario */
-    .description {
-      font-size: 1.1em;
-      line-height: 1.6;
+    .contact-inputs {
+      display: none;
+      flex-direction: column;
+      gap: .5rem;
+      margin-top: .5rem;
     }
 
-    /* Estilo de los posts del usuario */
-    .user-posts {
-      margin-top: 3rem;
+    .contact-inputs input {
+      background: rgba(0, 0, 0, 0.3);
+      color: #fff;
+      padding: .6rem 1.2rem;
+      border: 1px solid #555;
+      border-radius: 25px;
     }
 
-    /* Estilo de cada post en la sección de publicaciones */
-    .post {
+    .contact-inputs button {
+      align-self: flex-start;
+      background: #5c40c9;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: .6rem 1rem;
+      cursor: pointer;
+      transition: background .2s;
+    }
+
+    .contact-inputs button:hover {
+      background: #764fd9;
+    }
+
+    .description-box {
+      grid-column: 2;
+      grid-row: 1;
       background: rgba(255, 255, 255, 0.1);
       border-radius: 10px;
-      margin-bottom: 1.5rem;
-      padding: 1.5rem;
+      padding: 1rem;
+    }
+
+    .description-box textarea {
+      width: 100%;
+      height: 100px;
+      border-radius: 8px;
+      border: 1px solid #555;
+      background: rgba(0, 0, 0, 0.2);
+      color: #fff;
+      padding: .5rem;
+      resize: vertical;
+    }
+
+    .actions {
+      grid-column: 2;
+      grid-row: 2;
       display: flex;
-      flex-direction: column;
       gap: 1rem;
     }
 
-    /* Encabezado del post (usuario y nombre) */
-    .post .post-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .actions button {
+      flex: 1;
+      padding: .8rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+      background: #5c40c9;
+      color: #fff;
     }
 
-    .post .post-header img {
+    .actions button:hover {
+      transform: scale(1.03);
+      background: #764fd9;
+    }
+
+    .actions .logout-button {
+      background: #e63946;
+    }
+
+    .actions .logout-button:hover {
+      background: #d62828;
+    }
+
+    .user-posts {
+      grid-column: 1 / -1;
+      grid-row: 3;
+      height: 300px;
+      overflow-y: auto;
+    }
+
+    .post {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .post-header {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .post-header img {
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      object-fit: cover;
-      margin-right: 1rem;
     }
 
-    .post .post-header .user-name {
-      font-weight: bold;
-      font-size: 1.1em;
-    }
-
-    /* Contenido del post */
-    .post .post-content {
-      font-size: 1em;
-      line-height: 1.5;
-    }
-
-    /* Barra de navegación inferior */
+    /* Barra inferior de navegación */
     .bottom-nav {
       position: fixed;
       bottom: 1rem;
@@ -210,23 +313,24 @@
       transform: translateX(-50%);
       display: flex;
       gap: 2rem;
-      padding: 0.8rem 1.2rem;
+      padding: .8rem 1.2rem;
       background: rgba(175, 19, 128, 0.11);
       backdrop-filter: blur(1px);
       border-radius: 24px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-      z-index: 2000;
+      z-index: 1000;
     }
 
-    /* Botones de navegación con imágenes */
     .nav-button {
       background: none;
       border: none;
       cursor: pointer;
+      transition: transform .2s;
     }
 
     .nav-button img {
       height: 60px;
+      transition: transform .2s, filter .2s;
     }
 
     .nav-button:hover img,
@@ -234,176 +338,90 @@
       transform: scale(1.05);
       filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
     }
-    .upload-controls {
-  text-align: center;
-  margin: 15px 0;
-}
-
-.upload-controls input {
-  display: none; /* Opcional: ocultar el input por defecto */
-}
-
-.upload-controls button {
-  padding: 8px 15px;
-  background: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-} 
-.upload-controls button {
-  padding: 10px 20px;
-  background: #4285F4;
-  color: white;   /* mejoras del bpton pa de agregar fotos */
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-}
   </style>
 </head>
+
 <body>
 
-  <!-- Encabezado con el logo y selector de idioma -->
+  <!-- Header -->
   <header>
     <img src="logo.png" alt="THE RED Logo" class="logo" />
     <div class="language-selector">
-      <span class="language-text">LANGUAGE:</span>
+      <span>LANGUAGE:</span>
       <button class="language-button" onclick="toggleLanguage()">EN</button>
     </div>
   </header>
 
-  <!-- Zona principal de contenido -->
-  <div class="scroll-wall" id="scroll-wall">
-    
-    <!-- Carrusel de imágenes -->
-    <!-- Contenedor del carrusel (usa tus clases CSS originales) -->
+  <!-- Contenido principal desplazable -->
+  <div class="scroll-wall">
+
+    <!-- Carrusel de fotos del usuario -->
     <div class="carousel-container">
+      <div class="carousel" id="carousel"></div>
       <div class="arrow left-arrow" onclick="moveSlide(-1)">‹</div>
-      <div class="carousel" id="carousel">
-        <!-- Las imágenes aparecerán aquí -->
-      </div>
       <div class="arrow right-arrow" onclick="moveSlide(1)">›</div>
     </div>
-    
-    <!-- Input oculto + Botón visible (Versión Funcional) -->
+
+    <!-- Botón para subir fotos -->
     <div class="upload-controls">
       <input type="file" id="imageUpload" accept="image/*" multiple style="display:none">
-      <button onclick="triggerUpload()">Agregar fotos</button>
+      <button class="upload-button" onclick="triggerUpload()">Agregar fotos</button>
     </div>
-    
-    <script>
-      // 1. Variables globales
-      let userImages = [];
-      let currentSlide = 0;
-    
-      // 2. Función para activar el input file
-      function triggerUpload() {
-        document.getElementById('imageUpload').click();
-      }
-    
-      // 3. Escuchar cuando se seleccionan archivos
-      document.getElementById('imageUpload').addEventListener('change', function(e) {
-        if (this.files.length > 0) {
-          processImages(this.files);
-        }
-      });
-    
-      // 4. Procesar cada imagen
-      function processImages(files) {
-        Array.from(files).forEach(file => {
-          if (!file.type.startsWith('image/')) {
-            alert('Solo se permiten archivos de imagen');
-            return;
-          }
-    
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            userImages.push(e.target.result);
-            updateCarousel();
-          };
-          reader.readAsDataURL(file);
-        });
-      }
-    
-      // 5. Actualizar el carrusel con las nuevas imágenes
-      function updateCarousel() {
-        const carousel = document.getElementById('carousel');
-        carousel.innerHTML = ''; // Limpiar existentes
-        
-        userImages.forEach(imgSrc => {
-          const img = document.createElement('img');
-          img.src = imgSrc;
-          carousel.appendChild(img);
-        });
-    
-        // Mostrar la primera imagen
-        if (userImages.length > 0) {
-          showSlide(0);
-        }
-      }
-    
-      // Funciones de navegación (mantén las tuyas si ya las tienes)
-      function moveSlide(n) {
-        currentSlide += n;
-        showSlide(currentSlide);
-      }
-    
-      function showSlide(n) {
-        const slides = document.querySelectorAll('#carousel img');
-        if (slides.length === 0) return;
-        
-        // Ajustar índice si excede los límites
-        currentSlide = (n + slides.length) % slides.length;
-        
-        // Ocultar todas y mostrar la actual
-        slides.forEach(img => img.style.display = 'none');
-        slides[currentSlide].style.display = 'block';
-      }
-    </script>
-    <!-- Sección de perfil del usuario -->
-    <!DOCTYPE html>
-    <html lang="es">
-    <head>
-      <meta charset="UTF-8">
-      <title>Perfil de Usuario</title>
-      <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-      <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-      <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-      <link rel="stylesheet" href="descripcion.css">
-    </head>
-    <body>
-    
+
+    <!-- Sección del perfil -->
     <div class="profile-section">
+
+      <!-- Foto de perfil y enlaces -->
       <div class="profile-photo">
         <img src="https://via.placeholder.com/200" alt="Foto de perfil" />
-    
         <div class="contact">
-          <a href="#" id="emailLink" target="_blank">Email</a>
-          <a href="#" id="instagramLink" target="_blank">Instagram</a>
-          <a href="#" id="facebookLink" target="_blank">Facebook</a>
-          <a href="#" id="whatsappLink" target="_blank">Whatsapp</a>
-          <a href="#" id="telefonoLink">Número de Teléfono</a>
-          <button onclick="toggleEnlaceEditor()">Editar enlaces</button>
-        </div>
-    
-        <div class="contact-inputs" id="contactInputs" style="display: none;">
-          <input type="url" id="emailInput" placeholder="Link de Email">
-          <input type="url" id="instagramInput" placeholder="Link de Instagram">
-          <input type="url" id="facebookInput" placeholder="Link de Facebook">
-          <input type="url" id="whatsappInput" placeholder="Link de WhatsApp">
-          <input type="text" id="telefonoInput" placeholder="Número de Teléfono">
-          <button onclick="guardarEnlaces()">Guardar enlaces</button>
+          <a href="#" id="emailLink">Email</a>
+          <a href="#" id="instagramLink">Instagram</a>
+          <a href="#" id="facebookLink">Facebook</a>
+          <a href="#" id="whatsappLink">Whatsapp</a>
+          <a href="#" id="telefonoLink">Teléfono</a>
+
+          <!-- Editor de enlaces -->
+          <div class="contact-inputs" id="contactInputs">
+            <input type="url" id="emailInput" placeholder="Link de Email">
+            <input type="url" id="instagramInput" placeholder="Link de Instagram">
+            <input type="url" id="facebookInput" placeholder="Link de Facebook">
+            <input type="url" id="whatsappInput" placeholder="Link de WhatsApp">
+            <input type="text" id="telefonoInput" placeholder="Número de Teléfono">
+            <button onclick="guardarEnlaces()">Guardar enlaces</button>
+          </div>
         </div>
       </div>
-    
-      <div class="description">
-        <p id="descripcionTexto"></p>
-        <textarea id="descripcionInput" placeholder="Agregar descripción..." style="display: none;"></textarea>
-        <button id="editarDescripcionBtn" onclick="editarDescripcion()">Editar descripción</button>
-        <button id="guardarDescripcionBtn" onclick="guardarDescripcion()" style="display: none;">Guardar descripción</button>
+
+      <!-- Descripción -->
+      <div class="description-box">
+        <label for="descripcionInput">Descripción:</label>
+        <textarea id="descripcionInput" placeholder="Escribe tu descripción..."></textarea>
       </div>
+
+      <!-- Botones de acción -->
+      <div class="actions">
+        <button class="edit-links" onclick="toggleEnlaceEditor()">Editar enlaces</button>
+        <button class="edit-desc" onclick="guardarDescripcion()">Editar descripción</button>
+        <button onclick="changeProfilePhoto()">Cambiar foto</button>
+        <button class="logout-button" onclick="logout()">Cerrar sesión</button>
+      </div>
+
+      <!-- Publicaciones del usuario -->
+      <div class="user-posts">
+        <div class="post">
+          <div class="post-header">
+            <img src="https://via.placeholder.com/40" alt="Usuario" />
+            <span class="user-name">Usuario</span>
+          </div>
+          <div class="post-content">
+            <p>Este es un post de ejemplo.</p>
+          </div>
+        </div>
+      </div>
+
     </div>
+<<<<<<< HEAD
     
     <script>
       // Configura Firebase con tus credenciales
@@ -459,184 +477,131 @@
               document.getElementById("descripcionInput").value = data.descripcion || "";
             }
           });
+=======
+  </div>
+
+  <!-- Barra inferior de navegación -->
+  <div class="bottom-nav">
+    <button class="nav-button" onclick="navigate('home')"><img src="BOTON_HOME.svg" alt="Home" /></button>
+    <button class="nav-button" onclick="navigate('discover')"><img src="BOTON_DISCOVER.svg" alt="Discover" /></button>
+    <button class="nav-button" onclick="navigate('myrole')"><img src="BOTON_MYROLE.svg" alt="My Role" /></button>
+    <button class="nav-button" onclick="navigate('profile')"><img src="BOTON_PROFILE.svg" alt="Profile" /></button>
+  </div>
+
+  <!-- Scripts JS -->
+  <script>
+    let userImages = [];
+    let currentSlide = 0;
+
+    // Abre el selector de archivos para subir fotos
+    function triggerUpload() {
+      document.getElementById('imageUpload').click();
+    }
+
+    // Maneja los archivos subidos y los convierte en imágenes
+    document.getElementById('imageUpload').addEventListener('change', e => {
+      Array.from(e.target.files).forEach(f => {
+        if (f.type.startsWith('image/')) {
+          let r = new FileReader();
+          r.onload = ev => addImageToCarousel(ev.target.result);
+          r.readAsDataURL(f);
+>>>>>>> db81ae3a0a4020a01cf4bfa08a5bd0bc13c2ad9f
         }
       });
-    
-      function guardarEnlaces() {
-        const user = firebase.auth().currentUser;
-        if (!user) return;
-    
-        const data = {
-          email: document.getElementById("emailInput").value,
-          instagram: document.getElementById("instagramInput").value,
-          facebook: document.getElementById("facebookInput").value,
-          whatsapp: document.getElementById("whatsappInput").value,
-          telefono: document.getElementById("telefonoInput").value
-        };
-    
-        db.collection("usuarios").doc(user.uid).set(data, { merge: true }).then(() => {
-          alert("Enlaces guardados correctamente.");
-          location.reload();
-        });
-      }
-    
-      function guardarDescripcion() {
-        const user = firebase.auth().currentUser;
-        if (!user) return;
-    
-        const descripcion = document.getElementById("descripcionInput").value;
-    
-        db.collection("usuarios").doc(user.uid).set({ descripcion }, { merge: true }).then(() => {
-          document.getElementById("descripcionTexto").textContent = descripcion;
-          document.getElementById("descripcionInput").style.display = "none";
-          document.getElementById("guardarDescripcionBtn").style.display = "none";
-          document.getElementById("editarDescripcionBtn").style.display = "inline";
-        });
-      }
-    
-      function editarDescripcion() {
-        document.getElementById("descripcionInput").style.display = "block";
-        document.getElementById("guardarDescripcionBtn").style.display = "inline";
-        document.getElementById("editarDescripcionBtn").style.display = "none";
-      }
-    
-      function toggleEnlaceEditor() {
-        const editor = document.getElementById("contactInputs");
-        editor.style.display = editor.style.display === "none" ? "block" : "none";
-      }
-    </script>
-    
-    </body>
-    </html>
-    
-</script>
+    });
 
-    <!-- Publicaciones del usuario -->
-    <div class="user-posts">
-      <div class="post">
-        <div class="post-header">
-          <img src="https://via.placeholder.com/40" alt="Usuario 1" />
-          <span class="user-name">Usuario</span>
-        </div>
-        <div class="post-content">
-          <p>Este es un post de ejemplo sobre arte. Aquí, el usuario puede compartir pensamientos, imágenes o cualquier otra cosa relacionada con su actividad en la red social.</p>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Barra de navegación inferior -->
-  <div class="bottom-nav">
-    <button class="nav-button" onclick="navigate('home')">
-      <img src="BOTON_HOME.svg" alt="Home" />
-    </button>
-    <button class="nav-button" onclick="navigate('discover')">
-      <img src="BOTON_DISCOVER.svg" alt="Discover" />
-    </button>
-    <button class="nav-button" onclick="navigate('myrole')">
-      <img src="BOTON_MYROLE.svg" alt="My Role" />
-    </button>
-    <button class="nav-button" onclick="navigate('profile')">
-      <img src="BOTON_PROFILE.svg" alt="Profile" />
-    </button>
-  </div>
-
-  <!-- Funciones JavaScript -->
-  <script>
-
-    // Función para mover las diapositivas del carrusel
-    function moveSlide(direction) {
-      const carousel = document.getElementById('carousel');
-      const total = carousel.children.length;
-      currentSlide = (currentSlide + direction + total) % total;
-      carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
+    // Agrega imagen al carrusel
+    function addImageToCarousel(src) {
+      const img = document.createElement('img');
+      img.src = src;
+      if (userImages.length === 0) img.classList.add('active');
+      userImages.push(src);
+      document.getElementById('carousel').appendChild(img);
     }
 
-    // Función para cambiar el idioma del botón
+    // Cambia de imagen en el carrusel
+    function moveSlide(n) {
+      if (!userImages.length) return;
+      currentSlide = (currentSlide + n + userImages.length) % userImages.length;
+      updateCarouselDisplay();
+    }
+
+    // Muestra solo la imagen activa en el carrusel
+    function updateCarouselDisplay() {
+      document.querySelectorAll('#carousel img').forEach((img, i) =>
+        img.classList.toggle('active', i === currentSlide)
+      );
+    }
+
+    // Muestra/oculta el editor de enlaces
+    function toggleEnlaceEditor() {
+      const ci = document.getElementById('contactInputs');
+      ci.style.display = ci.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    // Guarda los enlaces personalizados del perfil
+    function guardarEnlaces() {
+      const email = document.getElementById('emailInput').value;
+      const instagram = document.getElementById('instagramInput').value;
+      const facebook = document.getElementById('facebookInput').value;
+      const whatsapp = document.getElementById('whatsappInput').value;
+      const telefono = document.getElementById('telefonoInput').value;
+
+      document.getElementById('emailLink').href = email || '#';
+      document.getElementById('instagramLink').href = instagram || '#';
+      document.getElementById('facebookLink').href = facebook || '#';
+      document.getElementById('whatsappLink').href = whatsapp || '#';
+      document.getElementById('telefonoLink').href = telefono ? 'tel:' + telefono : '#';
+      document.getElementById('telefonoLink').textContent = telefono || 'Teléfono';
+
+      alert('Enlaces actualizados');
+      document.getElementById('contactInputs').style.display = 'none';
+    }
+
+    // Guarda la descripción del perfil
+    function guardarDescripcion() {
+      const d = document.getElementById('descripcionInput').value;
+      console.log('Descripción:', d);
+      alert('Descripción guardada');
+    }
+
+    // Cambia la foto de perfil
+    function changeProfilePhoto() {
+      const inp = document.createElement('input');
+      inp.type = 'file';
+      inp.accept = 'image/*';
+      inp.onchange = e => {
+        const f = e.target.files[0];
+        if (f) {
+          const r = new FileReader();
+          r.onload = ev => document.querySelector('.profile-photo img').src = ev.target.result;
+          r.readAsDataURL(f);
+        }
+      };
+      inp.click();
+    }
+
+    // Cierra sesión (redirección)
+    function logout() {
+      window.location.href = 'loggin.html';
+    }
+
+    // Cambia el idioma (solo cambia el texto del botón por ahora)
     function toggleLanguage() {
-      const btn = document.querySelector('.language-button');
-      btn.textContent = btn.textContent === 'EN' ? 'ES' : 'EN';
+      const b = document.querySelector('.language-button');
+      b.textContent = b.textContent === 'EN' ? 'ES' : 'EN';
     }
 
-    // Función de navegación entre páginas
-    function navigate(page) {
-      const urls = {
+    // Navega a otras páginas
+    function navigate(p) {
+      const u = {
         home: 'home.html',
         discover: 'discover.html',
         myrole: 'myrole.html',
         profile: 'profile.html'
       };
-      if (urls[page]) {
-        window.location.href = urls[page];
-      } else {
-        console.error("Página no encontrada:", page);
-      }
+      if (u[p]) window.location.href = u[p];
     }
   </script>
-
 </body>
-<script>
-  // Función para subir imágenes
-  function uploadImages() {
-    const input = document.getElementById('imageUpload');
-    const files = input.files;
-    
-    if (files.length === 0) {
-      alert('Selecciona al menos una imagen');
-      return;
-    }
-
-    // Procesar cada imagen seleccionada
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      if (file.type.startsWith('image/')) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          userImages.push(e.target.result); // Guardar la imagen
-          updateCarousel(); // Actualizar el carrusel
-        };
-        reader.readAsDataURL(file); // Convertir a URL
-      }
-    }
-    input.value = ''; // Limpiar el input
-  }
-
-  // Actualiza el carrusel con las imágenes subidas
-  function updateCarousel() {
-    const carousel = document.getElementById('carousel');
-    carousel.innerHTML = ''; // Limpiar carrusel
-
-    userImages.forEach((imgSrc) => {
-      const img = document.createElement('img');
-      img.src = imgSrc;
-      carousel.appendChild(img);
-    });
-
-    showSlide(currentSlide); // Mostrar la primera imagen
-  }
-
-  // Funciones de navegación (usando tu CSS original)
-  function moveSlide(n) {
-    currentSlide += n;
-    showSlide(currentSlide);
-  }
-
-  function showSlide(n) {
-    const slides = document.querySelectorAll('#carousel img');
-    if (slides.length === 0) return;
-
-    // Ajustar índice si se pasa del límite
-    if (n >= slides.length) currentSlide = 0;
-    if (n < 0) currentSlide = slides.length - 1;
-
-    // Ocultar todas las imágenes y mostrar la actual
-    slides.forEach((img) => (img.style.display = 'none'));
-    slides[currentSlide].style.display = 'block';
-  }
-
-  // Inicializar carrusel vacío
-  updateCarousel();
-</script>
 </html>
-  
