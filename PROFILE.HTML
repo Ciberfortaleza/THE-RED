@@ -421,6 +421,63 @@
       </div>
 
     </div>
+<<<<<<< HEAD
+    
+    <script>
+      // Configura Firebase con tus credenciales
+      const firebaseConfig = {
+            apiKey: "AIzaSyApU8UbfqfzBH1UPU3a1CQGf1p995Rf0y4",
+            authDomain: "the-red-loggin.firebaseapp.com",
+            projectId: "the-red-loggin",
+            storageBucket: "the-red-loggin.firebasestorage.app",
+            messagingSenderId: "40265573777",
+            appId: "1:40265573777:web:1651cb4119969010ea2630",
+            measurementId: "G-DPLC00RS2V"
+      };
+    
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+    
+      firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          const uid = user.uid;
+          db.collection("usuarios").doc(uid).get().then(doc => {
+            if (doc.exists) {
+              const data = doc.data();
+              // Asignando los enlaces de forma dinámica
+              if (data.email) {
+                document.getElementById("emailLink").href = data.email;
+                document.getElementById("emailLink").target = "_blank";
+              }
+              if (data.instagram) {
+                document.getElementById("instagramLink").href = data.instagram;
+                document.getElementById("instagramLink").target = "_blank";
+              }
+              if (data.facebook) {
+                document.getElementById("facebookLink").href = data.facebook;
+                document.getElementById("facebookLink").target = "_blank";
+              }
+              if (data.whatsapp) {
+                document.getElementById("whatsappLink").href = data.whatsapp;
+                document.getElementById("whatsappLink").target = "_blank";
+              }
+              if (data.telefono) {
+                document.getElementById("telefonoLink").textContent = data.telefono;
+              }
+    
+              // Los inputs se llenan con los datos guardados
+              document.getElementById("emailInput").value = data.email || "";
+              document.getElementById("instagramInput").value = data.instagram || "";
+              document.getElementById("facebookInput").value = data.facebook || "";
+              document.getElementById("whatsappInput").value = data.whatsapp || "";
+              document.getElementById("telefonoInput").value = data.telefono || "";
+    
+              // Descripción
+              document.getElementById("descripcionTexto").textContent = data.descripcion || "";
+              document.getElementById("descripcionInput").value = data.descripcion || "";
+            }
+          });
+=======
   </div>
 
   <!-- Barra inferior de navegación -->
@@ -448,6 +505,7 @@
           let r = new FileReader();
           r.onload = ev => addImageToCarousel(ev.target.result);
           r.readAsDataURL(f);
+>>>>>>> db81ae3a0a4020a01cf4bfa08a5bd0bc13c2ad9f
         }
       });
     });
