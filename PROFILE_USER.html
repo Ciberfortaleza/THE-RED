@@ -162,8 +162,10 @@
 
     /* Estilo de los posts del usuario */
     .user-posts {
-      margin-top: 3rem;
+      margin-top: 2rem;
+      width: 100%;
     }
+
 
     /* Estilo de cada post en la sección de publicaciones */
     .post {
@@ -234,6 +236,29 @@
       transform: scale(1.05);
       filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
     }
+
+    .profile-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.save-profile, .connect-chat {
+  background: #5c40c9;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.save-profile:hover, .connect-chat:hover {
+  background: #472fa2;
+  transform: scale(1.05);
+}
   </style>
 </head>
 <body>
@@ -261,7 +286,6 @@
       <div class="arrow right-arrow" onclick="moveSlide(1)">›</div>
     </div>
 
-    <!-- Sección de perfil del usuario -->
     <div class="profile-section">
       <div class="profile-photo">
         <img src="https://via.placeholder.com/200" alt="Foto de perfil" />
@@ -273,25 +297,30 @@
           <a href="#">NUMERO DE TELEFONO</a>
         </div>
       </div>
+    
       <div class="description">
         <p><strong>Rubén Adrián Zamora Alva</strong>, conocido como RAZA, es un artista de collage que construye sus piezas con recortes encontrados en sus viajes por el mundo, transformando lo ordinario en composiciones extraordinarias...</p>
       </div>
-    </div>
-
-    <!-- Publicaciones del usuario -->
-    <div class="user-posts">
-      <div class="post">
-        <div class="post-header">
-          <img src="https://via.placeholder.com/40" alt="Usuario 1" />
-          <span class="user-name">Usuario</span>
-        </div>
-        <div class="post-content">
-          <p>Este es un post de ejemplo sobre arte. Aquí, el usuario puede compartir pensamientos, imágenes o cualquier otra cosa relacionada con su actividad en la red social.</p>
+    
+      <!-- Sección de botones debajo de la descripción -->
+      <div class="profile-actions">
+        <button class="save-profile" onclick="saveProfile()">Guardar Perfil</button>
+        <button class="connect-chat" onclick="startChat()">Conexión</button>
+      </div>
+    
+      <!-- Publicaciones del usuario (Ahora dentro de .profile-section) -->
+      <div class="user-posts">
+        <div class="post">
+          <div class="post-header">
+            <img src="https://via.placeholder.com/40" alt="Usuario 1" />
+            <span class="user-name">Usuario</span>
+          </div>
+          <div class="post-content">
+            <p>Este es un post de ejemplo sobre arte. Aquí, el usuario puede compartir pensamientos, imágenes o cualquier otra cosa relacionada con su actividad en la red social.</p>
+          </div>
         </div>
       </div>
     </div>
-
-  </div>
 
   <!-- Barra de navegación inferior -->
   <div class="bottom-nav">
@@ -341,6 +370,18 @@
         console.error("Página no encontrada:", page);
       }
     }
+
+    // Función para guardar el perfil
+function saveProfile() {
+  alert("Perfil guardado correctamente.");
+  // Aquí puedes agregar lógica para almacenar datos en localStorage o una base de datos.
+}
+
+// Función para iniciar un chat con el perfil visualizado
+function startChat() {
+  alert("Iniciando chat con el usuario...");
+  // Aquí podrías enlazar con un sistema de mensajería.
+}
   </script>
 
 </body>
