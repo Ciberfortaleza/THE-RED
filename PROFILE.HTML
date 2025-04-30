@@ -421,94 +421,97 @@
       </div>
 
     </div>
-<<<<<<< HEAD
+    <div>
+      <!-- Configura Firebase con tus credenciales -->
+      <script>
+        const firebaseConfig = {
+          apiKey: "AIzaSyApU8UbfqfzBH1UPU3a1CQGf1p995Rf0y4",
+          authDomain: "the-red-loggin.firebaseapp.com",
+          projectId: "the-red-loggin",
+          storageBucket: "the-red-loggin.firebasestorage.app",
+          messagingSenderId: "40265573777",
+          appId: "1:40265573777:web:1651cb4119969010ea2630",
+          measurementId: "G-DPLC00RS2V"
+        };
     
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+    
+        firebase.auth().onAuthStateChanged(user => {
+          if (user) {
+            const uid = user.uid;
+            db.collection("usuarios").doc(uid).get().then(doc => {
+              if (doc.exists) {
+                const data = doc.data();
+                // Asignando los enlaces de forma dinámica
+                if (data.email) {
+                  document.getElementById("emailLink").href = data.email;
+                  document.getElementById("emailLink").target = "_blank";
+                }
+                if (data.instagram) {
+                  document.getElementById("instagramLink").href = data.instagram;
+                  document.getElementById("instagramLink").target = "_blank";
+                }
+                if (data.facebook) {
+                  document.getElementById("facebookLink").href = data.facebook;
+                  document.getElementById("facebookLink").target = "_blank";
+                }
+                if (data.whatsapp) {
+                  document.getElementById("whatsappLink").href = data.whatsapp;
+                  document.getElementById("whatsappLink").target = "_blank";
+                }
+                if (data.telefono) {
+                  document.getElementById("telefonoLink").textContent = data.telefono;
+                }
+    
+                // Los inputs se llenan con los datos guardados
+                document.getElementById("emailInput").value = data.email || "";
+                document.getElementById("instagramInput").value = data.instagram || "";
+                document.getElementById("facebookInput").value = data.facebook || "";
+                document.getElementById("whatsappInput").value = data.whatsapp || "";
+                document.getElementById("telefonoInput").value = data.telefono || "";
+    
+                // Descripción
+                document.getElementById("descripcionTexto").textContent = data.descripcion || "";
+                document.getElementById("descripcionInput").value = data.descripcion || "";
+              }
+            });
+          }
+        });
+      </script>
+    </div>
+    
+    <!-- Barra inferior de navegación -->
+    <div class="bottom-nav">
+      <button class="nav-button" onclick="navigate('home')"><img src="BOTON_HOME.svg" alt="Home" /></button>
+      <button class="nav-button" onclick="navigate('discover')"><img src="BOTON_DISCOVER.svg" alt="Discover" /></button>
+      <button class="nav-button" onclick="navigate('myrole')"><img src="BOTON_MYROLE.svg" alt="My Role" /></button>
+      <button class="nav-button" onclick="navigate('profile')"><img src="BOTON_PROFILE.svg" alt="Profile" /></button>
+    </div>
+    
+    <!-- Scripts JS -->
     <script>
-      // Configura Firebase con tus credenciales
-      const firebaseConfig = {
-            apiKey: "AIzaSyApU8UbfqfzBH1UPU3a1CQGf1p995Rf0y4",
-            authDomain: "the-red-loggin.firebaseapp.com",
-            projectId: "the-red-loggin",
-            storageBucket: "the-red-loggin.firebasestorage.app",
-            messagingSenderId: "40265573777",
-            appId: "1:40265573777:web:1651cb4119969010ea2630",
-            measurementId: "G-DPLC00RS2V"
-      };
+      let userImages = [];
+      let currentSlide = 0;
     
-      firebase.initializeApp(firebaseConfig);
-      const db = firebase.firestore();
+      // Abre el selector de archivos para subir fotos
+      function triggerUpload() {
+        document.getElementById('imageUpload').click();
+      }
     
-      firebase.auth().onAuthStateChanged(user => {
-        if (user) {
-          const uid = user.uid;
-          db.collection("usuarios").doc(uid).get().then(doc => {
-            if (doc.exists) {
-              const data = doc.data();
-              // Asignando los enlaces de forma dinámica
-              if (data.email) {
-                document.getElementById("emailLink").href = data.email;
-                document.getElementById("emailLink").target = "_blank";
-              }
-              if (data.instagram) {
-                document.getElementById("instagramLink").href = data.instagram;
-                document.getElementById("instagramLink").target = "_blank";
-              }
-              if (data.facebook) {
-                document.getElementById("facebookLink").href = data.facebook;
-                document.getElementById("facebookLink").target = "_blank";
-              }
-              if (data.whatsapp) {
-                document.getElementById("whatsappLink").href = data.whatsapp;
-                document.getElementById("whatsappLink").target = "_blank";
-              }
-              if (data.telefono) {
-                document.getElementById("telefonoLink").textContent = data.telefono;
-              }
-    
-              // Los inputs se llenan con los datos guardados
-              document.getElementById("emailInput").value = data.email || "";
-              document.getElementById("instagramInput").value = data.instagram || "";
-              document.getElementById("facebookInput").value = data.facebook || "";
-              document.getElementById("whatsappInput").value = data.whatsapp || "";
-              document.getElementById("telefonoInput").value = data.telefono || "";
-    
-              // Descripción
-              document.getElementById("descripcionTexto").textContent = data.descripcion || "";
-              document.getElementById("descripcionInput").value = data.descripcion || "";
-            }
-          });
-=======
-  </div>
-
-  <!-- Barra inferior de navegación -->
-  <div class="bottom-nav">
-    <button class="nav-button" onclick="navigate('home')"><img src="BOTON_HOME.svg" alt="Home" /></button>
-    <button class="nav-button" onclick="navigate('discover')"><img src="BOTON_DISCOVER.svg" alt="Discover" /></button>
-    <button class="nav-button" onclick="navigate('myrole')"><img src="BOTON_MYROLE.svg" alt="My Role" /></button>
-    <button class="nav-button" onclick="navigate('profile')"><img src="BOTON_PROFILE.svg" alt="Profile" /></button>
-  </div>
-
-  <!-- Scripts JS -->
-  <script>
-    let userImages = [];
-    let currentSlide = 0;
-
-    // Abre el selector de archivos para subir fotos
-    function triggerUpload() {
-      document.getElementById('imageUpload').click();
-    }
-
-    // Maneja los archivos subidos y los convierte en imágenes
-    document.getElementById('imageUpload').addEventListener('change', e => {
-      Array.from(e.target.files).forEach(f => {
-        if (f.type.startsWith('image/')) {
-          let r = new FileReader();
-          r.onload = ev => addImageToCarousel(ev.target.result);
-          r.readAsDataURL(f);
->>>>>>> db81ae3a0a4020a01cf4bfa08a5bd0bc13c2ad9f
-        }
+      // Maneja los archivos subidos y los convierte en imágenes
+      document.getElementById('imageUpload').addEventListener('change', e => {
+        Array.from(e.target.files).forEach(f => {
+          if (f.type.startsWith('image/')) {
+            let r = new FileReader();
+            r.onload = ev => addImageToCarousel(ev.target.result);
+            r.readAsDataURL(f);
+          }
+        });
       });
-    });
+    </script>
+  
+  <script>
 
     // Agrega imagen al carrusel
     function addImageToCarousel(src) {
