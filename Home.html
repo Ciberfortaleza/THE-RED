@@ -220,53 +220,180 @@
       margin-top: 1rem;
     }
 
-    /* === Pop-up === */
-    .popup {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.7);
-      display: none;
+   /* === Nuevo Post Mejorado === */
+   .new-post-section {
+      margin: 100px auto 30px;
+      padding: 1.5rem;
+      background: linear-gradient(145deg, rgba(146,16,118,0.3), rgba(92,64,201,0.3));
+      border: 2px solid rgba(255,255,255,0.15);
+      border-radius: 16px;
+      max-width: 800px;
+      width: 90%;
+      backdrop-filter: blur(10px);
+      cursor: pointer;
+      display: flex;
       justify-content: center;
       align-items: center;
-      z-index: 3000;
+      gap: 12px;
+      color: white;
+      font-size: 1.4rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    }
+
+    .new-post-section:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(145deg, rgba(146,16,118,0.4), rgba(92,64,201,0.4));
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+      border-color: rgba(255,255,255,0.3);
+    }
+
+    .new-post-section::before {
+      content: '+';
+      font-size: 2rem;
+      font-weight: 300;
+      margin-top: -4px;
+    }
+
+    /* === Pop-up Mejorado === */
+    .popup {
+      backdrop-filter: blur(8px);
     }
 
     .popup-content {
-      background: #fff;
+      background: rgba(25, 25, 25, 0.95);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 2.5rem;
+      width: 90%;
+      max-width: 500px;
+      color: white;
+      position: relative;
+      transform: scale(0.95);
+      transition: transform 0.3s ease;
+    }
+
+    .popup.show .popup-content {
+      transform: scale(1);
+    }
+
+    .popup-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .popup-title {
+      font-size: 1.8rem;
+      margin: 0;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      opacity: 0.7;
+      transition: opacity 0.2s ease;
+    }
+
+    .close-btn:hover {
+      opacity: 1;
+    }
+
+    .upload-area {
+      border: 2px dashed rgba(255,255,255,0.2);
+      border-radius: 12px;
       padding: 2rem;
-      border-radius: 10px;
-      width: 300px;
+      text-align: center;
+      margin-bottom: 2rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .upload-area:hover {
+      border-color: #5c40c9;
+      background: rgba(92,64,201,0.05);
+    }
+
+    .upload-area input[type="file"] {
+      display: none;
+    }
+
+    .upload-label {
       display: flex;
       flex-direction: column;
+      align-items: center;
       gap: 1rem;
+      cursor: pointer;
     }
 
-    .popup input[type="file"] {
-      margin-bottom: 1rem;
+    .upload-icon {
+      font-size: 2.5rem;
+      color: #5c40c9;
     }
+
+    .popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
+    transition: all 0.3s ease;
+}
 
     .popup textarea {
-      padding: 1rem;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-      resize: none;
-    }
-
-    .popup button {
-      padding: 1rem;
-      background-color: #5c40c9;
-      color: white;
-      border: none;
+      width: 100%;
+      padding: 1.2rem;
       border-radius: 12px;
-      cursor: pointer;
-      font-size: 1.1rem;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(0,0,0,0.3);
+      color: white;
+      font-size: 1rem;
+      resize: vertical;
+      min-height: 120px;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s ease;
     }
 
-    .popup button:hover {
-      background-color: #4a2e92;
+    .popup textarea:focus {
+      border-color: #5c40c9;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(92,64,201,0.2);
+    }
+
+    .popup button[type="submit"] {
+      background: linear-gradient(145deg, #5c40c9, #4a2e92);
+      border: none;
+      padding: 1.2rem 2rem;
+      border-radius: 12px;
+      color: white;
+      font-size: 1.1rem;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .popup button[type="submit"]:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(92,64,201,0.3);
+    }
+
+    .image-preview {
+      margin-top: 1rem;
+      max-width: 100%;
+      border-radius: 8px;
+      display: none;
     }
   </style>
 </head>
@@ -385,11 +512,26 @@
   
 
   <!-- Pop-up para crear nuevo post -->
+  
   <div class="popup" id="popup">
     <div class="popup-content">
-      <input type="file" id="image-upload" />
-      <textarea id="description" placeholder="Escribe tu descripción aquí..." rows="4"></textarea>
-      <button onclick="submitPost()">Subir Post</button>
+      <div class="popup-header">
+        <h2 class="popup-title">Nuevo Post</h2>
+        <button class="close-btn" onclick="closePopup()">&times;</button>
+      </div>
+      
+      <div class="upload-area">
+        <label class="upload-label">
+          <span class="upload-icon">📷</span>
+          <span>Haz clic para subir una imagen</span>
+          <input type="file" id="image-upload" accept="image/*" />
+        </label>
+      </div>
+      <img id="image-preview" class="image-preview" alt="Vista previa de la imagen">
+      
+      <textarea id="description" placeholder="Escribe una descripción interesante..."></textarea>
+      
+      <button type="submit" onclick="submitPost()">Publicar ahora</button>
     </div>
   </div>
 
@@ -413,25 +555,41 @@
       }
     }
 
-    // Abrir pop-up para nuevo post
-    function openPopup() {
-      document.getElementById('popup').style.display = 'flex';
-    }
+   // Actualiza las funciones del pop-up
+   function openPopup() {
+    const popup = document.getElementById('popup');
+    popup.style.display = 'flex';
+    popup.style.backdropFilter = 'blur(8px)'; // Añade esto
+    setTimeout(() => popup.classList.add('show'), 10);
+}
 
-    // Cerrar pop-up
-    function closePopup() {
-      document.getElementById('popup').style.display = 'none';
-    }
+function closePopup() {
+    const popup = document.getElementById('popup');
+    popup.classList.remove('show');
+    popup.style.backdropFilter = 'none'; // Añade esto
+    setTimeout(() => {
+        popup.style.display = 'none';
+        document.getElementById('image-preview').style.display = 'none'; // Limpia la previsualización
+        document.getElementById('description').value = ''; // Limpia el texto
+    }, 300);
+}
 
-    // Subir un nuevo post (solo por mostrar la funcionalidad, puedes agregar backend)
-    function submitPost() {
-      const image = document.getElementById('image-upload').files[0];
-      const description = document.getElementById('description').value;
-      if (image && description) {
-        alert('Post Subido: ' + description);
+    // Vista previa de la imagen
+    document.getElementById('image-upload').addEventListener('change', function(e) {
+      const reader = new FileReader();
+      reader.onload = function() {
+        const preview = document.getElementById('image-preview');
+        preview.src = reader.result;
+        preview.style.display = 'block';
+      }
+      reader.readAsDataURL(e.target.files[0]);
+    });
+
+    // Cerrar al hacer clic fuera
+    window.onclick = function(e) {
+      const popup = document.getElementById('popup');
+      if (e.target === popup) {
         closePopup();
-      } else {
-        alert('Por favor, completa todos los campos.');
       }
     }
 
