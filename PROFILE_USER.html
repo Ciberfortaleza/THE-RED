@@ -78,7 +78,9 @@
       position: relative;
       max-width: 800px;
       margin: 0 auto 3rem;
+      overflow: hidden;
     }
+    
 
     .carousel {
       display: flex;
@@ -86,11 +88,13 @@
     }
 
     .carousel img {
-      width: 100%;
-      height: 400px;
-      object-fit: cover;
-      border-radius: 15px;
-    }
+  width: 100%;
+  min-width: 100%; /* Asegura que cada imagen ocupe todo el ancho del contenedor */
+  height: 400px;
+  object-fit: cover;
+  border-radius: 15px;
+  flex-shrink: 0; /* Previene que las imágenes se reduzcan */
+}
 
     /* Flechas de navegación del carrusel */
     .arrow {
@@ -260,8 +264,121 @@
   background: #472fa2;
   transform: scale(1.05);
 }
+
+/* Animación carrusel */
+.carousel img {
+    animation: slideIn 0.5s ease-out;
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Estilos del chat */
+  .chat-container {
+    position: fixed;
+    bottom: 100px;
+    right: 20px;
+    width: 350px;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(92, 64, 201, 0.3);
+    display: none;
+    flex-direction: column;
+    backdrop-filter: blur(5px);
+    z-index: 3000;
+  }
+
+  .chat-header {
+    background: #5c40c9;
+    padding: 1rem;
+    border-radius: 15px 15px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .chat-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+
+  .close-chat {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+
+  .chat-body {
+    flex-grow: 1;
+    height: 400px;
+    overflow-y: auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .message {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.8rem;
+    border-radius: 10px;
+    max-width: 80%;
+    align-self: flex-start;
+  }
+
+  .own-message {
+    background: #5c40c9;
+    align-self: flex-end;
+  }
+
+  .chat-input {
+    display: flex;
+    padding: 1rem;
+    gap: 0.5rem;
+  }
+
+  .chat-input input {
+    flex-grow: 1;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #555;
+    border-radius: 20px;
+    padding: 0.8rem;
+    color: white;
+  }
+
+  .chat-input button {
+    background: #5c40c9;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 20px;
+    cursor: pointer;
+  }
   </style>
 </head>
+
+<div class="chat-container" id="chatWindow">
+  <div class="chat-header">
+    <h3>Chat con RAZA</h3>
+    <button class="close-chat" onclick="closeChat()">×</button>
+  </div>
+  <div class="chat-body" id="chatBody"></div>
+  <div class="chat-input">
+    <input type="text" id="messageInput" placeholder="Escribe un mensaje...">
+    <button onclick="sendMessage()">Enviar</button>
+  </div>
+</div>  
+
 <body>
 
   <!-- Encabezado con el logo y selector de idioma -->
@@ -280,9 +397,9 @@
     <div class="carousel-container">
       <div class="arrow left-arrow" onclick="moveSlide(-1)">‹</div>
       <div class="carousel" id="carousel">
-        <img src="https://via.placeholder.com/800x400?text=Imagen+1" />
-        <img src="https://via.placeholder.com/800x400?text=Imagen+2" />
-        <img src="https://via.placeholder.com/800x400?text=Imagen+3" />
+        <img src="la desdolarización I.jpg" />
+        <img src="jarra.jpg" />
+        <img src="joyas2.jpg" />
       </div>
       <div class="arrow right-arrow" onclick="moveSlide(1)">›</div>
     </div>
@@ -296,8 +413,6 @@
           <a href="#">Facebook</a>
           <a href="#">Whatsapp</a>
           <a href="#">NUMERO DE TELEFONO</a>
-          <a href="#">CONEXION</a>
-          <button id="conexion-btn">Conexión</button>
 
         </div>
       </div>
@@ -342,25 +457,37 @@
     </button>
   </div>
 
-  <!-- Funciones JavaScript -->
   <script>
+    // Variables globales
     let currentSlide = 0;
-
-    // Función para mover las diapositivas del carrusel
+    let chatOpen = false;
+    let isDragging = false;
+    let currentX, currentY, initialX, initialY, xOffset = 0, yOffset = 0;
+  
+    // Carrusel
     function moveSlide(direction) {
       const carousel = document.getElementById('carousel');
       const total = carousel.children.length;
       currentSlide = (currentSlide + direction + total) % total;
+      
+      carousel.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
       carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
+      
+      Array.from(carousel.children).forEach(img => {
+        img.style.animation = 'none';
+        setTimeout(() => {
+          img.style.animation = 'slideIn 0.5s ease-out';
+        }, 50);
+      });
     }
-
-    // Función para cambiar el idioma del botón
+  
+    // Idioma
     function toggleLanguage() {
       const btn = document.querySelector('.language-button');
       btn.textContent = btn.textContent === 'EN' ? 'ES' : 'EN';
     }
-
-    // Función de navegación entre páginas
+  
+    // Navegación
     function navigate(page) {
       const urls = {
         home: 'home.html',
@@ -368,24 +495,91 @@
         myrole: 'myrole.html',
         profile: 'profile.html'
       };
+      
       if (urls[page]) {
         window.location.href = urls[page];
       } else {
         console.error("Página no encontrada:", page);
       }
     }
-
-    // Función para guardar el perfil
-function saveProfile() {
-  alert("Perfil guardado correctamente.");
-  // Aquí puedes agregar lógica para almacenar datos en localStorage o una base de datos.
-}
-
-// Función para iniciar un chat con el perfil visualizado
-function startChat() {
-  alert("Iniciando chat con el usuario...");
-  // Aquí podrías enlazar con un sistema de mensajería.
-}
+  
+    // Perfil
+    function saveProfile() {
+      alert("Perfil guardado correctamente.");
+      // Lógica adicional para guardar el perfil
+    }
+  
+    // Chat
+    function startChat() {
+      const chatWindow = document.getElementById('chatWindow');
+      chatOpen = !chatOpen;
+      chatWindow.style.display = chatOpen ? 'flex' : 'none';
+      
+      if (chatOpen) {
+        const chatBody = document.getElementById('chatBody');
+        chatBody.innerHTML = `
+          <div class="message">Hola! ¿Cómo estás?</div>
+          <div class="message own-message">Estoy bien, gracias!</div>
+        `;
+        chatBody.scrollTop = chatBody.scrollHeight;
+      }
+    }
+  
+    function closeChat() {
+      document.getElementById('chatWindow').style.display = 'none';
+      chatOpen = false;
+    }
+  
+    function sendMessage() {
+      const input = document.getElementById('messageInput');
+      const message = input.value.trim();
+      
+      if (message) {
+        const chatBody = document.getElementById('chatBody');
+        chatBody.innerHTML += `<div class="message own-message">${message}</div>`;
+        input.value = '';
+        chatBody.scrollTop = chatBody.scrollHeight;
+      }
+    }
+  
+    // Drag and Drop para el chat
+    function dragStart(e) {
+      initialX = e.clientX - xOffset;
+      initialY = e.clientY - yOffset;
+      
+      if (e.target === chatWindow || e.target.closest('.chat-header')) {
+        isDragging = true;
+      }
+    }
+  
+    function drag(e) {
+      if (isDragging) {
+        e.preventDefault();
+        currentX = e.clientX - initialX;
+        currentY = e.clientY - initialY;
+        xOffset = currentX;
+        yOffset = currentY;
+        setTranslate(currentX, currentY, chatWindow);
+      }
+    }
+  
+    function dragEnd() {
+      initialX = currentX;
+      initialY = currentY;
+      isDragging = false;
+    }
+  
+    function setTranslate(xPos, yPos, el) {
+      el.style.left = `${xPos}px`;
+      el.style.bottom = `auto`;
+      el.style.top = `${yPos}px`;
+    }
+  
+    // Event Listeners
+    const chatWindow = document.getElementById('chatWindow');
+    chatWindow.addEventListener('mousedown', dragStart);
+    document.addEventListener('mousemove', drag);
+    document.addEventListener('mouseup', dragEnd);
   </script>
 
 </body>
