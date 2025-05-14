@@ -1,293 +1,585 @@
-<!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login - THE RED</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400;500;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>THE RED</title>
+  <link rel="icon" href="logo.png" type="image/x-icon" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400;700&display=swap" rel="stylesheet" />
   <style>
+    /* Estilo base del body, con imagen de fondo y texto blanco */
     body {
       margin: 0;
       font-family: 'Roboto Flex', sans-serif;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: url('background_Login.png') no-repeat center center;
+      background: url('background.png') no-repeat center center fixed;
       background-size: cover;
       color: white;
+      height: 100vh;
       overflow: hidden;
-      padding: 40px;
     }
 
-    .logo-container {
-      flex: 1;
+    /* Estilo del encabezado, se fija en la parte superior */
+    header {
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
-      padding: 80px;
-      animation: float 4s ease-in-out infinite;
+      padding: 1rem 1.5rem;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: transparent;
     }
 
-    .logo-container img {
-      max-width: 80%;
+    /* Logo con tamaño flexible */
+    .logo {
+      height: clamp(30px, 6vw, 60px);
     }
 
-    .form-container {
-      background-color: rgba(64, 0, 64, 0.9);
+    /* Selector de idioma en la parte superior derecha */
+    .language-selector {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .language-text {
+      font-weight: bold;
+      font-size: 1rem;
+    }
+
+    .language-button {
+      background-color: #5c40c9;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 0.3rem 1rem;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-transform: uppercase;
+    }
+
+    .scroll-wall {
+  position: absolute;
+  top: 80px;
+  bottom: 120px;
+  left: 0;
+  right: 0;
+  overflow-y: auto;
+  padding: 2rem;
+  padding-bottom: 8rem; /* ← Agregado */
+  box-sizing: border-box;
+}
+
+
+    /* Estilo del carrusel de imágenes */
+    .carousel-container {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      overflow: hidden;
+    }
+    
+
+    .carousel {
+      display: flex;
+      transition: transform 0.4s ease-in-out;
+    }
+
+    .carousel img {
+  width: 100%;
+  min-width: 100%; /* Asegura que cada imagen ocupe todo el ancho del contenedor */
+  height: 400px;
+  object-fit: cover;
+  border-radius: 15px;
+  flex-shrink: 0; /* Previene que las imágenes se reduzcan */
+}
+
+    /* Flechas de navegación del carrusel */
+    .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2.5rem;
+      background-color: rgba(0,0,0,0.5);
+      padding: 0.5rem 1rem;
+      border-radius: 50%;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .left-arrow { left: 10px; }
+    .right-arrow { right: 10px; }
+
+    /* Estilo de la sección de perfil del usuario */
+    .profile-section {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 2rem;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 2rem;
       border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-      padding: 40px 30px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+
+    /* Foto de perfil redonda */
+    .profile-photo {
       text-align: center;
+    }
+
+    .profile-photo img {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid white;
+      margin-bottom: 1.5em;
+    }
+
+    /* Enlaces de contacto del perfil */
+    .contact {
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-      max-width: 420px;
-      width: 100%;
-      height: auto;
+      gap: 0.7rem;
     }
 
-    .form-panel {
+    .contact a {
+      color: white;
+      text-decoration: none;
+      padding: 0.6rem 1.2rem;
+      border: 1px solid #555;
+      border-radius: 25px;
+      transition: background 0.3s ease;
+    }
+
+    .contact a:hover {
+      background-color: #222;
+    }
+
+    /* Descripción del usuario */
+    .description {
+      font-size: 1.1em;
+      line-height: 1.6;
+    }
+
+    /* Estilo de los posts del usuario */
+    .user-posts {
+      margin-top: 2rem;
       width: 100%;
+    }
+
+
+    /* Estilo de cada post en la sección de publicaciones */
+    .post {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      margin-bottom: 1.5rem;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    /* Encabezado del post (usuario y nombre) */
+    .post .post-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .post .post-header img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 1rem;
+    }
+
+    .post .post-header .user-name {
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+
+    /* Contenido del post */
+    .post .post-content {
+      font-size: 1em;
+      line-height: 1.5;
+    }
+
+    /* Barra de navegación inferior */
+    .bottom-nav {
+      position: fixed;
+      bottom: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 2rem;
+      padding: 0.8rem 1.2rem;
+      background: rgba(175, 19, 128, 0.11);
+      backdrop-filter: blur(1px);
+      border-radius: 24px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      z-index: 2000;
+    }
+
+    /* Botones de navegación con imágenes */
+    .nav-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .nav-button img {
+      height: 60px;
+    }
+
+    .nav-button:hover img,
+    .nav-button.active img {
+      transform: scale(1.05);
+      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
+    }
+
+    .profile-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.save-profile, .connect-chat {
+  background: #5c40c9;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.save-profile:hover, .connect-chat:hover {
+  background: #472fa2;
+  transform: scale(1.05);
+}
+
+/* Animación carrusel */
+.carousel img {
+    animation: slideIn 0.5s ease-out;
+  }
+
+  @keyframes slideIn {
+    from {
       opacity: 0;
       transform: scale(0.95);
-      transition: all 0.4s ease;
-      display: none;
     }
-
-    .form-panel.active {
+    to {
       opacity: 1;
       transform: scale(1);
-      display: block;
     }
+  }
 
-    .form-container h1 {
-      font-size: 30px;
-      margin-bottom: 25px;
-    }
+  /* Estilos del chat */
+  .chat-container {
+    position: fixed;
+    bottom: 100px;
+    right: 20px;
+    width: 350px;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(92, 64, 201, 0.3);
+    display: none;
+    flex-direction: column;
+    backdrop-filter: blur(5px);
+    z-index: 3000;
+  }
 
-    .form-group {
-      width: 100%;
-      text-align: left;
-      margin-bottom: 18px;
-    }
+  .chat-header {
+    background: #5c40c9;
+    padding: 1rem;
+    border-radius: 15px 15px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: 500;
-      font-size: 15px;
-    }
+  .chat-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+  }
 
-    input, select {
-      width: 100%;
-      padding: 12px;
-      font-size: 15px;
-      border-radius: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.6);
-      background-color: rgba(64, 0, 64, 0.8);
-      color: white;
-    }
+  .close-chat {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
 
-    .form-group.checkbox-wrapper {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 10px;
-      margin-bottom: 20px;
-    }
+  .chat-body {
+    flex-grow: 1;
+    height: 400px;
+    overflow-y: auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
 
-    .checkbox-wrapper input[type="checkbox"] {
-      margin: 0;
-      transform: scale(1.2);
-      cursor: pointer;
-    }
+  .message {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.8rem;
+    border-radius: 10px;
+    max-width: 80%;
+    align-self: flex-start;
+  }
 
-    .checkbox-wrapper label {
-      font-size: 14px;
-      line-height: 1.4;
-      flex: 1;
-    }
+  .own-message {
+    background: #5c40c9;
+    align-self: flex-end;
+  }
 
-    button {
-      background: #4b6ea9;
-      border: none;
-      padding: 12px;
-      border-radius: 15px;
-      width: 100%;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-      margin-top: 10px;
-      transition: background 0.3s;
-    }
+  .chat-input {
+    display: flex;
+    padding: 1rem;
+    gap: 0.5rem;
+  }
 
-    button:hover {
-      background: #365489;
-    }
+  .chat-input input {
+    flex-grow: 1;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #555;
+    border-radius: 20px;
+    padding: 0.8rem;
+    color: white;
+  }
 
-    .toggle-form {
-      margin-top: 20px;
-      font-size: 14px;
-    }
-
-    .toggle-form a {
-      color: #4b9dd8;
-      cursor: pointer;
-      text-decoration: none;
-    }
-
-    .toggle-form a:hover {
-      text-decoration: underline;
-    }
-
-    .messages {
-      color: #e74c3c;
-      font-size: 14px;
-      margin-top: 8px;
-      text-align: left;
-      width: 100%;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-15px); }
-    }
-
-    @media (max-width: 768px) {
-      body {
-        flex-direction: column;
-      }
-
-      .logo-container {
-        padding: 30px;
-      }
-    }
+  .chat-input button {
+    background: #5c40c9;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 20px;
+    cursor: pointer;
+  }
   </style>
 </head>
-<body>
-  <div class="logo-container">
-    <img src="logo.png" alt="Logo THE RED">
+
+<div class="chat-container" id="chatWindow">
+  <div class="chat-header">
+    <h3>Chat con RAZA</h3>
+    <button class="close-chat" onclick="closeChat()">×</button>
   </div>
+  <div class="chat-body" id="chatBody"></div>
+  <div class="chat-input">
+    <input type="text" id="messageInput" placeholder="Escribe un mensaje...">
+    <button onclick="sendMessage()">Enviar</button>
+  </div>
+</div>  
 
-  <div class="form-container">
-    <!-- LOGIN -->
-    <div id="login-form" class="form-panel active">
-      <h1>Glad to see Ya!</h1>
-      <div class="form-group">
-        <label for="login-email">Email</label>
-        <input type="email" id="login-email" placeholder="Enter your email">
+<body>
+
+  <!-- Encabezado con el logo y selector de idioma -->
+  <header>
+    <img src="logo.png" alt="THE RED Logo" class="logo" />
+    <div class="language-selector">
+      <span class="language-text">LANGUAGE:</span>
+      <button class="language-button" onclick="toggleLanguage()">EN</button>
+    </div>
+  </header>
+
+  <!-- Zona principal de contenido -->
+  <div class="scroll-wall" id="scroll-wall">
+    
+    <!-- Carrusel de imágenes -->
+    <div class="carousel-container">
+      <div class="arrow left-arrow" onclick="moveSlide(-1)">‹</div>
+      <div class="carousel" id="carousel">
+        <img src="la desdolarización I.jpg" />
+        <img src="jarra.jpg" />
+        <img src="joyas2.jpg" />
       </div>
-      <div class="form-group">
-        <label for="login-password">Password</label>
-        <input type="password" id="login-password" placeholder="Enter your password">
-      </div>
-      <button id="login-button">LOGIN</button>
-      <p class="messages" id="login-error"></p>
-      <div class="toggle-form">Don't have an account? <a id="show-register">Register here</a></div>
+      <div class="arrow right-arrow" onclick="moveSlide(1)">›</div>
     </div>
 
-    <!-- REGISTER -->
-    <div id="register-form" class="form-panel">
-      <h1>Create Your Account</h1>
-      <div class="form-group">
-        <label for="register-username">Username</label>
-        <input type="text" id="register-username" placeholder="Enter your username">
-      </div>
-      <div class="form-group">
-        <label for="register-email">Email</label>
-        <input type="email" id="register-email" placeholder="Enter your email">
-      </div>
-      <div class="form-group">
-        <label for="register-phone">Phone Number</label>
-        <input type="tel" id="register-phone" placeholder="Enter your phone number">
-      </div>
-      <div class="form-group">
-        <label for="register-birthdate">Date of Birth</label>
-        <input type="date" id="register-birthdate">
-      </div>
-      <div class="form-group">
-        <label for="register-country">Country</label>
-        <select id="register-country">
-          <option value="">Select country</option>
-          <option value="MX">Mexico</option>
-          <option value="AR">Argentina</option>
-          <option value="ES">Spain</option>
-          <option value="US">USA</option>
-          <option value="Other">Other</option>
-        </select>
-      </div>
-      <div class="form-group checkbox-group">
-            <label class="checkbox-label">
-                <input type="checkbox" id="terms">
-                <span>I agree to the terms and conditions</span>
-            </label>
+    <div class="profile-section">
+      <div class="profile-photo">
+        <img src="https://via.placeholder.com/200" alt="Foto de perfil" />
+        <div class="contact">
+          <a href="#">Email</a>
+          <a href="#">Instagram</a>
+          <a href="#">Facebook</a>
+          <a href="#">Whatsapp</a>
+          <a href="#">NUMERO DE TELEFONO</a>
+
         </div>
-      <button id="register-button">CREATE ACCOUNT</button>
-      <p class="messages" id="register-error"></p>
-      <p class="messages" style="color: #2ecc71;" id="register-success"></p>
-      <div class="toggle-form">Already have an account? <a id="show-login">Login here</a></div>
+      </div>
+    
+      <div class="description">
+        <p><strong>Rubén Adrián Zamora Alva</strong>, conocido como RAZA, es un artista de collage que construye sus piezas con recortes encontrados en sus viajes por el mundo, transformando lo ordinario en composiciones extraordinarias...</p>
+      </div>
+    
+      <!-- Sección de botones debajo de la descripción -->
+      <div class="profile-actions">
+        <button class="save-profile" onclick="saveProfile()">Guardar Perfil</button>
+        <button class="connect-chat" onclick="startChat()">Conexión</button>
+      </div>
+    
+      <!-- Publicaciones del usuario (Ahora dentro de .profile-section) -->
+      <div class="user-posts">
+        <div class="post">
+          <div class="post-header">
+            <img src="https://via.placeholder.com/40" alt="Usuario 1" />
+            <span class="user-name">Usuario</span>
+          </div>
+          <div class="post-content">
+            <p>Este es un post de ejemplo sobre arte. Aquí, el usuario puede compartir pensamientos, imágenes o cualquier otra cosa relacionada con su actividad en la red social.</p>
+          </div>
+        </div>
+      </div>
     </div>
+
+  <!-- Barra de navegación inferior -->
+  <div class="bottom-nav">
+    <button class="nav-button" onclick="navigate('home')">
+      <img src="BOTON_HOME.svg" alt="Home" />
+    </button>
+    <button class="nav-button" onclick="navigate('discover')">
+      <img src="BOTON_DISCOVER.svg" alt="Discover" />
+    </button>
+    <button class="nav-button" onclick="navigate('myrole')">
+      <img src="BOTON_MYROLE.svg" alt="My Role" />
+    </button>
+    <button class="nav-button" onclick="navigate('profile')">
+      <img src="BOTON_PROFILE.svg" alt="Profile" />
+    </button>
   </div>
 
   <script>
-    const loginForm = document.getElementById("login-form");
-    const registerForm = document.getElementById("register-form");
-
-    document.getElementById("show-register").onclick = () => {
-      loginForm.classList.remove("active");
-      registerForm.classList.add("active");
-    };
-
-    document.getElementById("show-login").onclick = () => {
-      registerForm.classList.remove("active");
-      loginForm.classList.add("active");
-    };
-
-    document.getElementById("login-button").onclick = () => {
-      const email = document.getElementById("login-email").value;
-      const password = document.getElementById("login-password").value;
-      const error = document.getElementById("login-error");
-
-      if (!email || !password) {
-        error.textContent = "Complete all fields.";
-        return;
+    // Variables globales
+    let currentSlide = 0;
+    let chatOpen = false;
+    let isDragging = false;
+    let currentX, currentY, initialX, initialY, xOffset = 0, yOffset = 0;
+  
+    // Carrusel
+    function moveSlide(direction) {
+      const carousel = document.getElementById('carousel');
+      const total = carousel.children.length;
+      currentSlide = (currentSlide + direction + total) % total;
+      
+      carousel.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+      carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
+      
+      Array.from(carousel.children).forEach(img => {
+        img.style.animation = 'none';
+        setTimeout(() => {
+          img.style.animation = 'slideIn 0.5s ease-out';
+        }, 50);
+      });
+    }
+  
+    // Idioma
+    function toggleLanguage() {
+      const btn = document.querySelector('.language-button');
+      btn.textContent = btn.textContent === 'EN' ? 'ES' : 'EN';
+    }
+  
+    // Navegación
+    function navigate(page) {
+      const urls = {
+        home: 'home.html',
+        discover: 'discover.html',
+        myrole: 'myrole.html',
+        profile: 'profile.html'
+      };
+      
+      if (urls[page]) {
+        window.location.href = urls[page];
+      } else {
+        console.error("Página no encontrada:", page);
       }
-
-      error.textContent = "";
-      window.location.href = "Home.html";
-    };
-
-    document.getElementById("register-button").onclick = () => {
-      const username = document.getElementById("register-username").value;
-      const email = document.getElementById("register-email").value;
-      const phone = document.getElementById("register-phone").value;
-      const birthdate = document.getElementById("register-birthdate").value;
-      const country = document.getElementById("register-country").value;
-      const terms = document.getElementById("terms-checkbox").checked;
-
-      const error = document.getElementById("register-error");
-      const success = document.getElementById("register-success");
-
-      if (!username || !email || !phone || !birthdate || !country) {
-        error.textContent = "Please fill in all required fields.";
-        success.textContent = "";
-        return;
+    }
+  
+    // Perfil
+    function saveProfile() {
+      alert("Perfil guardado correctamente.");
+      // Lógica adicional para guardar el perfil
+    }
+  
+    // Chat
+    function startChat() {
+      const chatWindow = document.getElementById('chatWindow');
+      chatOpen = !chatOpen;
+      chatWindow.style.display = chatOpen ? 'flex' : 'none';
+      
+      if (chatOpen) {
+        const chatBody = document.getElementById('chatBody');
+        chatBody.innerHTML = `
+          <div class="message">Hola! ¿Cómo estás?</div>
+          <div class="message own-message">Estoy bien, gracias!</div>
+        `;
+        chatBody.scrollTop = chatBody.scrollHeight;
       }
-
-      if (!terms) {
-        error.textContent = "You must agree to the terms and conditions.";
-        success.textContent = "";
-        return;
+    }
+  
+    function closeChat() {
+      document.getElementById('chatWindow').style.display = 'none';
+      chatOpen = false;
+    }
+  
+    function sendMessage() {
+      const input = document.getElementById('messageInput');
+      const message = input.value.trim();
+      
+      if (message) {
+        const chatBody = document.getElementById('chatBody');
+        chatBody.innerHTML += `<div class="message own-message">${message}</div>`;
+        input.value = '';
+        chatBody.scrollTop = chatBody.scrollHeight;
       }
-
-      error.textContent = "";
-      success.textContent = "Registration successful! Redirecting...";
-      setTimeout(() => {
-        window.location.href = "regis.html";
-      }, 2000);
-    };
+    }
+  
+    // Drag and Drop para el chat
+    function dragStart(e) {
+      initialX = e.clientX - xOffset;
+      initialY = e.clientY - yOffset;
+      
+      if (e.target === chatWindow || e.target.closest('.chat-header')) {
+        isDragging = true;
+      }
+    }
+  
+    function drag(e) {
+      if (isDragging) {
+        e.preventDefault();
+        currentX = e.clientX - initialX;
+        currentY = e.clientY - initialY;
+        xOffset = currentX;
+        yOffset = currentY;
+        setTranslate(currentX, currentY, chatWindow);
+      }
+    }
+  
+    function dragEnd() {
+      initialX = currentX;
+      initialY = currentY;
+      isDragging = false;
+    }
+  
+    function setTranslate(xPos, yPos, el) {
+      el.style.left = `${xPos}px`;
+      el.style.bottom = `auto`;
+      el.style.top = `${yPos}px`;
+    }
+  
+    // Event Listeners
+    const chatWindow = document.getElementById('chatWindow');
+    chatWindow.addEventListener('mousedown', dragStart);
+    document.addEventListener('mousemove', drag);
+    document.addEventListener('mouseup', dragEnd);
   </script>
+
 </body>
 </html>
