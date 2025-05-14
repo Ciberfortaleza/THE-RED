@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>THE RED</title>
+  <link rel="icon" href="logo.png" type="image/x-icon" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <img src="logo.png" alt="THE RED Logo" class="logo" />
+    <div class="language-selector">
+      <span class="language-text">LANGUAGE:</span>
+      <button class="language-button" onclick="toggleLanguage()">EN</button>
+    </div>
+  </header>
+
+  <div class="new-post-section" onclick="openPopup()">
+    Crear un nuevo post
+  </div>
+
+  <div class="scroll-wall" id="scroll-wall"></div>
+
+  <div class="bottom-nav">
+    <button class="nav-button" onclick="navigate('home')">
+      <img src="BOTON_HOME.svg" alt="Home" />
+      <span class="mobile-text">HOME</span>
+    </button>
+    <button class="nav-button" onclick="navigate('discover')">
+      <img src="BOTON_DISCOVER.svg" alt="Discover" />
+      <span class="mobile-text">DISCOVER</span>
+    </button>
+    <button class="nav-button" onclick="navigate('myrole')">
+      <img src="BOTON_MYROLE.svg" alt="My Role" />
+      <span class="mobile-text">ROLE</span>
+    </button>
+    <button class="nav-button" onclick="navigate('profile')">
+      <img src="BOTON_PROFILE.svg" alt="Profile" />
+      <span class="mobile-text">PROFILE</span>
+    </button>
+  </div>
+
+  <div class="popup" id="popup">
+    <div class="popup-content">
+      <div class="popup-header">
+        <h2>Nuevo Post</h2>
+        <button class="close-btn" onclick="closePopup()">&times;</button>
+      </div>
+      <div class="upload-area">
+        <label class="upload-label">
+          <span>📷 Haz clic para subir una imagen</span>
+          <input type="file" id="image-upload" accept="image/*" hidden />
+        </label>
+      </div>
+      <img id="image-preview" class="image-preview" alt="">
+      <input type="text" id="titulo" placeholder="Título del producto" required />
+      <input type="text" id="ubicacion" placeholder="Ubicación" />
+      <input type="text" id="contacto" placeholder="Contacto" required />
+      <input type="text" id="sitio" placeholder="Sitio web (opcional)" />
+      <input type="text" id="precio" placeholder="Precio" required />
+      <textarea id="description" placeholder="Descripción del producto..." rows="4"></textarea>
+      <button type="button" onclick="submitPost()">Publicar ahora</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
