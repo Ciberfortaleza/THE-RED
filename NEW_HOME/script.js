@@ -50,13 +50,32 @@ window.addEventListener("scroll", () => {
 });
 
 // Manejo del popup
+// Abre el popup cuando se presiona el botón "Crear nuevo post"
 function openPopup() {
-    document.getElementById("popup").style.display = "flex";
+    let popup = document.getElementById("popup");
+    popup.style.display = "flex";
+    popup.style.opacity = "1";
+    popup.style.transform = "scale(1)"; // Hace que el popup aparezca con efecto suave
 }
 
+// Cierra el popup cuando el usuario presiona el botón de cierre
 function closePopup() {
-    document.getElementById("popup").style.display = "none";
+    let popup = document.getElementById("popup");
+    popup.style.opacity = "0";
+    popup.style.transform = "scale(0.95)"; // Pequeña animación de salida
+    setTimeout(() => {
+        popup.style.display = "none";
+    }, 300); // Retraso para animación de salida
 }
+
+// Detectar si el usuario hace clic fuera del popup para cerrarlo
+window.onclick = function (event) {
+    let popup = document.getElementById("popup");
+    if (event.target === popup) {
+        closePopup();
+    }
+};
+
 
 // Cargar imagen de forma interactiva
 const uploadArea = document.querySelector('.upload-area');
@@ -80,60 +99,3 @@ if (uploadArea && fileInput && previewImage) {
 }
 
 // Crear y publicar un nuevo post
-function submitPost() {
-    const titulo = document.getElementById("titulo").value.trim();
-    const ubicacion = document.getElementById("ubicacion").value.trim();
-    const contacto = document.getElementById("contacto").value.trim();
-    const sitio = document.getElementById("sitio").value.trim();
-    const precio = document.getElementById("precio").value.trim();
-    const description = document.getElementById("description").value.trim();
-    const imageSrc = previewImage?.src;
-
-    if (!titulo || !contacto || !precio) {
-        alert("Por favor, completa los campos obligatorios (Título, Contacto, Precio).");
-        return;
-    }
-
-    const postHTML = `
-        <div class="post visible">
-            <div class="post-header">
-                <img src="avatar.png" class="user-avatar" alt="Avatar del usuario" />
-                <div class="user-info">
-                    <p class="username">${currentUser}</p>
-                    <p class="location">${ubicacion || 'Ubicación no especificada'}</p>
-                </div>
-            </div>
-            ${imageSrc ? `<img src="${imageSrc}" class="post-image" alt="${titulo}"/>` : ''}
-            <p class="product-description">${description}</p>
-            <div class="product-details">
-                <p class="product-price">${precio}</p>
-                <div class="contact-info">
-                    <a class="external-link" href="mailto:${contacto}">📧 ${contacto}</a>
-                    ${sitio ? `<a class="external-link" href="${sitio}" target="_blank" rel="noopener noreferrer">🔗 Sitio Web</a>` : ''}
-                </div>
-            </div>
-        </div>
-    `;
-
-    const wall = document.getElementById("scroll-wall");
-    if (wall) {
-        wall.insertAdjacentHTML('afterbegin', postHTML);
-    }
-
-    closePopup();
-
-    // Limpiar formulario
-    document.getElementById("popup").querySelectorAll("input, textarea").forEach(el => el.value = "");
-    if (previewImage) {
-        previewImage.src = "";
-        previewImage.style.display = "none";
-    }
-}
-
-// Cambiar idioma
-function toggleLanguage() {
-    const button = document.querySelector('.language-button');
-    if (button) {
-        button.textContent = button.textContent === 'EN' ? 'ES' : 'EN';
-    }
-}
