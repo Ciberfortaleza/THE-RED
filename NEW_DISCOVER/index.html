@@ -257,12 +257,23 @@
       transform: scale(1.05);
     }
 
+    .content-layout {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
     .posts-grid {
       display: grid;
       gap: 1.5rem;
       max-width: 1200px;
       margin: 0 auto;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      flex: 1;
+      max-width: 800px;
     }
 
     .post-card {
@@ -293,6 +304,101 @@
         grid-template-columns: 1fr;
       }
     }
+
+    .user-card {
+  background: rgba(28, 28, 28, 0.3);
+  border-radius: 15px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+  transition: transform 0.3s ease;
+  width: 250px;
+  text-align: center;
+  position: sticky;
+  top: 120px;
+  height: fit-content;
+}
+
+.user-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.user-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 1rem;
+  display: block;
+  border: 3px solid #5c40c9;
+}
+
+.user-info {
+  margin-bottom: 1.5rem;
+}
+
+.user-info h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.3rem;
+  color: #ff6b00;
+}
+
+.user-title {
+  margin: 0 0 0.3rem;
+  font-size: 0.9rem;
+  color: #ddd;
+}
+
+.user-stats {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.view-profile-button {
+  background: linear-gradient(145deg, #5c40c9 0%, #3d2a8a 100%);
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 25px;
+  width: 100%;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.view-profile-button:hover {
+  background: linear-gradient(145deg, #ff6b00 0%, #ff4500 100%);
+  transform: scale(1.02);
+  box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+ .content-layout {
+    flex-direction: column;
+    align-items: center;
+  }
+ 
+  .user-card {
+    float: none;
+    margin-left: 0;
+    width: 100%;
+  }
+  
+  .user-avatar {
+    width: 80px;
+    height: 80px;
+  }
+
+  .posts-grid {
+    width: 100%;
+    float: none;
+  }
+}
   </style>
 </head>
 <body>
@@ -326,7 +432,16 @@
       </div>
     </div>
 
-    
+    <div class="content-layout">
+  <div class="user-card">
+  <img src="avatar-placeholder.png" alt="Avatar" class="user-avatar">
+  <div class="user-info">
+    <h3>CyberExplorer23</h3>
+    <p class="user-title">Desarrollador de realidades aumentadas</p>
+    <p class="user-stats">15.8k seguidores · 325 siguiendo</p>
+  </div>
+  <button class="view-profile-button" onclick="viewProfile('CyberExplorer23')">Ver Perfil</button>
+</div>
 
     <div class="posts-grid">
       <!-- Los posts se llenarán dinámicamente -->
@@ -496,6 +611,17 @@
         });
       }
     });
+
+    // función boton ver perfil
+function viewProfile(username) {
+  // Aquí la lógica para redirigir al perfil
+  window.location.href = `profile.html?user=${encodeURIComponent(username)}`;
+  
+  // O si usas SPA:
+  // loadUserProfile(username);
+  // navigateToProfile();
+}
+    
   </script>
 </body>
 </html>

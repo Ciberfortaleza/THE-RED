@@ -1,13 +1,35 @@
-// Inicialización
-let currentUser = null;
+// Configuración Firebase (debes completar con tus credenciales)
+const firebaseConfig = {
+  apiKey: "TU_API_KEY",
+  authDomain: "TU_PROYECTO.firebaseapp.com",
+  projectId: "TU_PROYECTO",
+  storageBucket: "TU_PROYECTO.appspot.com",
+  messagingSenderId: "TU_SENDER_ID",
+  appId: "TU_APP_ID"
+};
 
-auth.onAuthStateChanged(user => {
-  currentUser = user;
-  loadTrendingHashtags();
-  loadRecommendedPosts();
-});
+// Inicializar Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const auth = firebase.auth();
 
-// Búsqueda
+// Funcionalidad general de la aplicación
+function toggleLanguage() {
+  const btn = document.querySelector('.language-button');
+  btn.textContent = btn.textContent === 'EN' ? 'ES' : 'EN';
+}
+
+function navigate(page) {
+  const urls = {
+    home: '1pagin.html',
+    discover: 'discover.html',
+    myrole: 'myrole.html',
+    profile: 'profile.html'
+  };
+  if (urls[page]) window.location.href = urls[page];
+}
+
+// Sistema de búsqueda
 let searchTimeout;
 
 document.getElementById('searchInput').addEventListener('input', (e) => {
@@ -20,96 +42,23 @@ async function performSearch(query) {
   if (!searchTerm) return;
 
   try {
-    // Búsqueda en posts
-    const postsQuery = db.collection('posts')
+    const postsRef = db.collection('posts');
+    const snapshot = await postsRef
       .where('hashtags', 'array-contains', searchTerm)
       .orderBy('timestamp', 'desc')
-      .limit(10);
+      .limit(20)
+      .get();
 
-    // Búsqueda en usuarios
-    const usersQuery = db.collection('users')
-      .where('keywords', 'array-contains', searchTerm)
-      .orderBy('followersCount', 'desc')
-      .limit(5);
-
-    const [postsSnapshot, usersSnapshot] = await Promise.all([
-      postsQuery.get(),
-      usersQuery.get()
-    ]);
-
-    const results = [
-      ...postsSnapshot.docs.map(d => ({...d.data(), type: 'post'})),
-      ...usersSnapshot.docs.map(d => ({...d.data(), type: 'user'}))
-    ];
-
-    displayResults(results);
+    displayPosts(snapshot.docs);
   } catch (error) {
-    console.error('Error searching:', error);
+    console.error('Error searching posts:', error);
   }
 }
 
-// Trending Hashtags
-async function loadTrendingHashtags() {
-  const hashtagsRef = db.collection('metadata').doc('trending');
-  const doc = await hashtagsRef.get();
-  
-  if (doc.exists) {
-    const hashtags = doc.data().hashtags;
-    const track = document.getElementById('hashtagsTrack');
-    
-    track.innerHTML = hashtags.map(hashtag => `
-      <button class="hashtag-button" onclick="searchHashtag('${hashtag}')">
-        #${hashtag}
-      </button>
-    `).join('');
-    
-    // Duplicar para efecto de scroll infinito
-    track.innerHTML += track.innerHTML;
-  }
-}
-
-function searchHashtag(hashtag) {
-  document.getElementById('searchInput').value = hashtag;
-  performSearch(hashtag);
-}
-
-// Posts recomendados
-async function loadRecommendedPosts() {
-  if (!currentUser) return;
-
-  const postsRef = db.collection('posts');
-  const snapshot = await postsRef
-    .where('userId', '==', currentUser.uid)
-    .orderBy('timestamp', 'desc')
-    .limit(10)
-    .get();
-
-  displayResults(snapshot.docs);
-}
-
-// Mostrar resultados
-function displayResults(docs) {
+function displayPosts(docs) {
   const grid = document.querySelector('.posts-grid');
   grid.innerHTML = docs.map(doc => {
     const data = doc.data();
-    
-    if(data.type === 'user') { // Ejemplo de documento de usuario
-      return `
-        <div class="user-card">
-          <div class="user-header">
-            <img src="${data.photoURL || 'avatar-placeholder.png'}" class="user-avatar" alt="${data.displayName}">
-            <div class="user-info">
-              <h3>${data.displayName}</h3>
-              <p class="user-bio">${data.bio || ''}</p>
-              <p class="user-stats">${data.followersCount || 0} seguidores</p>
-            </div>
-          </div>
-          <button class="follow-button" onclick="followUser('${doc.id}')">Seguir</button>
-        </div>
-      `;
-    }
-    
-    // Post normal
     return `
       <div class="post-card">
         <h3>${data.title}</h3>
@@ -122,8 +71,72 @@ function displayResults(docs) {
   }).join('');
 }
 
-// Mantener funcionalidades del esqueleto
-function toggleLanguage() {
-  const btn = document.querySelector('.language-button');
-  btn.textContent = btn.textContent === 'EN' ? 'ES' : 'EN';
+// Carga inicial de datos
+auth.onAuthStateChanged(user => {
+  if (user) {
+    loadTrendingHashtags();
+    loadRecommendedPosts(user.uid);
+  }
+});
+
+async function loadTrendingHashtags() {
+  try {
+    const doc = await db.collection('metadata').doc('trending').get();
+    if (doc.exists) {
+      const hashtags = doc.data().hashtags;
+      const track = document.querySelector('.hashtags-track');
+      track.innerHTML = [...hashtags, ...hashtags].map(tag => `
+        <button class="hashtag-button" onclick="performSearch('${tag}')">
+          #${tag}
+        </button>
+      `).join('');
+    }
+  } catch (error) {
+    console.error('Error loading hashtags:', error);
+  }
 }
+
+async function loadRecommendedPosts(userId) {
+  try {
+    const snapshot = await db.collection('posts')
+      .where('userId', '==', userId)
+      .orderBy('timestamp', 'desc')
+      .limit(10)
+      .get();
+
+    displayPosts(snapshot.docs);
+  } catch (error) {
+    console.error('Error loading recommended posts:', error);
+  }
+}
+
+// Gestión del estado activo en la navegación
+document.querySelectorAll('.nav-button').forEach(button => {
+  button.addEventListener('click', function() {
+    document.querySelectorAll('.nav-button').forEach(btn => btn.classList.remove('active'));
+    this.classList.add('active');
+    localStorage.setItem('activeButton', this.querySelector('.mobile-text').innerText);
+  });
+});
+
+// Restaurar estado al cargar
+window.addEventListener('load', () => {
+  const activeButtonText = localStorage.getItem('activeButton');
+  if (activeButtonText) {
+    document.querySelectorAll('.mobile-text').forEach(text => {
+      if (text.innerText === activeButtonText) {
+        text.parentElement.classList.add('active');
+      }
+    });
+  }
+});
+
+// Función para ver perfiles
+function viewProfile(username) {
+  window.location.href = `profile.html?user=${encodeURIComponent(username)}`;
+}
+
+// Inicialización adicional necesaria
+document.addEventListener('DOMContentLoaded', () => {
+  // Aquí puedes añadir cualquier inicialización adicional necesaria
+});
