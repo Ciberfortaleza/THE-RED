@@ -1,13 +1,14 @@
 // script.js
 // Configura Firebase
-const firebaseConfig = {
-  apiKey: "TU_API_KEY",
-  authDomain: "TU_DOMINIO.firebaseapp.com",
-  projectId: "TU_ID",
-  storageBucket: "TU_BUCKET.appspot.com",
-  messagingSenderId: "TU_SENDER_ID",
-  appId: "TU_APP_ID"
-};
+ const firebaseConfig = {
+            apiKey: "AIzaSyApU8UbfqfzBH1UPU3a1CQGf1p995Rf0y4",
+            authDomain: "the-red-loggin.firebaseapp.com",
+            projectId: "the-red-loggin",
+            storageBucket: "the-red-loggin.firebasestorage.app",
+            messagingSenderId: "40265573777",
+            appId: "1:40265573777:web:1651cb4119969010ea2630",
+            measurementId: "G-DPLC00RS2V"
+        };
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
