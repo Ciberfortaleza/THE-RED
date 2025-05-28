@@ -216,4 +216,3 @@ document.getElementById("popupImage").addEventListener("wheel", function (e) {
   scale = Math.min(Math.max(.5, scale), 4); // límites
   this.style.transform = `scale(${scale})`;
 });
-
