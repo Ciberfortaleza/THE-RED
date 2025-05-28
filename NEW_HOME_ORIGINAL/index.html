@@ -31,7 +31,7 @@
 <div class="scroll-wall" id="scroll-wall">
   <div class="post-card">
     <div class="post-image">
-      <img src="jarra.jpg" alt="Imagen del producto" />
+      <img src="jarra.jpg" alt="Imagen del producto" onclick="openImagePopup(this.src)" />
     </div>
     <div class="post-info">
       <div class="user">
@@ -75,31 +75,63 @@
   <!-- Ventana emergente -->
   <section class="popup" id="popup">
     <div class="popup-content">
-      <div class="popup-header">
-        <h2>Nuevo Post</h2>
-        <button class="close-btn" onclick="closePopup()">&times;</button>
-      </div>
-      <div class="upload-area">
-        <label class="upload-label">
-          <span>📷 Haz clic para subir una imagen</span>
-          <input type="file" id="image-upload" accept="image/*" hidden>
-        </label>
-      </div>
-      <img id="image-preview" class="image-preview" alt="">
+  <div class="popup-header">
+    <h2>Nuevo Post</h2>
+    <button class="close-btn" onclick="closePopup()">&times;</button>
+  </div>
+  <div class="upload-area">
+    <label class="upload-label">
+      <span>📷 Haz clic para subir una imagen</span>
+      <input type="file" id="image-upload" accept="image/*" hidden>
+    </label>
+  </div>
+  <img id="image-preview" class="image-preview" alt="">
 
-      <!-- Campos de entrada -->
-      <input type="text" id="titulo" placeholder="Título del producto" required>
-      <input type="text" id="ubicacion" placeholder="Ubicación">
-      <input type="text" id="contacto" placeholder="Contacto" required>
-      <input type="text" id="sitio" placeholder="Sitio web (opcional)">
-      <input type="text" id="precio" placeholder="Precio" required>
-      <textarea id="description" placeholder="Descripción del producto..." rows="4"></textarea>
+  <input type="text" id="titulo" placeholder="Título del producto" required>
+  <input type="text" id="ubicacion" placeholder="Ubicación (ej: CDMX)">
+  <input type="number" id="precio" placeholder="Precio en MXN" required>
+  <textarea id="description" placeholder="Descripción del producto..." rows="4"></textarea>
+  <input type="text" id="hashtags" placeholder="#etiquetas #separadas #por #espacios">
+  
+  <div class="contact-toggle">
+    <label>
+      <input type="checkbox" id="mostrar-contacto" checked> 
+      Mostrar botón de contacto
+    </label>
+    <input type="text" id="contacto-info" placeholder="Info de contacto (ej: WhatsApp)">
+  </div>
 
-      <button class="publish-button" type="button" onclick="submitPost()">Publicar ahora</button>
-    </div>
+  <button class="publish-button" type="button" onclick="submitPost()">Publicar ahora</button>
+</div>
   </section>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js" integrity="sha512-9KkIqdfN7ipEW6B6k+Aq20PV31bjODg4AA52W+tYtAE0JQitSQRyKF9LNJUTRGनिश्新生萝卜)." crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="script.js"></script>
+  <div id="imagePopup" class="image-popup">
+  <span class="close-popup" onclick="closeImagePopup()">&times;</span>
+  <img id="popupImage" src="" alt="Imagen ampliada" />
+</div>
+
+  <!-- Firebase App (obligatorio) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+
+<!-- Firebase Firestore (si van a usar base de datos) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
+<!-- Firebase Storage (si van a guardar imágenes) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
+
+<!-- Inicializar Firebase -->
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyApU8UbfqfzBH1UPU3a1CQGf1p995Rf0y4",
+    authDomain: "the-red-loggin.firebaseapp.com",
+    projectId: "the-red-loggin",
+    storageBucket: "the-red-loggin.firebasestorage.app",
+    messagingSenderId: "40265573777",
+    appId: "1:40265573777:web:1651cb4119969010ea2630",
+    measurementId: "G-DPLC00RS2V"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+</script>
 </body>
 </html>

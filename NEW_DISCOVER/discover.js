@@ -21,10 +21,10 @@ function toggleLanguage() {
 
 function navigate(page) {
   const urls = {
-    home: '1pagin.html',
-    discover: 'discover.html',
-    myrole: 'myrole.html',
-    profile: 'profile.html'
+    home: '../NEW_HOME_ORIGINAL/index.html',
+    discover: '../new_discover/index.html',
+    myrole: '../new_myrole/index.html',
+    profile: '../new_profile/index.html'
   };
   if (urls[page]) window.location.href = urls[page];
 }

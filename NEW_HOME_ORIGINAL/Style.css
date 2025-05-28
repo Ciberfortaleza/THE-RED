@@ -434,6 +434,44 @@ hr {
   transform: translateY(-2px);
 }
 
+
+/*FORMULARIO NUEVO POST*/
+.popup input[type="text"],
+.popup input[type="number"],
+.popup textarea {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  margin: 10px 0;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.contact-toggle {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  margin: 10px 0;
+  font-size: 0.9rem;
+}
+
+.contact-toggle label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+#contacto-info {
+  flex-grow: 1;
+  display: none;
+}
+
+/* Mostrar campo de contacto cuando el checkbox está marcado */
+#mostrar-contacto:checked ~ #contacto-info {
+  display: block;
+}
+
+
 /* ============================= */
 /* PUBLICAR AHORA BUTTON        */
 /* ============================= */
@@ -457,6 +495,40 @@ hr {
   box-shadow: 0 0 20px rgb(211, 128, 193), 0 5px 15px rgba(255, 0, 170, 0.502);
   transform: translateY(-2px);
 }
+
+/*POP UP IMAGE POST*/
+.image-popup {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.9);
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.image-popup img {
+  max-width: 90%;
+  max-height: 90%;
+  transition: transform 0.25s ease;
+  cursor: grab;
+}
+
+.close-popup {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 2rem;
+  color: white;
+  cursor: pointer;
+  z-index: 10000;
+}
+
+
 
 /* ============================= */
 /* RESPONSIVE DESIGN            */
@@ -575,86 +647,78 @@ body {
 }
 
 @media (max-width: 600px) {
-    .post-image {
-        width: 100%;
-        height: 300px; /* Tamaño cuadrado */
-        overflow: hidden;
-        position: relative;
-    }
+  .post-card {
+    background: rgba(0, 0, 0, 0.9);
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+    margin: 1rem auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    max-width: 95%;
+    transform: scale(1);
+  }
 
-    .post-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover; /* Hace que la imagen llene su espacio */
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-    }
+  .post-image {
+    height: auto;
+    max-height: 250px;
+    border-radius: 12px;
+    overflow: hidden;
+  }
 
-    .post-info {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start; /* Alinea mejor el contenido */
-        padding: 15px;
-    }
+  .post-image img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
 
-    .user {
-        display: flex;
-        flex-direction: row; /* Usuario alineado horizontalmente */
-        align-items: center;
-        gap: 12px;
-        width: 100%;
-    }
+  .post-info {
+    background-color: transparent;
+    padding: 0.8rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
-    .avatar {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-    }
+  .username {
+    font-size: 1rem;
+    color: #b44ed1;
+    font-weight: bold;
+  }
 
-    .user-data {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
+  .location {
+    font-size: 0.85rem;
+    color: #ccc;
+  }
 
-    .username {
-        font-size: 1rem;
-        font-weight: bold;
-        color: #b44ed1;
-    }
+  .description {
+    font-size: 0.95rem;
+    color: #ddd;
+    text-align: center;
+  }
 
-    .location {
-        font-size: 0.85rem;
-        color: #ccc;
-    }
+  .price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #59d3ff;
+    margin-top: 0.5rem;
+  }
 
-    .description {
-        font-size: 1rem;
-        color: #ddd;
-        margin-top: 10px;
-        line-height: 1.5;
-    }
+  .contact {
+    background-color: #8000ff;
+    color: white;
+    padding: 10px 20px;
+    margin: 1rem auto;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    display: inline-block;
+  }
 
-    .price {
-        font-size: 1.2rem;
-        color: #59d3ff;
-        font-weight: bold;
-        margin-top: 10px;
-    }
-
-    .contact {
-        font-size: 0.95rem;
-        color: #59d3ff;
-        text-decoration: none;
-        margin-top: 5px;
-    }
-
-    .hashtags {
-        font-size: 0.85rem;
-        color: #aaa;
-        margin-top: 15px;
-    }
+  .hashtags {
+    font-size: 0.85rem;
+    color: #aaa;
+    margin-top: 0.5rem;
+    text-align: center;
+  }
 }
