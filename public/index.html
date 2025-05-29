@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>THE RED - Perfil</title>
+  <link rel="icon" href="logo.png" type="image/x-icon" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400;700&display=swap" rel="stylesheet" />
+  
+  <!-- Estilos -->
+  <style>
+    /* Estilos generales del cuerpo */
+    body {
+      margin: 0;
+      font-family: 'Roboto Flex', sans-serif;
+      background: url('background.png') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+    }
+
+    /* Encabezado superior */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      background: rgba(0, 0, 0, 0.3);
+      transition: background 0.3s;
+      z-index: 1000;
+    }
+
+    header:hover {
+      background: rgba(0, 0, 0, 0.6);
+    }
+
+    .logo {
+      height: clamp(30px, 6vw, 60px);
+    }
+
+    .language-selector {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .language-button {
+      background: #5c40c9;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: .3rem 1rem;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: background .2s, transform .2s;
+    }
+
+    .language-button:hover {
+      background: #764fd9;
+      transform: scale(1.05);
+    }
+
+    /* Área desplazable principal */
+    .scroll-wall {
+      position: absolute;
+      top: 80px;
+      bottom: 80px;
+      left: 0;
+      right: 0;
+      overflow-y: auto;
+      padding: 2rem;
+      box-sizing: border-box;
+    }
+
+    /* Carrusel de imágenes */
+    .carousel-container {
+      position: relative;
+      max-width: 800px;
+      height: 400px;
+      margin: 2rem auto;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 15px;
+      overflow: hidden;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .carousel {
+      display: flex;
+      height: 100%;
+      transition: transform .4s ease-in-out;
+    }
+
+    .carousel img {
+      flex: 0 0 100%;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      display: none;
+    }
+
+    .carousel img.active {
+      display: block;
+    }
+
+    .upload-controls {
+      text-align: center;
+      margin: 1rem auto;
+    }
+
+    .upload-button {
+      background: #5c40c9;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: .8rem 1.2rem;
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+
+    .upload-button:hover {
+      background: #764fd9;
+      transform: scale(1.05);
+    }
+
+    .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2.5rem;
+      background: rgba(0, 0, 0, 0.5);
+      padding: .5rem 1rem;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+      user-select: none;
+    }
+
+    .arrow:hover {
+      background: rgba(0, 0, 0, 0.8);
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .left-arrow {
+      left: 10px;
+    }
+
+    .right-arrow {
+      right: 10px;
+    }
+
+    /* Sección de perfil del usuario */
+    .profile-section {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      grid-template-rows: auto auto 1fr;
+      gap: 2rem;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 2rem;
+      border-radius: 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .profile-photo {
+      grid-row: 1 / span 2;
+      text-align: center;
+    }
+
+    .profile-photo img {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      margin-bottom: 1.5em;
+    }
+
+    .contact {
+      display: flex;
+      flex-direction: column;
+      gap: .7rem;
+    }
+
+    .contact a {
+      background: rgba(0, 0, 0, 0.2);
+      color: #fff;
+      text-decoration: none;
+      padding: .6rem 1.2rem;
+      border: 1px solid #555;
+      border-radius: 25px;
+      transition: background .2s, transform .2s;
+    }
+
+    .contact a:hover {
+      background: #222;
+      transform: scale(1.02);
+    }
+
+    .contact-inputs {
+      display: none;
+      flex-direction: column;
+      gap: .5rem;
+      margin-top: .5rem;
+    }
+
+    .contact-inputs input {
+      background: rgba(0, 0, 0, 0.3);
+      color: #fff;
+      padding: .6rem 1.2rem;
+      border: 1px solid #555;
+      border-radius: 25px;
+    }
+
+    .contact-inputs button {
+      align-self: flex-start;
+      background: #5c40c9;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: .6rem 1rem;
+      cursor: pointer;
+      transition: background .2s;
+    }
+
+    .contact-inputs button:hover {
+      background: #764fd9;
+    }
+
+    .description-box {
+      grid-column: 2;
+      grid-row: 1;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 1rem;
+    }
+
+    .description-box textarea {
+      width: 100%;
+      height: 100px;
+      border-radius: 8px;
+      border: 1px solid #555;
+      background: rgba(0, 0, 0, 0.2);
+      color: #fff;
+      padding: .5rem;
+      resize: vertical;
+    }
+
+    .actions {
+      grid-column: 2;
+      grid-row: 2;
+      display: flex;
+      gap: 1rem;
+    }
+
+    .actions button {
+      flex: 1;
+      padding: .8rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+      background: #5c40c9;
+      color: #fff;
+    }
+
+    .actions button:hover {
+      transform: scale(1.03);
+      background: #764fd9;
+    }
+
+    .actions .logout-button {
+      background: #e63946;
+    }
+
+    .actions .logout-button:hover {
+      background: #d62828;
+    }
+
+    .user-posts {
+      grid-column: 1 / -1;
+      grid-row: 3;
+      height: 300px;
+      overflow-y: auto;
+    }
+
+    .post {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .post-header {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .post-header img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+
+    /* Barra inferior de navegación */
+    .bottom-nav {
+      position: fixed;
+      bottom: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 2rem;
+      padding: .8rem 1.2rem;
+      background: rgba(175, 19, 128, 0.11);
+      backdrop-filter: blur(1px);
+      border-radius: 24px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      z-index: 1000;
+    }
+
+    .nav-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: transform .2s;
+    }
+
+    .nav-button img {
+      height: 60px;
+      transition: transform .2s, filter .2s;
+    }
+
+    .nav-button:hover img,
+    .nav-button.active img {
+      transform: scale(1.05);
+      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header>
+    <img src="logo.png" alt="THE RED Logo" class="logo" />
+    <div class="language-selector">
+      <span>LANGUAGE:</span>
+      <button class="language-button" onclick="toggleLanguage()">EN</button>
+    </div>
+  </header>
+
+  <!-- Contenido principal desplazable -->
+  <div class="scroll-wall">
+
+    <!-- Carrusel de fotos del usuario -->
+    <div class="carousel-container">
+      <div class="carousel" id="carousel"></div>
+      <div class="arrow left-arrow" onclick="moveSlide(-1)">‹</div>
+      <div class="arrow right-arrow" onclick="moveSlide(1)">›</div>
+    </div>
+
+    <!-- Botón para subir fotos -->
+    <div class="upload-controls">
+      <input type="file" id="imageUpload" accept="image/*" multiple style="display:none">
+      <button class="upload-button" onclick="triggerUpload()">Agregar fotos</button>
+    </div>
+
+    <!-- Sección del perfil -->
+    <div class="profile-section">
+
+      <!-- Foto de perfil y enlaces -->
+      <div class="profile-photo">
+        <img src="https://via.placeholder.com/200" alt="Foto de perfil" />
+        <div class="contact">
+          <a href="#" id="emailLink">Email</a>
+          <a href="#" id="instagramLink">Instagram</a>
+          <a href="#" id="facebookLink">Facebook</a>
+          <a href="#" id="whatsappLink">Whatsapp</a>
+          <a href="#" id="telefonoLink">Teléfono</a>
+
+          <!-- Editor de enlaces -->
+          <div class="contact-inputs" id="contactInputs">
+            <input type="url" id="emailInput" placeholder="Link de Email">
+            <input type="url" id="instagramInput" placeholder="Link de Instagram">
+            <input type="url" id="facebookInput" placeholder="Link de Facebook">
+            <input type="url" id="whatsappInput" placeholder="Link de WhatsApp">
+            <input type="text" id="telefonoInput" placeholder="Número de Teléfono">
+            <button onclick="guardarEnlaces()">Guardar enlaces</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Descripción -->
+      <div class="description-box">
+        <label for="descripcionInput">Descripción:</label>
+        <textarea id="descripcionInput" placeholder="Escribe tu descripción..."></textarea>
+      </div>
+
+      <!-- Botones de acción -->
+      <div class="actions">
+        <button class="edit-links" onclick="toggleEnlaceEditor()">Editar enlaces</button>
+        <button class="edit-desc" onclick="guardarDescripcion()">Editar descripción</button>
+        <button onclick="changeProfilePhoto()">Cambiar foto</button>
+        <button class="logout-button" onclick="logout()">Cerrar sesión</button>
+      </div>
+
+      <!-- Publicaciones del usuario -->
+      <div class="user-posts">
+        <div class="post">
+          <div class="post-header">
+            <img src="https://via.placeholder.com/40" alt="Usuario" />
+            <span class="user-name">Usuario</span>
+          </div>
+          <div class="post-content">
+            <p>Este es un post de ejemplo.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div>
+      <!-- Configura Firebase con tus credenciales -->
+      
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyApU8UbfqfzBH1UPU3a1CQGf1p995Rf0y4",
+    authDomain: "the-red-loggin.firebaseapp.com",
+    projectId: "the-red-loggin",
+    storageBucket: "the-red-loggin.appspot.com",
+    messagingSenderId: "40265573777",
+    appId: "1:40265573777:web:1651cb4119969010ea2630",
+    measurementId: "G-DPLC00RS2V"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+  const storage = firebase.storage();
+
+  auth.onAuthStateChanged(user => {
+    if (!user) {
+      window.location.href = "loggin_firebase.html";
+    } else {
+      const uid = user.uid;
+      db.collection("usuarios").doc(uid).get().then(doc => {
+        if (doc.exists) {
+          const data = doc.data();
+
+          // Enlaces
+          document.getElementById("emailLink").href = data.email || "#";
+          document.getElementById("instagramLink").href = data.instagram || "#";
+          document.getElementById("facebookLink").href = data.facebook || "#";
+          document.getElementById("whatsappLink").href = data.whatsapp || "#";
+          document.getElementById("telefonoLink").textContent = data.telefono || "Teléfono";
+
+          document.getElementById("emailInput").value = data.email || "";
+          document.getElementById("instagramInput").value = data.instagram || "";
+          document.getElementById("facebookInput").value = data.facebook || "";
+          document.getElementById("whatsappInput").value = data.whatsapp || "";
+          document.getElementById("telefonoInput").value = data.telefono || "";
+
+          document.getElementById("descripcionInput").value = data.descripcion || "";
+
+          // Foto de perfil
+          if (data.fotoPerfil) {
+            document.querySelector(".profile-photo img").src = data.fotoPerfil;
+          }
+
+          // Carrusel de imágenes
+          if (data.imagenesCarrusel) {
+            data.imagenesCarrusel.forEach(addImageToCarousel);
+            updateCarouselDisplay();
+          }
+        }
+      });
+    }
+  });
+
+  function guardarEnlaces() {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const data = {
+      email: document.getElementById('emailInput').value,
+      instagram: document.getElementById('instagramInput').value,
+      facebook: document.getElementById('facebookInput').value,
+      whatsapp: document.getElementById('whatsappInput').value,
+      telefono: document.getElementById('telefonoInput').value,
+    };
+
+    db.collection("usuarios").doc(user.uid).update(data).then(() => {
+      alert("Enlaces actualizados");
+      document.getElementById("contactInputs").style.display = "none";
+    });
+  }
+
+  function guardarDescripcion() {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const descripcion = document.getElementById("descripcionInput").value;
+    db.collection("usuarios").doc(user.uid).update({ descripcion }).then(() => {
+      alert("Descripción guardada");
+    });
+  }
+
+  function changeProfilePhoto() {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.onchange = e => {
+      const file = e.target.files[0];
+      const user = auth.currentUser;
+      if (file && user) {
+        const ref = storage.ref(`perfiles/${user.uid}/perfil.jpg`);
+        ref.put(file).then(() => ref.getDownloadURL()).then(url => {
+          document.querySelector(".profile-photo img").src = url;
+          db.collection("usuarios").doc(user.uid).update({ fotoPerfil: url });
+        });
+      }
+    };
+    input.click();
+  }
+
+  document.getElementById('imageUpload').addEventListener('change', e => {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const files = Array.from(e.target.files);
+    const urls = [];
+
+    files.forEach((file, index) => {
+      if (file.type.startsWith('image/')) {
+        const ref = storage.ref(`perfiles/${user.uid}/carrusel/${Date.now()}-${file.name}`);
+        ref.put(file).then(() => ref.getDownloadURL()).then(url => {
+          urls.push(url);
+          addImageToCarousel(url);
+          updateCarouselDisplay();
+
+          if (urls.length === files.length) {
+            db.collection("usuarios").doc(user.uid).get().then(doc => {
+              const existentes = (doc.data().imagenesCarrusel || []);
+              db.collection("usuarios").doc(user.uid).update({
+                imagenesCarrusel: [...existentes, ...urls]
+              });
+            });
+          }
+        });
+      }
+    });
+  });
+</script>
+
+    </div>
+    
+    <!-- Barra inferior de navegación -->
+    <div class="bottom-nav">
+      <button class="nav-button" onclick="navigate('home')"><img src="BOTON_HOME.svg" alt="Home" /></button>
+      <button class="nav-button" onclick="navigate('discover')"><img src="BOTON_DISCOVER.svg" alt="Discover" /></button>
+      <button class="nav-button" onclick="navigate('myrole')"><img src="BOTON_MYROLE.svg" alt="My Role" /></button>
+      <button class="nav-button" onclick="navigate('profile')"><img src="BOTON_PROFILE.svg" alt="Profile" /></button>
+    </div>
+    
+    <!-- Scripts JS -->
+    <script>
+      let userImages = [];
+      let currentSlide = 0;
+    
+      // Abre el selector de archivos para subir fotos
+      function triggerUpload() {
+        document.getElementById('imageUpload').click();
+      }
+    
+      // Maneja los archivos subidos y los convierte en imágenes
+      document.getElementById('imageUpload').addEventListener('change', e => {
+        Array.from(e.target.files).forEach(f => {
+          if (f.type.startsWith('image/')) {
+            let r = new FileReader();
+            r.onload = ev => addImageToCarousel(ev.target.result);
+            r.readAsDataURL(f);
+          }
+        });
+      });
+    </script>
+  
+  <script>
+
+    // Agrega imagen al carrusel
+    function addImageToCarousel(src) {
+      const img = document.createElement('img');
+      img.src = src;
+      if (userImages.length === 0) img.classList.add('active');
+      userImages.push(src);
+      document.getElementById('carousel').appendChild(img);
+    }
+
+    // Cambia de imagen en el carrusel
+    function moveSlide(n) {
+      if (!userImages.length) return;
+      currentSlide = (currentSlide + n + userImages.length) % userImages.length;
+      updateCarouselDisplay();
+    }
+
+    // Muestra solo la imagen activa en el carrusel
+    function updateCarouselDisplay() {
+      document.querySelectorAll('#carousel img').forEach((img, i) =>
+        img.classList.toggle('active', i === currentSlide)
+      );
+    }
+
+    // Muestra/oculta el editor de enlaces
+    function toggleEnlaceEditor() {
+      const ci = document.getElementById('contactInputs');
+      ci.style.display = ci.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    // Guarda los enlaces personalizados del perfil
+    function guardarEnlaces() {
+      const email = document.getElementById('emailInput').value;
+      const instagram = document.getElementById('instagramInput').value;
+      const facebook = document.getElementById('facebookInput').value;
+      const whatsapp = document.getElementById('whatsappInput').value;
+      const telefono = document.getElementById('telefonoInput').value;
+
+      document.getElementById('emailLink').href = email || '#';
+      document.getElementById('instagramLink').href = instagram || '#';
+      document.getElementById('facebookLink').href = facebook || '#';
+      document.getElementById('whatsappLink').href = whatsapp || '#';
+      document.getElementById('telefonoLink').href = telefono ? 'tel:' + telefono : '#';
+      document.getElementById('telefonoLink').textContent = telefono || 'Teléfono';
+
+      alert('Enlaces actualizados');
+      document.getElementById('contactInputs').style.display = 'none';
+    }
+
+    // Guarda la descripción del perfil
+    function guardarDescripcion() {
+      const d = document.getElementById('descripcionInput').value;
+      console.log('Descripción:', d);
+      alert('Descripción guardada');
+    }
+
+    // Cambia la foto de perfil
+    function changeProfilePhoto() {
+      const inp = document.createElement('input');
+      inp.type = 'file';
+      inp.accept = 'image/*';
+      inp.onchange = e => {
+        const f = e.target.files[0];
+        if (f) {
+          const r = new FileReader();
+          r.onload = ev => document.querySelector('.profile-photo img').src = ev.target.result;
+          r.readAsDataURL(f);
+        }
+      };
+      inp.click();
+    }
+
+    // Cierra sesión (redirección)
+    function logout() {
+      window.location.href = 'loggin_firebase.html';
+    }
+
+    // Cambia el idioma (solo cambia el texto del botón por ahora)
+    function toggleLanguage() {
+      const b = document.querySelector('.language-button');
+      b.textContent = b.textContent === 'EN' ? 'ES' : 'EN';
+    }
+
+    // Navega a otras páginas
+    function navigate(p) {
+      const u = {
+        home: 'home.html',
+        discover: 'discover.html',
+        myrole: 'myrole.html',
+        profile: 'profile.html'
+      };
+      if (u[p]) window.location.href = u[p];
+    }
+  </script>
+</body>
+</html>
