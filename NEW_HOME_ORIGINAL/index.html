@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>THE RED</title>
+  <link rel="icon" href="logo.png" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+    <link rel="stylesheet" href="style.css">
+<body>
+
+  <!-- Encabezado -->
+  <header>
+    <img src="logo.png" alt="THE RED Logo" class="logo">
+    <div class="language-selector">
+      <span class="language-text">LANGUAGE:</span>
+      <button class="language-button" onclick="toggleLanguage()">EN</button>
+    </div>
+  </header>
+
+  <!-- Sección para crear nuevos posts -->
+  <div class="new-post-section" onclick="openPopup()">Crear un nuevo post</div>
+
+  <!-- Muro de publicaciones -->
+<div class="scroll-wall" id="scroll-wall">
+  <div class="post-card">
+    <div class="post-image">
+      <img src="jarra.jpg" alt="Imagen del producto" onclick="openImagePopup(this.src)" />
+    </div>
+    <div class="post-info">
+      <div class="user">
+        <img class="avatar" src="perfil.jpg" alt="Foto de perfil" />
+        <div class="user-data">
+          <span class="username">@usuario</span>
+          <span class="location">CDMX</span>
+        </div>
+      </div>
+      <p class="description">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam neque mauris, iaculis ut rutrum non, tempor vel nisi.
+      </p>
+      <hr />
+      <div class="price">$250 MXN</div>
+      <a href="#" class="contact">Contactar</a>
+      <div class="hashtags">#etiqueta1 #producto #hechoenmexico</div>
+    </div>
+  </div>
+</div>
+
+  <!-- Barra de navegación inferior -->
+  <nav class="bottom-nav">
+    <button class="nav-button" onclick="navigate('home')">
+      <img src="BOTON_HOME.svg" alt="Home">
+      <span class="mobile-text">HOME</span>
+    </button>
+    <button class="nav-button" onclick="navigate('discover')">
+      <img src="BOTON_DISCOVER.svg" alt="Discover">
+      <span class="mobile-text">DISCOVER</span>
+    </button>
+    <button class="nav-button" onclick="navigate('myrole')">
+      <img src="BOTON_MYROLE.svg" alt="My Role">
+      <span class="mobile-text">RED</span>
+    </button>
+    <button class="nav-button" onclick="navigate('profile')">
+      <img src="BOTON_PROFILE.svg" alt="Profile">
+      <span class="mobile-text">PROFILE</span>
+    </button>
+  </nav>
+
+  <!-- Ventana emergente -->
+  <section class="popup" id="popup">
+    <div class="popup-content">
+  <div class="popup-header">
+    <h2>Nuevo Post</h2>
+    <button class="close-btn" onclick="closePopup()">&times;</button>
+  </div>
+  <div class="upload-area">
+    <label class="upload-label">
+      <span>📷 Haz clic para subir una imagen</span>
+      <input type="file" id="image-upload" accept="image/*" hidden>
+    </label>
+  </div>
+  <img id="image-preview" class="image-preview" alt="">
+
+  <input type="text" id="titulo" placeholder="Título del producto" required>
+  <input type="text" id="ubicacion" placeholder="Ubicación (ej: CDMX)">
+  <input type="number" id="precio" placeholder="Precio en MXN" required>
+  <textarea id="description" placeholder="Descripción del producto..." rows="4"></textarea>
+  <input type="text" id="hashtags" placeholder="#etiquetas #separadas #por #espacios">
+  
+  <div class="contact-toggle">
+    <label>
+      <input type="checkbox" id="mostrar-contacto" checked> 
+      Mostrar botón de contacto
+    </label>
+    <input type="text" id="contacto-info" placeholder="Info de contacto (ej: WhatsApp)">
+  </div>
+
+  <button class="publish-button" type="button" onclick="submitPost()">Publicar ahora</button>
+</div>
+  </section>
+
+  <div id="imagePopup" class="image-popup">
+  <span class="close-popup" onclick="closeImagePopup()">&times;</span>
+  <img id="popupImage" src="" alt="Imagen ampliada" />
+</div>
+
+<script src="script.js"></script>
+
+<!-- Firebase App (obligatorio) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+
+<!-- Firebase Firestore (si van a usar base de datos) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
+<!-- Firebase Storage (si van a guardar imágenes) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
+
+<!-- Inicializar Firebase -->
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyApU8UbfqfzBH1UPU3a1CQGf1p995Rf0y4",
+    authDomain: "the-red-loggin.firebaseapp.com",
+    projectId: "the-red-loggin",
+    storageBucket: "the-red-loggin.firebasestorage.app",
+    messagingSenderId: "40265573777",
+    appId: "1:40265573777:web:1651cb4119969010ea2630",
+    measurementId: "G-DPLC00RS2V"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+</script>
+</body>
+</html>
