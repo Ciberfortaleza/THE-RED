@@ -1,0 +1,1191 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+:root {
+    --dark-purple: #1e0525;
+    --medium-purple: #4a1a55;
+    --light-purple: #7d3490;
+    --dark-red: #a0001a;
+    --medium-red: #e01030;
+    --light-red: #ff3058;
+    --glow-purple: 0 0 15px rgba(125, 52, 144, 0.8);
+    --glow-red: 0 0 15px rgba(255, 48, 88, 0.8);
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+body {
+    /* Corrected path for the background image */
+    background: url('background.png') no-repeat center center fixed; 
+    background-size: cover;
+    color: #fff;
+    min-height: 100vh;
+    padding-bottom: 70px;
+    overflow-x: hidden;
+}
+
+/* Header Styles */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: rgba(30, 5, 37, 0.493);
+    backdrop-filter: blur(10px);
+    box-shadow: var(--shadow);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    transition: transform 0.3s ease;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    height: 40px;
+    filter: drop-shadow(0 0 8px rgba(255, 48, 88, 0.9));
+}
+
+.header-center {
+    display: flex;
+    gap: 15px;
+}
+
+.btn {
+    padding: 8px 20px;
+    border-radius: 30px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-new-post {
+    background: linear-gradient(45deg, var(--medium-red), var(--light-red));
+    color: white;
+    box-shadow: var(--glow-red);
+}
+
+.btn-new-post:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(255, 48, 88, 0.9);
+}
+
+.btn-language {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid var(--light-purple);
+}
+
+.btn-language:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Floating button for mobile */
+.floating-btn {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, var(--medium-red), var(--light-red));
+    color: white;
+    box-shadow: var(--glow-red);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    z-index: 99;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.floating-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 25px rgba(255, 48, 88, 0.9);
+}
+
+/* Search Section Styles */
+.search-section {
+    max-width: 900px;
+    margin: 100px auto 20px; /* Adjust margin to accommodate header */
+    padding: 0 15px;
+    text-align: center; /* Keep text-align for search bar centering */
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--light-purple);
+    border-radius: 30px;
+    padding: 10px 20px; /* Original padding */
+    margin-bottom: 15px;
+    box-shadow: var(--shadow); /* Keep shadow for the whole bar */
+}
+
+.search-bar i {
+    color: var(--light-purple);
+    margin-right: 10px; /* Space between icon and input area */
+    font-size: 1.2rem;
+    /* Transition for glow effect */
+    transition: color 0.3s ease, text-shadow 0.3s ease; 
+    cursor: pointer; /* Make the icon clickable */
+}
+
+/* Style for the glowing search icon */
+.search-bar i.active-search {
+    color: var(--light-red); /* Change color to red when active */
+    text-shadow: 0 0 10px var(--light-red), /* Inner glow */
+                 0 0 20px var(--light-red), /* Outer glow */
+                 0 0 30px var(--light-red); /* Wider glow */
+}
+
+
+/* New wrapper for tags and input */
+.search-input-area {
+    display: flex;
+    flex-wrap: wrap; /* Allow tags to wrap */
+    align-items: center;
+    flex-grow: 1; /* Take all available space */
+    min-width: 0; /* Allow shrinking */
+    /* Remove background, border, padding, border-radius from here */
+    /* These properties are now on .search-bar */
+}
+
+/* Styles for the dynamic search tags container within the search bar */
+.dynamic-search-tags {
+    display: flex;
+    flex-wrap: wrap; /* Allow tags to wrap within the input area */
+    gap: 8px; /* Space between tags */
+    /* No margin-right here, as it's handled by gap within flex */
+    overflow: hidden; /* Hide overflow */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.dynamic-search-tags::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Webkit browsers */
+}
+
+/* Styles for individual dynamic search tags */
+.dynamic-search-tag {
+    background: rgba(125, 52, 144, 0.5); /* Slightly darker purple for dynamic tags */
+    color: #ffc4d0;
+    padding: 5px 10px;
+    border-radius: 15px; /* More rounded */
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--light-purple);
+    flex-shrink: 0; /* Prevent tags from shrinking */
+}
+
+.dynamic-search-tag .remove-dynamic-tag {
+    margin-left: 8px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.7);
+    transition: color 0.2s;
+}
+
+.dynamic-search-tag .remove-dynamic-tag:hover {
+    color: var(--light-red);
+}
+
+/* Adjust search input to accommodate dynamic tags */
+#searchInput { /* Target the input directly */
+    flex-grow: 1; /* Allow input to take remaining space */
+    min-width: 50px; /* Ensure input is not too small */
+    background: none; /* No background for the input itself */
+    border: none; /* No border for the input itself */
+    outline: none;
+    color: white;
+    font-size: 1rem;
+    padding: 0; /* Remove all padding from the input itself */
+    margin-left: 8px; /* Add a small margin if there are tags before it */
+}
+
+/* Ensure placeholder visibility */
+#searchInput::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+
+.search-tags {
+    display: flex; /* Use flexbox for the outer container */
+    overflow: hidden; /* Hide overflowing content */
+    position: relative; /* For positioning the inner content */
+    height: 40px; /* Define a height for the scroll area */
+    align-items: center; /* Vertically center tags */
+}
+
+.search-tags-inner {
+    display: flex; /* Flexbox for the inner container to keep tags in a row */
+    white-space: nowrap; /* Prevent tags from wrapping */
+    animation: scroll-left 20s linear infinite; /* Apply animation */
+    /* Ensure the inner container is wide enough to hold duplicated content */
+    width: max-content; 
+}
+
+.search-tags:hover .search-tags-inner {
+    animation-play-state: paused; /* Pause animation on hover */
+}
+
+.tag-button {
+    flex-shrink: 0; /* Prevent tags from shrinking */
+    margin-right: 10px; /* Space between tags */
+    background: rgba(125, 52, 144, 0.3);
+    color: #ffc4d0;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: 1px solid var(--light-purple);
+}
+
+.tag-button:hover {
+    background: rgba(255, 48, 88, 0.3);
+    border-color: var(--light-red);
+    box-shadow: var(--glow-red);
+}
+
+/* Keyframe animation for horizontal scrolling */
+@keyframes scroll-left {
+    0% {
+        transform: translateX(0%);
+    }
+    100% {
+        /* Scrolls half of the content's width to create a seamless loop */
+        transform: translateX(-50%); 
+    }
+}
+
+
+/* Navigation Styles */
+.nav-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(30, 5, 37, 0.384);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: space-around;
+    padding: 15px 0;
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.3);
+    z-index: 100;
+}
+
+.nav-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    font-size: 0.8rem;
+    transition: all 0.3s;
+}
+
+.nav-btn i {
+    font-size: 1.4rem;
+    margin-bottom: 5px;
+}
+
+.nav-btn.active {
+    color: var(--light-red);
+    transform: translateY(-5px);
+}
+
+.nav-btn.active i {
+    text-shadow: var(--glow-red);
+}
+
+/* Posts Container */
+.posts-container {
+    max-width: 900px;
+    margin: 30px auto 30px; /* Adjusted margin-top after search section */
+    padding: 0 15px;
+    display: grid; /* Use grid for layout */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive columns */
+    gap: 25px; /* Gap between posts */
+}
+
+.post {
+    background: rgba(15, 6, 19, 0.247);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(125, 52, 144, 0.4);
+    position: relative;
+    display: flex; /* Ensure content inside post flows correctly */
+    flex-direction: column; /* Stack header, image, content */
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+}
+
+.user-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 12px;
+    border: 2px solid var(--light-purple);
+    box-shadow: var(--glow-purple);
+}
+
+.user-info {
+    flex: 1;
+}
+
+.username {
+    font-weight: bold;
+    color: var(--light-red);
+    text-shadow: 0 0 5px rgba(255, 48, 88, 0.7);
+}
+
+.post-time {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.options-btn {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px;
+    transition: all 0.3s;
+}
+
+.options-btn:hover {
+    color: var(--light-red);
+}
+
+.post-content {
+    display: flex;
+    flex-direction: column; /* Stack text and buttons */
+    flex-grow: 1; /* Allow content to take available space */
+}
+
+.post-text {
+    flex: 1;
+    padding: 0 15px 15px;
+}
+
+.post-description {
+    margin-bottom: 15px;
+    line-height: 1.5;
+    position: relative;
+    overflow: hidden;
+}
+
+.post-description.collapsed {
+    max-height: 4.8em;
+}
+
+.post-description.collapsed::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1.6em;
+    background: linear-gradient(to bottom, rgba(40, 10, 50, 0), rgba(40, 10, 50, 0.9));
+}
+
+.show-more-btn {
+    background: none;
+    border: none;
+    color: var(--light-red);
+    cursor: pointer;
+    font-weight: bold;
+    padding: 5px 0;
+    display: block;
+    margin-top: 5px;
+}
+
+.post-price {
+    background: rgba(125, 52, 144, 0.3);
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #ffdd40;
+}
+
+.post-location {
+    display: flex;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+.post-location i {
+    margin-right: 5px;
+    color: var(--light-purple);
+}
+
+.post-image-container {
+    width: 100%; /* Take full width of its parent */
+    padding: 0 15px 15px; /* Add padding as before */
+    position: relative;
+}
+
+.post-image {
+    width: 100%;
+    height: 250px; /* Fixed height for consistency in grid */
+    border-radius: 10px;
+    object-fit: cover;
+    transition: all 0.3s ease-in-out; /* Smoother transition */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    cursor: pointer; /* Indicate it's clickable */
+    border: 2px solid transparent; /* Initial transparent border */
+}
+
+.post-image:hover {
+    transform: scale(1.03); /* Slightly more pronounced scale */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5), var(--glow-purple); /* Add purple glow on hover */
+    border-color: var(--light-purple); /* Show border on hover */
+}
+
+.post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.tag {
+    background: rgba(255, 48, 88, 0.2);
+    color: #ffc4d0;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    transition: all 0.3s ease; /* Add transition for smooth highlighting */
+}
+
+/* New style for highlighted tags */
+.tag.highlighted-tag {
+    background: linear-gradient(45deg, var(--medium-purple), var(--light-purple)); /* Darker purple background */
+    color: #fff; /* White text */
+    font-weight: bold;
+    box-shadow: var(--glow-purple); /* Purple glow */
+    transform: scale(1.05); /* Slightly larger */
+}
+
+
+.contact-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background: rgba(125, 52, 144, 0.4);
+    border: 1px solid var(--light-purple);
+    color: white;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 10px;
+}
+
+.contact-btn:hover {
+    background: rgba(255, 48, 88, 0.3);
+    border-color: var(--light-red);
+    box-shadow: var(--glow-red);
+}
+
+/* Popup Styles */
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(10px);
+}
+
+.popup-content {
+    background: linear-gradient(135deg, var(--dark-purple), #2f0a38);
+    width: 90%;
+    max-width: 500px;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 0 30px rgba(125, 52, 144, 0.9);
+    border: 1px solid var(--light-purple);
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.popup-title {
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--light-red);
+    text-shadow: 0 0 10px rgba(255, 48, 88, 0.7);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--light-purple);
+    color: white;
+    font-size: 1rem;
+}
+
+textarea.form-control {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.image-preview-container {
+    width: 100%;
+    height: 200px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 2px dashed var(--light-purple);
+    border-radius: 10px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.image-preview {
+    max-width: 100%;
+    max-height: 100%;
+    display: none;
+}
+
+.image-placeholder {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.9rem;
+}
+
+.submit-btn {
+    background: linear-gradient(45deg, var(--medium-red), var(--light-red));
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    width: 100%;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: var(--glow-red);
+    transition: all 0.3s;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 25px rgba(255, 48, 88, 0.9);
+}
+
+/* Contact Button Toggle */
+.contact-toggle {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.contact-toggle label {
+    margin-left: 10px;
+    cursor: pointer; /* Indicate label is clickable */
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+    /* ADDED THIS: Ensure relative positioning for absolute children */
+    position: relative; 
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 100%; /* Make input cover the full toggle area */
+    height: 100%; /* Make input cover the full toggle area */
+    position: absolute; /* Position it over the slider */
+    z-index: 1; /* Ensure it's on top for clicks */
+    cursor: pointer; /* Indicate input is clickable */
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #4a1a55;
+    transition: .4s;
+    border-radius: 24px;
+}
+
+/* The "thumb" of the slider */
+.slider::before {
+    position: absolute;
+    content: "";
+    height: 16px; /* Height of the thumb */
+    width: 16px;  /* Width of the thumb */
+    left: 4px;    /* Initial position from the left edge of the slider */
+    bottom: 4px;  /* Initial position from the bottom edge of the slider */
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%; /* Make it a circle */
+}
+
+input:checked + .slider {
+    background-color: var(--light-red);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px); /* Move thumb to the right */
+}
+
+/* Options Menu */
+.options-menu {
+    display: none;
+    position: absolute;
+    top: 50px;
+    right: 15px;
+    background: rgba(30, 5, 37, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    z-index: 10;
+    border: 1px solid var(--light-purple);
+}
+
+.options-menu button {
+    display: block;
+    width: 100%;
+    padding: 12px 20px;
+    background: none;
+    border: none;
+    text-align: left;
+    color: rgba(255, 255, 255, 0.9);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.options-menu button:hover {
+    background: rgba(125, 52, 144, 0.3);
+    color: white;
+}
+
+.options-menu button i {
+    margin-right: 10px;
+    width: 20px;
+    text-align: center;
+}
+
+/* Chat Popup */
+.chat-popup {
+    display: none;
+    position: fixed;
+    bottom: 70px;
+    right: 20px;
+    width: 350px;
+    height: 450px;
+    background: rgba(31, 10, 37, 0.603);
+    border-radius: 15px;
+    box-shadow: 0 0 30px rgba(255, 48, 88, 0.7);
+    z-index: 4000;
+    border: 1px solid var(--light-purple);
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.chat-header {
+    background: rgba(74, 26, 85, 0.8);
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--light-purple);
+}
+
+.chat-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    border: 2px solid var(--light-purple);
+}
+
+.chat-username {
+    font-weight: bold;
+    color: var(--light-red);
+}
+
+.chat-close {
+    margin-left: auto;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.message {
+    max-width: 80%;
+    padding: 10px 15px;
+    border-radius: 15px;
+    position: relative;
+}
+
+.message.received {
+    background: rgba(125, 52, 144, 0.3);
+    align-self: flex-start;
+    border-bottom-left-radius: 0;
+}
+
+.message.sent {
+    background: rgba(224, 16, 48, 0.3);
+    align-self: flex-end;
+    border-bottom-right-radius: 0;
+}
+
+.chat-input {
+    display: flex;
+    padding: 15px;
+    border-top: 1px solid var(--light-purple);
+    background: rgba(40, 19, 46, 0.9);
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 10px 15px;
+    border-radius: 30px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--light-purple);
+    color: white;
+    font-size: 0.9rem;
+    outline: none;
+}
+
+.chat-input button {
+    background: var(--light-red);
+    border: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-left: 10px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Image View Popup */
+.image-view-popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 3000;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.image-view-popup.active {
+    display: flex;
+    opacity: 1;
+}
+
+.close-image-btn {
+    position: absolute;
+    top: 25px;
+    right: 35px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 2.5rem;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.2s ease;
+}
+
+.close-image-btn:hover {
+    transform: scale(1.2);
+    color: var(--light-red);
+}
+
+.image-container {
+    max-width: 90vw;
+    max-height: 90vh;
+    overflow: auto;
+    text-align: center;
+    position: relative;
+    cursor: default;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    padding: 20px;
+}
+
+.image-container::-webkit-scrollbar {
+    display: none;
+}
+
+#popupImage {
+    max-width: 100%;
+    max-height: 100%;
+    transition: transform 0.1s ease;
+    cursor: zoom-in;
+    transform-origin: center center;
+    user-select: none;
+    display: block;
+    margin: 0 auto;
+}
+
+#popupImage.grabbing {
+    cursor: grabbing;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.post {
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.chat-popup {
+    animation: slideIn 0.3s ease-out;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .btn-new-post span {
+        display: none;
+    }
+    
+    .floating-btn {
+        display: flex;
+    }
+    
+    .posts-container {
+        grid-template-columns: 1fr; /* Single column for mobile */
+        margin-top: 70px;
+    }
+    
+    .post-content {
+        flex-direction: column;
+    }
+    
+    .post-image-container {
+        order: 1; /* Imagen primero */
+        padding: 15px;
+    }
+    
+    .post-header {
+        order: 2; /* Header después de la imagen */
+        padding: 15px 15px 0;
+    }
+    
+    .post-text {
+        order: 3; /* Contenido al final */
+        padding-top: 0;
+    }
+    
+    .chat-popup {
+        width: 100%;
+        height: 70%;
+        bottom: 0;
+        right: 0;
+        border-radius: 15px 15px 0 0;
+    }
+
+    .search-section {
+        margin-top: 70px; /* Adjust for header on mobile */
+    }
+}
+
+@media (max-width: 480px) {
+    .logo {
+        height: 35px;
+    }
+    
+    .btn {
+        padding: 8px 15px;
+    }
+    
+    .btn-language span {
+        display: none;
+    }
+}
+
+/* Contador de caracteres */
+.char-counter {
+    float: right;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Área de subida mejorada */
+.upload-area {
+    border: 2px dashed var(--light-purple);
+    border-radius: 10px;
+    padding: 25px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-bottom: 15px;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.upload-area:hover {
+    border-color: var(--light-red);
+    background: rgba(125, 52, 144, 0.1);
+}
+
+.upload-area i {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    color: var(--light-purple);
+}
+
+.upload-area p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+/* Previsualizaciones de imágenes */
+.image-previews {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.preview-item {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--light-purple);
+}
+
+.preview-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.remove-preview {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: rgba(224, 16, 48, 0.7);
+    border: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    color: white;
+    font-size: 0.7rem;
+    cursor: pointer;
+}
+
+/* Campos en fila */
+.form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.half-width {
+    flex: 1;
+}
+
+/* Inputs con icono */
+.input-with-icon {
+    position: relative;
+}
+
+.input-with-icon i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--light-purple);
+}
+
+.input-with-icon input {
+    padding-left: 35px;
+}
+
+/* Tags como chips */
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.tag-chip {
+    background: rgba(255, 48, 88, 0.2);
+    color: #ffc4d0;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+}
+
+.tag-chip .remove-tag {
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+/* Style for no posts found message */
+.no-posts-message {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.2rem;
+    padding: 50px 20px;
+    grid-column: 1 / -1; /* Make it span all columns in the grid */
+
+    /* New styles for better appearance */
+    background: rgba(15, 6, 19, 0.4); /* Slightly darker background */
+    border: 1px solid rgba(125, 52, 144, 0.6); /* More prominent border */
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+    display: flex; /* Use flexbox for icon and text alignment */
+    flex-direction: column; /* Stack icon and text */
+    align-items: center; /* Center items horizontally */
+    justify-content: center; /* Center items vertically */
+    min-height: 200px; /* Give it some height */
+    gap: 20px; /* Space between icon and text */
+}
+
+.no-posts-message i {
+    font-size: 3rem; /* Larger icon */
+    color: var(--light-red); /* Red color for the icon */
+    text-shadow: var(--glow-red); /* Glow effect for the icon */
+}
+
+/* Custom Alert Styles */
+.custom-alert {
+    position: fixed;
+    top: 20px; /* Position at the top */
+    right: 20px; /* Position at the right */
+    transform: none; /* No longer centering horizontally */
+    background: rgba(30, 5, 37, 0.9); /* Darker background */
+    color: white;
+    padding: 15px 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    z-index: 5000; /* Ensure it's on top */
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    opacity: 0; /* Start hidden for animation */
+    animation: fadeInOut 3s forwards; /* Animation for fade in and out */
+    min-width: 250px;
+    max-width: 90%;
+    text-align: center;
+}
+
+.custom-alert p {
+    margin: 0;
+    flex-grow: 1;
+}
+
+.custom-alert-close {
+    background: var(--light-red);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+}
+
+.custom-alert-close:hover {
+    background: var(--medium-red);
+}
+
+/* Keyframes for custom alert animation */
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translateY(-20px); } /* Start slightly above */
+    10% { opacity: 1; transform: translateY(0); } /* Slide down to position */
+    90% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-20px); } /* Slide up to fade out */
+}
