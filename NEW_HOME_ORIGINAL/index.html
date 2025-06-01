@@ -1,135 +1,308 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>THE RED</title>
-  <link rel="icon" href="logo.png" type="image/x-icon">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Red - Social Network</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+</head>
 <body>
-
-  <!-- Encabezado -->
-  <header>
-    <img src="logo.png" alt="THE RED Logo" class="logo">
-    <div class="language-selector">
-      <span class="language-text">LANGUAGE:</span>
-      <button class="language-button" onclick="toggleLanguage()">EN</button>
-    </div>
-  </header>
-
-  <!-- Sección para crear nuevos posts -->
-  <div class="new-post-section" onclick="openPopup()">Crear un nuevo post</div>
-
-  <!-- Muro de publicaciones -->
-<div class="scroll-wall" id="scroll-wall">
-  <div class="post-card">
-    <div class="post-image">
-      <img src="jarra.jpg" alt="Imagen del producto" onclick="openImagePopup(this.src)" />
-    </div>
-    <div class="post-info">
-      <div class="user">
-        <img class="avatar" src="perfil.jpg" alt="Foto de perfil" />
-        <div class="user-data">
-          <span class="username">@usuario</span>
-          <span class="location">CDMX</span>
+    <header id="mainHeader">
+        <div class="logo-container">
+            <img src="img/logo.png" alt="The Red Logo" class="logo">
         </div>
-      </div>
-      <p class="description">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam neque mauris, iaculis ut rutrum non, tempor vel nisi.
-      </p>
-      <hr />
-      <div class="price">$250 MXN</div>
-      <a href="#" class="contact">Contactar</a>
-      <div class="hashtags">#etiqueta1 #producto #hechoenmexico</div>
+        
+        <div class="header-center">
+            <button class="btn btn-new-post" id="newPostBtn">
+                <i class="fas fa-plus"></i> <span>New Post</span>
+            </button>
+        </div>
+        
+        <button class="btn btn-language" id="languageBtn">
+            <i class="fas fa-globe"></i> <span>EN</span>
+        </button>
+    </header>
+    
+    <div class="floating-btn" id="mobilePostBtn">
+        <i class="fas fa-plus"></i>
     </div>
-  </div>
-</div>
+    
+    <div class="posts-container" id="postsContainer">
+        <div class="post sponsored-post">
+            <div class="sponsored-label">
+                <i class="fas fa-ad"></i> Patrocinado
+            </div>
+            
+            <div class="post-main-flex-container">
+                <div class="post-image-container">
+                    <img src="https://placehold.co/600x400/800080/ffffff?text=Producto+Innovador" alt="Sponsored Post Image" class="post-image">
+                </div>
+                
+                <div class="post-info-section">
+                    <div class="post-header">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NSIgaGVpZ2h0PSI0NSIgdmlld0JveD0iMCAwIDQ1IDQ1Ij48Y2lyY2xlIGN4PSIyMi41IiBjeT09IjIyLjUiIHI9IjIyLjUiIGZpbGw9IiM1NTZiZjciLz48Y2lyY2xlIGN4PSIxNiIgY3k9IjE3IiByPSI0IiBmaWxsPSIjZmZmIi8+PGNpcmNsZSBjeD0iMjkiIGN5PSIxNyIgcj0iNCIgZmlsbD0iI2ZmZiIvPjxwYXRoIGQ9Ik0xNiAzMCBBOCA4IDAgMCAwIDI5IDMwIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==" alt="User Avatar" class="user-avatar">
+                        <div class="user-info">
+                            <div class="username">@TechSolutions_Official</div>
+                            <div class="post-time">Promocionado</div>
+                        </div>
+                        </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            <p class="post-description collapsed">
+                                ¡Descubre nuestra nueva línea de gadgets inteligentes para el hogar!
+                                Simplifica tu vida con tecnología de punta y diseño elegante.
+                                Controla todo desde tu smartphone y disfruta de la comodidad.
+                                Oferta especial por tiempo limitado. ¡No te lo pierdas!
+                            </p>
+                            <button class="show-more-btn" onclick="toggleText(this)">Ver más</button>
+                            
+                            <div class="post-tags">
+                                <span class="tag">#Tecnología</span>
+                                <span class="tag">#HogarInteligente</span>
+                                <span class="tag">#Innovación</span>
+                            </div>
+                            
+                            <div class="post-price">Desde $79.99</div>
+                            <div class="post-location">
+                                <i class="fas fa-globe"></i> Disponible Online
+                            </div>
+                            <button class="contact-btn" onclick="openChat('TechSolutions_Official')">Contactar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-  <!-- Barra de navegación inferior -->
-  <nav class="bottom-nav">
-    <button class="nav-button" onclick="navigate('home')">
-      <img src="BOTON_HOME.svg" alt="Home">
-      <span class="mobile-text">HOME</span>
-    </button>
-    <button class="nav-button" onclick="navigate('discover')">
-      <img src="BOTON_DISCOVER.svg" alt="Discover">
-      <span class="mobile-text">DISCOVER</span>
-    </button>
-    <button class="nav-button" onclick="navigate('myrole')">
-      <img src="BOTON_MYROLE.svg" alt="My Role">
-      <span class="mobile-text">RED</span>
-    </button>
-    <button class="nav-button" onclick="navigate('profile')">
-      <img src="BOTON_PROFILE.svg" alt="Profile">
-      <span class="mobile-text">PROFILE</span>
-    </button>
-  </nav>
+        <div class="post sponsored-post">
+            <div class="sponsored-label">
+                <i class="fas fa-ad"></i> Patrocinado
+            </div>
+            
+            <div class="post-main-flex-container">
+                <div class="post-image-container">
+                    <img src="https://placehold.co/600x400/4CAF50/ffffff?text=Viaje+Aventura" alt="Sponsored Post Image" class="post-image">
+                </div>
+                
+                <div class="post-info-section">
+                    <div class="post-header">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NSIgaGVpZ2h0PSI0NSIgdmlld0JveD0iMCAwIDQ1IDQ1Ij48Y2lyY2xlIGN4PSIyMi41IiBjeT0iMjIuNSIgcj0iMjIuNSIgZmlsbD0iIzQ2YmY5YyIvPjxciY2lyY2xlIGN4PSIxNiIgY3k9IjE3IiByPSI0LjUiIGZpbGw9IiNmZmYiLz48Y2lyY2xlIGN4PSIyOSIgY3k9IjE3IiByPSI0LjUiIGZpbGw9IiNmZmYiLz48cGF0aCBkPSJNMTYgMjYgQTYgNiAwIDAgMCAyOSAyNiIgc3Ryb2tlPSIiNmZmIiBzdHJva2Utd2lkdGg9IjIiIGZpbGw9Im5vbmUiLz48L3N2Zz4=" alt="User Avatar" class="user-avatar">
+                        <div class="user-info">
+                            <div class="username">@AdventureTours_Global</div>
+                            <div class="post-time">Promocionado</div>
+                        </div>
+                        </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            <p class="post-description collapsed">
+                                ¡Planifica tu próxima aventura con nosotros!
+                                Explora destinos exóticos, montañas majestuosas y playas paradisíacas.
+                                Paquetes todo incluido para una experiencia inolvidable.
+                                ¡Reserva ahora y vive el viaje de tus sueños!
+                            </p>
+                            <button class="show-more-btn" onclick="toggleText(this)">Ver más</button>
+                            
+                            <div class="post-tags">
+                                <span class="tag">#Viajes</span>
+                                <span class="tag">#Aventura</span>
+                                <span class="tag">#Explora</span>
+                            </div>
+                            
+                            <div class="post-price">Desde $500</div>
+                            <div class="post-location">
+                                <i class="fas fa-plane"></i> Destinos Globales
+                            </div>
+                            <button class="contact-btn" onclick="openChat('AdventureTours_Global')">Contactar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-  <!-- Ventana emergente -->
-  <section class="popup" id="popup">
-    <div class="popup-content">
-  <div class="popup-header">
-    <h2>Nuevo Post</h2>
-    <button class="close-btn" onclick="closePopup()">&times;</button>
-  </div>
-  <div class="upload-area">
-    <label class="upload-label">
-      <span>📷 Haz clic para subir una imagen</span>
-      <input type="file" id="image-upload" accept="image/*" hidden>
-    </label>
-  </div>
-  <img id="image-preview" class="image-preview" alt="">
+        <div class="post sponsored-post">
+            <div class="sponsored-label">
+                <i class="fas fa-ad"></i> Patrocinado
+            </div>
+            
+            <div class="post-main-flex-container">
+                <div class="post-image-container">
+                    <img src="https://placehold.co/600x400/FF5733/ffffff?text=Comida+Deliciosa" alt="Sponsored Post Image" class="post-image">
+                </div>
+                
+                <div class="post-info-section">
+                    <div class="post-header">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NSIgaGVpZ2h0PSI0NSIgdmlld0JveD0iMCAwIDQ1IDQ1Ij48Y2lyY2xlIGN4PSIyMi41IiBjeT0iMjIuNSIgcj09IjIyLjUiIGZpbGw9IiNmZjU3MzMiLz48Y2lyY2xlIGN4PSIxNiIgY3k9IjE3IiByPSI0IiBmaWxsPSIjZmZmIi8+PGNpcmNsZSBjeD0iMjkiIGN5PSIxNyIgcj0iNCIgZmlsbD0iI2ZmZiIvPjxwYXRoIGQ9Ik0xNiAzMCBBOCA4IDAgMCAwIDI5IDMwIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==" alt="User Avatar" class="user-avatar">
+                        <div class="user-info">
+                            <div class="username">@GourmetBites_Co</div>
+                            <div class="post-time">Promocionado</div>
+                        </div>
+                        </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            <p class="post-description collapsed">
+                                ¡Experimenta el sabor de la alta cocina en casa!
+                                Nuestros kits de comida gourmet te traen ingredientes frescos y recetas exclusivas.
+                                Fácil de preparar, delicioso de disfrutar.
+                                ¡Pide hoy y conviértete en un chef en tu propia cocina!
+                            </p>
+                            <button class="show-more-btn" onclick="toggleText(this)">Ver más</button>
+                            
+                            <div class="post-tags">
+                                <span class="tag">#ComidaGourmet</span>
+                                <span class="tag">#CocinaEnCasa</span>
+                                <span class="tag">#Delicioso</span>
+                            </div>
+                            
+                            <div class="post-price">Desde $35</div>
+                            <div class="post-location">
+                                <i class="fas fa-utensils"></i> Entrega a Domicilio
+                            </div>
+                            <button class="contact-btn" onclick="openChat('GourmetBites_Co')">Contactar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="nav-container">
+        <a href="../NEW_HOME_ORIGINAL/index.html" class="nav-btn" id="nav-home">
+            <i class="fas fa-home"></i>
+            <span>HOME</span>
+        </a>
+        <a href="../NEW_DISCOVER/index.html" class="nav-btn" id="nav-discover">
+            <i class="fas fa-compass"></i>
+            <span>DISCOVER</span>
+        </a>
+        <a href="#" class="nav-btn" id="nav-myred">
+            <i class="fas fa-heart"></i>
+            <span>MI RED</span>
+        </a>
+        <a href="#" class="nav-btn" id="nav-profile">
+            <i class="fas fa-user"></i>
+            <span>PERFIL</span>
+        </a>
+    </div>
+    
+    <div class="popup" id="newPostPopup">
+        <div class="popup-content">
+            <button class="close-btn" id="closePopup">&times;</button>
+            <h2 class="popup-title" id="popupTitle">Create New Post</h2>
+            
+            <form id="postForm">
+                <div class="form-group">
+                    <label for="postDescription">
+                        <i class="fas fa-align-left"></i> Description
+                        <span class="char-counter" id="charCounter">0/500</span>
+                    </label>
+                    <textarea id="postDescription" class="form-control"
+                              placeholder="Share your thoughts..." 
+                              maxlength="500"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="postTags">
+                        <i class="fas fa-tags"></i> Tags
+                    </label>
+                    <div class="tags-container" id="tagsContainer"></div>
+                    <input type="text" id="postTags" class="form-control"
+                           placeholder="Type and press Enter to add tags">
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <i class="fas fa-image"></i> Media
+                    </label>
+                    <div class="upload-area" id="uploadArea">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Drag & drop images or click to browse</p>
+                        <input type="file" id="postImage" accept="image/*" multiple>
+                    </div>
+                    <div class="image-previews" id="imagePreviews"></div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group half-width">
+                        <label for="postPrice">
+                            <i class="fas fa-tag"></i> Price
+                        </label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                            <input type="number" id="postPrice" class="form-control"
+                                   placeholder="0.00" min="0" step="0.01">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group half-width">
+                        <label for="postLocation">
+                            <i class="fas fa-map-marker-alt"></i> Location
+                        </label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-search-location"></i>
+                            <input type="text" id="postLocation" class="form-control"
+                                   placeholder="City, Country">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="contact-toggle">
+                        <div class="toggle-label">
+                            <i class="fas fa-comments"></i>
+                            Enable Contact Button
+                        </div>
+                        <div class="toggle-switch">
+                            <input type="checkbox" id="contactToggle" checked>
+                            <span class="slider"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-paper-plane"></i> Post Now
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <div class="chat-popup" id="chatPopup">
+        <div class="chat-header">
+            <img id="chatAvatar" src="" alt="Avatar" class="chat-avatar">
+            <div class="chat-username" id="chatUsername">@username</div>
+            <button class="chat-close" onclick="closeChat()">&times;</button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            </div>
+        <div class="chat-input">
+            <input type="text" id="chatInput" placeholder="Type a message...">
+            <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
 
-  <input type="text" id="titulo" placeholder="Título del producto" required>
-  <input type="text" id="ubicacion" placeholder="Ubicación (ej: CDMX)">
-  <input type="number" id="precio" placeholder="Precio en MXN" required>
-  <textarea id="description" placeholder="Descripción del producto..." rows="4"></textarea>
-  <input type="text" id="hashtags" placeholder="#etiquetas #separadas #por #espacios">
-  
-  <div class="contact-toggle">
-    <label>
-      <input type="checkbox" id="mostrar-contacto" checked> 
-      Mostrar botón de contacto
-    </label>
-    <input type="text" id="contacto-info" placeholder="Info de contacto (ej: WhatsApp)">
-  </div>
+    <div class="image-view-popup" id="imageViewPopup">
+        <button class="close-image-btn" id="closeImageBtn">&times;</button>
+        <div class="image-container">
+            <img id="popupImage" src="" alt="Full size image">
+        </div>
+    </div>
 
-  <button class="publish-button" type="button" onclick="submitPost()">Publicar ahora</button>
-</div>
-  </section>
+    <div class="custom-alert-modal" id="customAlertModal">
+        <div class="custom-alert-content">
+            <i id="customAlertIcon" class="fas"></i>
+            <span id="customAlertMessage"></span>
+        </div>
+    </div>
 
-  <div id="imagePopup" class="image-popup">
-  <span class="close-popup" onclick="closeImagePopup()">&times;</span>
-  <img id="popupImage" src="" alt="Imagen ampliada" />
-</div>
+    <div class="loading-indicator" id="loadingIndicator">
+        <div class="spinner"></div>
+        <p>Cargando...</p>
+    </div>
 
-<script src="script.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js"></script>
 
-<!-- Firebase App (obligatorio) -->
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-
-<!-- Firebase Firestore (si van a usar base de datos) -->
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-
-<!-- Firebase Storage (si van a guardar imágenes) -->
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
-
-<!-- Inicializar Firebase -->
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyApU8UbfqfzBH1UPU3a1CQGf1p995Rf0y4",
-    authDomain: "the-red-loggin.firebaseapp.com",
-    projectId: "the-red-loggin",
-    storageBucket: "the-red-loggin.firebasestorage.app",
-    messagingSenderId: "40265573777",
-    appId: "1:40265573777:web:1651cb4119969010ea2630",
-    measurementId: "G-DPLC00RS2V"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-</script>
+    <script type="module" src="script.js"></script>
 </body>
 </html>
