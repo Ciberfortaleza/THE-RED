@@ -4,56 +4,22 @@ import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged }
 import { getFirestore, collection, addDoc, serverTimestamp, query, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
 
-// Variables globales de Firebase (proporcionadas por el entorno Canvas)
-const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+// Configuración real de Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyApU8UbfqfzBH1UPU3a1CQGf1p995Rf0y4",
+  authDomain: "the-red-loggin.firebaseapp.com",
+  databaseURL: "https://the-red-loggin-default-rtdb.firebaseio.com",
+  projectId: "the-red-loggin",
+  storageBucket: "the-red-loggin.appspot.com",
+  messagingSenderId: "40265573777",
+  appId: "1:40265573777:web:1651cb411996010ea2630",
+  measurementId: "G-DPLC00RS2V"
+};
+const appId = "the-red-loggin";
 
-let app;
-let db;
-let auth;
-let storage;
-let userId = null;
-let isAuthReady = false; // Bandera para indicar si la autenticación está lista
+let app, db, auth, storage, userId = null;
+let isAuthReady = false;
 
-// Variables de paginación
-let allPosts = []; // Almacena todas las publicaciones cargadas
-let currentPage = 1;
-const postsPerPage = 5; // Número de publicaciones por página (ajusta según sea necesario)
-
-// --- Custom Alert Modal ---
-function showCustomAlert(message, type = 'info') {
-    const alertModal = document.getElementById('customAlertModal');
-    const alertMessage = document.getElementById('customAlertMessage');
-    const alertIcon = document.getElementById('customAlertIcon');
-
-    alertMessage.textContent = message;
-    alertIcon.className = ''; // Limpiar clases anteriores
-
-    if (type === 'success') {
-        alertIcon.classList.add('fas', 'fa-check-circle', 'text-green-500');
-    } else if (type === 'error') {
-        alertIcon.classList.add('fas', 'fa-times-circle', 'text-red-500');
-    } else {
-        alertIcon.classList.add('fas', 'fa-info-circle', 'text-blue-500');
-    }
-
-    alertModal.classList.add('active');
-    setTimeout(() => {
-        alertModal.classList.remove('active');
-    }, 3000); // Ocultar después de 3 segundos
-}
-
-// --- Loading Indicator ---
-function showLoadingIndicator(show) {
-    const loadingIndicator = document.getElementById('loadingIndicator');
-    if (show) {
-        loadingIndicator.classList.add('active');
-    } else {
-        loadingIndicator.classList.remove('active');
-    }
-}
-
-// --- Inicialización de Firebase y Autenticación ---
 window.onload = async () => {
     try {
         app = initializeApp(firebaseConfig);
