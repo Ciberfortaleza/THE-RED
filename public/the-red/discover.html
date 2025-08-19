@@ -696,9 +696,77 @@
             text-align: left;
         }
 
+        /* ====================================================== */
+        /* === NUEVAS REGLAS DE CSS PARA RESPONSIVIDAD MÓVIL === */
+        /* ====================================================== */
+
         @media (max-width: 768px) {
+            .main-content {
+                padding: 10px;
+            }
+
+            .main-header {
+                flex-wrap: wrap;
+                padding: 10px;
+                gap: 10px;
+            }
+            .new-post-button {
+                order: 2;
+                width: 100%;
+                text-align: center;
+            }
+            .right-icons {
+                order: 1;
+                width: 100%;
+                justify-content: space-around;
+            }
+
             .discover-posts-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr; /* Una sola columna en móviles */
+                gap: 15px;
+            }
+
+            .long-text-card {
+                padding: 15px;
+            }
+
+            .discover-filters, .discover-search-controls {
+                padding: 15px;
+            }
+
+            .footer-nav .nav-item span {
+                font-size: 0.75em; /* Texto más pequeño en el footer */
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+
+            .modal-content h2 {
+                font-size: 1.5em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .filter-group {
+                width: 100%;
+            }
+            .filter-buttons-container {
+                justify-content: center;
+            }
+            .discover-search-controls {
+                flex-direction: column;
+            }
+            .discover-search-controls input, .discover-search-controls button {
+                width: 100%;
+            }
+            .floating-chat-button {
+                width: 55px;
+                height: 55px;
+                font-size: 1.5em;
+                bottom: 80px;
+                right: 15px;
             }
         }
     </style>
@@ -847,19 +915,25 @@
         // SECCIÓN 2: MANEJO DE SESIÓN Y ELEMENTOS DEL DOM
         // =================================================================================
 
+        let currentUser = null; // Variable para almacenar el objeto de usuario actual
+
         // --- Elementos del DOM ---
         const confirmationModal = document.getElementById('confirmationModal');
         const loadingOverlay = document.getElementById('loadingOverlay');
         const newPostModal = document.getElementById('newPostModal');
         const discoverPostsFeed = document.getElementById('discover-posts-feed');
         const searchInput = document.getElementById('discoverSearchInput');
+        const newPostButton = document.getElementById('newPostButton');
 
         // --- Manejo de Autenticación ---
         onAuthStateChanged(auth, user => {
             if (user) {
-                console.log("Usuario autenticado:", user.uid);
-                cargarPublicaciones(); // Carga inicial de todas las publicaciones
+                currentUser = user; // Almacena el usuario globalmente
+                console.log("Usuario autenticado:", currentUser.uid);
+                newPostButton.disabled = false; // Habilita el botón de publicar
+                cargarPublicaciones(); 
             } else {
+                currentUser = null;
                 console.log("Usuario no autenticado. Redirigiendo al login.");
                 window.location.href = '404.html';
             }
@@ -879,7 +953,7 @@
             discoverPostsFeed.innerHTML = '';
             
             const postsCollection = collection(db, "publicaciones");
-            let q; // Variable para la consulta
+            let q; 
 
             if (searchTerm) {
                 q = query(postsCollection, where("keywords", "array-contains", searchTerm.toLowerCase()), orderBy("timestamp", "desc"));
@@ -908,8 +982,11 @@
          * Crea y guarda una nueva publicación en Firebase.
          */
         async function crearNuevaPublicacion() {
-            const user = auth.currentUser;
-            if (!user) return showConfirmationModal("Debes iniciar sesión para publicar.");
+            // Usa la variable global 'currentUser' que ya fue verificada por onAuthStateChanged
+            if (!currentUser) {
+                showConfirmationModal("Error de autenticación. Por favor, recarga la página.");
+                return;
+            }
 
             const text = document.getElementById('newPostTextInput').value.trim();
             const imageFile = document.getElementById('newPostImageUploadInput').files[0];
@@ -921,15 +998,15 @@
             try {
                 let imageUrl = "";
                 if (imageFile) {
-                    const storageRef = ref(storage, `posts/${user.uid}/${Date.now()}_${imageFile.name}`);
+                    const storageRef = ref(storage, `posts/${currentUser.uid}/${Date.now()}_${imageFile.name}`);
                     const uploadResult = await uploadBytes(storageRef, imageFile);
                     imageUrl = await getDownloadURL(uploadResult.ref);
                 }
 
                 const postData = {
-                    authorId: user.uid,
-                    authorName: user.displayName || 'Usuario Anónimo',
-                    authorAvatar: user.photoURL || `https://placehold.co/55x55/7d3490/ffffff?text=${(user.displayName || 'U').charAt(0)}`,
+                    authorId: currentUser.uid,
+                    authorName: currentUser.displayName || 'Usuario Anónimo',
+                    authorAvatar: currentUser.photoURL || `https://placehold.co/55x55/7d3490/ffffff?text=${(currentUser.displayName || 'U').charAt(0)}`,
                     text: text,
                     imageUrl: imageUrl,
                     keywords: keywords,
@@ -937,15 +1014,12 @@
                 };
 
                 // ***** LA CONEXIÓN CLAVE ESTÁ AQUÍ *****
-                // 1. Guardar en la colección pública para que todos la vean en "Descubrir"
                 await addDoc(collection(db, "publicaciones"), postData);
-                
-                // 2. Guardar en la subcolección del usuario para que aparezca en su perfil
-                await addDoc(collection(db, "usuarios", user.uid, "publicaciones"), postData);
+                await addDoc(collection(db, "usuarios", currentUser.uid, "publicaciones"), postData);
 
                 newPostModal.classList.add('hidden');
                 showConfirmationModal("Publicación creada con éxito.");
-                cargarPublicaciones(); // Recargar el feed
+                cargarPublicaciones(); 
             } catch (error) {
                 console.error("Error al crear la publicación: ", error);
                 showConfirmationModal("Error al crear la publicación: " + error.message);
@@ -985,7 +1059,7 @@
             const previewContainer = document.getElementById('newPostImagePreview');
             const file = event.target.files[0];
             
-            previewContainer.innerHTML = ''; // Limpiar vista previa anterior
+            previewContainer.innerHTML = ''; 
 
             if (file) {
                 const reader = new FileReader();
@@ -1010,8 +1084,7 @@
         // =================================================================================
 
         // --- Botones y Modales ---
-        document.getElementById('newPostButton').addEventListener('click', () => {
-            // Limpiar el formulario antes de mostrar el modal
+        newPostButton.addEventListener('click', () => {
             document.getElementById('newPostTextInput').value = '';
             document.getElementById('newPostImageUploadInput').value = null;
             document.getElementById('newPostKeywordsInput').value = '';
