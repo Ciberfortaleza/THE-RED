@@ -2042,6 +2042,38 @@
                 font-size: 0.9em;
             }
         }
+
+        /* --- NUEVOS ESTILOS PARA LA SECCIÓN DE PUBLICACIONES --- */
+        #myPostsSectionContainer .post-card {
+            background-color: var(--card-background-color);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            text-align: left;
+        }
+        #myPostsSectionContainer .post-card img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        #myPostsSectionContainer .post-card p {
+            color: var(--secondary-text-color);
+            line-height: 1.6;
+        }
+        #myPostsSectionContainer .post-card .post-date {
+            font-size: 0.8em;
+            color: #aaa;
+            margin-top: 15px;
+            display: block;
+        }
+        #myPostsSectionContainer .no-posts-message {
+            color: var(--secondary-text-color);
+            text-align: center;
+            padding: 20px;
+        }
+
     </style>
 </head>
 <body>
@@ -2138,6 +2170,13 @@
                             <div id="customContentSectionContainer" class="profile-preview-section custom-content-area">
                                 <h3>Contenido Personalizado</h3>
                                 <p>¡Bienvenido a mi espacio en The Red!</p>
+                            </div>
+                            <!-- === NUEVA SECCIÓN DE PUBLICACIONES === -->
+                            <div id="myPostsSectionContainer" class="profile-preview-section">
+                                <h3>Publicaciones Recientes</h3>
+                                <div id="posts-container">
+                                    <!-- Las publicaciones se cargarán aquí dinámicamente -->
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -2486,7 +2525,7 @@
         // --- INICIALIZACIÓN DE FIREBASE (Sintaxis Moderna v9+) ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-storage.js";
 
         const firebaseConfig = {
@@ -2512,6 +2551,7 @@
                 // Si el usuario está autenticado, carga sus datos
                 console.log("Usuario autenticado:", user.uid);
                 cargarYMostrarDatosPerfil(user.uid);
+                cargarPublicacionesUsuario(user.uid); // <-- LLAMADA A LA NUEVA FUNCIÓN
             } else {
                 // Si no hay usuario, redirige a la página de login
                 console.log("Ningún usuario autenticado, redirigiendo al login.");
@@ -2532,31 +2572,23 @@
             document.getElementById('confirmationModal').classList.add('hidden');
         });
         
-        // No necesitas las funciones de loading overlay porque no existe el elemento en tu HTML
-        // Si lo agregas, puedes descomentar estas funciones.
-        // function showLoadingOverlay() { ... }
-        // function hideLoadingOverlay() { ... }
-
         // =========================================================
         // === LÓGICA PRINCIPAL DE LA PÁGINA DE PERFIL (ACTUALIZADA) ===
         // =========================================================
 
         async function cargarYMostrarDatosPerfil(uid) {
-            // showLoadingOverlay();
-            const userRef = doc(db, 'usuarios', uid); // <-- CAMBIO v9+
-            const docSnap = await getDoc(userRef); // <-- CAMBIO v9+
+            const userRef = doc(db, 'usuarios', uid);
+            const docSnap = await getDoc(userRef);
 
-            if (docSnap.exists()) { // <-- CAMBIO v9+ (se llama .exists())
+            if (docSnap.exists()) {
                 const userData = docSnap.data();
                 console.log("Datos del perfil cargados:", userData);
                 
-                // Aplicar estilos dinámicos (sin cambios)
                 document.documentElement.style.setProperty('--primary-text-color', userData.primaryTextColor || 'var(--light-red)');
                 document.documentElement.style.setProperty('--secondary-text-color', userData.secondaryTextColor || 'var(--light-purple)');
                 document.documentElement.style.setProperty('--card-background-color', userData.cardBackgroundColor || 'rgba(74, 26, 85, 0.4)');
                 document.documentElement.style.setProperty('--border-color', userData.borderColor || 'var(--light-red)');
                 
-                // Cargar la imagen de fondo (sin cambios)
                 const profileView = document.getElementById('profilePreviewView');
                 if (userData.backgroundUrl) {
                     profileView.style.backgroundImage = `url(${userData.backgroundUrl})`;
@@ -2564,26 +2596,54 @@
                     profileView.style.backgroundImage = "url('https://placehold.co/900x300/4a1a55/ffffff?text=Fondo+de+Perfil')";
                 }
 
-                // Resto de la lógica para mostrar datos (sin cambios en la lógica, solo en la carga inicial)
                 const avatarImg = profileView.querySelector('.profile-avatar-large');
                 avatarImg.src = userData.avatarUrl || `https://placehold.co/150x150/7d3490/ffffff?text=${(userData.username || 'U').charAt(0)}`;
                 profileView.querySelector('h2').textContent = userData.username || 'Usuario The Red';
                 
-                // El resto del código para mostrar/ocultar secciones es idéntico...
-                
-                // Cargar los datos en el modal de edición
                 cargarDatosEnModalEdicion(userData);
 
             } else {
                 console.error("Error: No se encontró un documento de perfil para el usuario.");
                 showConfirmationModal("No se encontró el perfil del usuario. Por favor, contacta a soporte.");
             }
-            // hideLoadingOverlay();
         }
 
-        // Esta función no necesita cambios porque solo asigna valores a elementos del DOM
+        // === NUEVA FUNCIÓN PARA CARGAR PUBLICACIONES ===
+        async function cargarPublicacionesUsuario(uid) {
+            const postsContainer = document.getElementById('posts-container');
+            // La ruta debe ser 'usuarios/{uid}/publicaciones'
+            const postsRef = collection(db, 'usuarios', uid, 'publicaciones');
+            const q = query(postsRef, orderBy('timestamp', 'desc')); // Ordenar por más recientes
+
+            try {
+                const querySnapshot = await getDocs(q);
+                if (querySnapshot.empty) {
+                    postsContainer.innerHTML = '<p class="no-posts-message">Aún no has creado ninguna publicación.</p>';
+                    return;
+                }
+
+                let postsHTML = '';
+                querySnapshot.forEach((doc) => {
+                    const post = doc.data();
+                    const postDate = post.timestamp ? new Date(post.timestamp.seconds * 1000).toLocaleString() : 'Fecha no disponible';
+                    
+                    postsHTML += `
+                        <div class="post-card">
+                            ${post.imageUrl ? `<img src="${post.imageUrl}" alt="Imagen de la publicación">` : ''}
+                            <p>${post.text}</p>
+                            <span class="post-date">${postDate}</span>
+                        </div>
+                    `;
+                });
+                postsContainer.innerHTML = postsHTML;
+
+            } catch (error) {
+                console.error("Error al cargar las publicaciones: ", error);
+                postsContainer.innerHTML = '<p class="no-posts-message">Error al cargar las publicaciones.</p>';
+            }
+        }
+
         function cargarDatosEnModalEdicion(userData) {
-            // ... (Tu código original aquí es correcto)
             document.getElementById('profileUsernameInput').value = userData.username || '';
             document.getElementById('aboutMeContentInput').value = userData.aboutMe || '';
             document.getElementById('interestsContentInput').value = userData.interests || '';
@@ -2667,7 +2727,6 @@
                     showMyMusic: false,
                     showCustomContent: false,
                 };
-                // --- CAMBIO v9+ ---
                 await setDoc(doc(db, 'usuarios', user.uid), defaultData, { merge: true });
                 await cargarYMostrarDatosPerfil(user.uid);
                 showConfirmationModal('Configuración de perfil restablecida con éxito.');
@@ -2679,20 +2738,15 @@
         let backgroundFile = null;
         let myPhotosFiles = [];
 
-        // Los manejadores de eventos 'change' para los inputs de archivo son correctos y no necesitan cambios.
-        // ... (Tu código original para 'profileAvatarUploadInput', 'profileBackgroundUploadInput' y 'myPhotosUploadInput' es correcto)
-
         // Guardar los cambios del perfil (ACTUALIZADO)
         document.getElementById('saveProfileSettingsButton').onclick = async () => {
             const btn = document.getElementById('saveProfileSettingsButton');
             btn.disabled = true;
-            // showLoadingOverlay();
 
             const user = auth.currentUser;
             if (!user) {
                 showConfirmationModal('Debes iniciar sesión para guardar los cambios.');
                 btn.disabled = false;
-                // hideLoadingOverlay();
                 return;
             }
 
@@ -2706,52 +2760,44 @@
                     newMyPhotosUrls = docSnap.data().myPhotos || [];
                 }
 
-
-                // 1. Subir y obtener URLs de las imágenes
                 if (avatarFile) {
-                    const avatarRef = ref(storage, `avatars/${user.uid}/${avatarFile.name}`); // <-- CAMBIO v9+
-                    await uploadBytes(avatarRef, avatarFile); // <-- CAMBIO v9+
-                    newAvatarUrl = await getDownloadURL(avatarRef); // <-- CAMBIO v9+
+                    const avatarRef = ref(storage, `avatars/${user.uid}/${avatarFile.name}`);
+                    await uploadBytes(avatarRef, avatarFile);
+                    newAvatarUrl = await getDownloadURL(avatarRef);
                 }
 
                 if (backgroundFile) {
-                    const backgroundRef = ref(storage, `backgrounds/${user.uid}/${backgroundFile.name}`); // <-- CAMBIO v9+
-                    await uploadBytes(backgroundRef, backgroundFile); // <-- CAMBIO v9+
-                    newBackgroundUrl = await getDownloadURL(backgroundRef); // <-- CAMBIO v9+
+                    const backgroundRef = ref(storage, `backgrounds/${user.uid}/${backgroundFile.name}`);
+                    await uploadBytes(backgroundRef, backgroundFile);
+                    newBackgroundUrl = await getDownloadURL(backgroundRef);
                 }
                 
-                // Nota: Esta implementación reemplazará las fotos existentes.
-                // Si quieres agregarlas a las existentes, necesitarías una lógica más compleja.
                 if (myPhotosFiles.length > 0) {
-                    newMyPhotosUrls = []; // Limpiar el array para subir las nuevas fotos
+                    newMyPhotosUrls = [];
                     for (const file of myPhotosFiles) {
-                        const photoRef = ref(storage, `my-photos/${user.uid}/${Date.now()}-${file.name}`); // <-- CAMBIO v9+
-                        await uploadBytes(photoRef, file); // <-- CAMBIO v9+
-                        const url = await getDownloadURL(photoRef); // <-- CAMBIO v9+
+                        const photoRef = ref(storage, `my-photos/${user.uid}/${Date.now()}-${file.name}`);
+                        await uploadBytes(photoRef, file);
+                        const url = await getDownloadURL(photoRef);
                         newMyPhotosUrls.push(url);
                     }
                 }
 
-                // 2. Obtener los datos del formulario (sin cambios)
                 const profileData = {
                     username: document.getElementById('profileUsernameInput').value,
                     // ... el resto de tus campos ...
                 };
 
-                // 3. Añadir las URLs al objeto de datos
                 if (newAvatarUrl) profileData.avatarUrl = newAvatarUrl;
                 if (newBackgroundUrl) profileData.backgroundUrl = newBackgroundUrl;
-                profileData.myPhotos = newMyPhotosUrls; // Siempre actualiza el array de fotos
+                profileData.myPhotos = newMyPhotosUrls;
 
-                // 4. Actualizar el perfil en Firebase Auth
-                await updateProfile(user, { // <-- CAMBIO v9+
+                await updateProfile(user, {
                     displayName: profileData.username,
                     photoURL: profileData.avatarUrl
                 });
 
-                // 5. Actualizar el documento en Firestore
-                const userDocRef = doc(db, 'usuarios', user.uid); // <-- CAMBIO v9+
-                await updateDoc(userDocRef, profileData); // <-- CAMBIO v9+
+                const userDocRef = doc(db, 'usuarios', user.uid);
+                await updateDoc(userDocRef, profileData);
 
                 showConfirmationModal('Perfil actualizado con éxito!');
                 document.getElementById('profileEditModal').classList.add('hidden');
@@ -2761,7 +2807,6 @@
                 showConfirmationModal('Error al guardar los cambios: ' + error.message);
             } finally {
                 btn.disabled = false;
-                // hideLoadingOverlay();
             }
         };
 
@@ -2771,9 +2816,9 @@
         if (sideMenuLogout) {
             sideMenuLogout.addEventListener('click', (e) => {
                 e.preventDefault();
-                signOut(auth).then(() => { // <-- CAMBIO v9+
+                signOut(auth).then(() => {
                     console.log('Sesión cerrada');
-                    window.location.href = '/404.html'; // O a tu página de login
+                    window.location.href = '/404.html';
                 }).catch(error => {
                     console.error('Error al cerrar sesión:', error);
                 });
@@ -2782,5 +2827,3 @@
     </script>
 </body>
 </html>
-
-
