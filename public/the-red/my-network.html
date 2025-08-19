@@ -1,0 +1,3522 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Red - Mi Red</title>
+    <!-- Font Awesome para íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Fuentes de Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+    <style>
+        /* CSS Común (de common.css) */
+        /* Variables CSS */
+        :root {
+            --dark-purple: #1e0525;
+            --medium-purple: #4a1a55;
+            --light-purple: #7d3490;
+            --dark-red: #a0001a;
+            --medium-red: #e01030;
+            --light-red: #ff3058;
+            --glow-purple: 0 0 20px rgba(125, 52, 144, 0.9);
+            --glow-red: 0 0 20px rgba(255, 48, 88, 0.9);
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+            --side-menu-width: 280px;
+            --gray-dark: #1f2937;
+            --gray-medium: #9ca3af;
+            --gray-light: #d1d5db;
+            --gray-700: #374151;
+            --gray-600: #4b5563;
+            --white: #fff;
+            --red-primary: #dc2626;
+            --gradient-purple-dark: linear-gradient(135deg, #1e0525, #4a1a55);
+            --gradient-red-light: linear-gradient(45deg, #ff3058, #e01030);
+        }
+
+        /* Reset y estilos base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Asegurar que el HTML no tenga desbordamiento horizontal */
+        html {
+            overflow-x: hidden;
+        }
+
+        body {
+            background-image: url('assets/background.png');
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 10vh;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            padding-bottom: 70px; /* Espacio para el footer fijo */
+        }
+
+        /* Estilos para los "blobs" de fondo */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.6;
+            animation: blob-move 20s infinite alternate ease-in-out, blob-pulse 12s infinite alternate;
+        }
+
+        .blob-purple {
+            background: radial-gradient(circle, var(--light-purple), var(--medium-purple));
+            width: 450px;
+            height: 450px;
+            top: 10%;
+            left: -15%;
+            animation-delay: 0s;
+        }
+
+        .blob-red {
+            background: radial-gradient(circle, var(--light-red), var(--medium-red));
+            width: 550px;
+            height: 550px;
+            bottom: -5%;
+            right: -20%;
+            animation-delay: 4s;
+        }
+
+        .blob-blue {
+            background: radial-gradient(circle, #00bfff, #007bff);
+            width: 400px;
+            height: 400px;
+            top: 25%;
+            left: 15%;
+            animation-delay: 8s;
+        }
+
+        .blob-green {
+            background: radial-gradient(circle, #00ff80, #00b359);
+            width: 300px;
+            height: 300px;
+            bottom: 15%;
+            left: -10%;
+            animation-delay: 12s;
+        }
+
+        .blob-yellow {
+            background: radial-gradient(circle, #ffd700, #ff8c00);
+            width: 380px;
+            height: 380px;
+            top: -15%;
+            right: 10%;
+            animation-delay: 16s;
+        }
+
+        @keyframes blob-pulse {
+            0% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.08); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 0.6; }
+        }
+
+        @keyframes blob-move {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(30px, -40px); }
+            50% { transform: translate(-20px, 50px); }
+            75% { transform: translate(40px, -30px); }
+            100% { transform: translate(0, 0); }
+        }
+
+        /* --- Cabecera Principal --- */
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: rgba(30, 5, 37, 0.7); /* Efecto de cristal líquido */
+            backdrop-filter: blur(10px); /* Efecto de cristal líquido */
+            -webkit-backdrop-filter: blur(10px); /* Efecto de cristal líquido */
+            border-bottom: 1px solid rgba(125, 52, 144, 0.7); /* Efecto de cristal líquido */
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .new-post-button {
+            background: var(--gradient-red-light);
+            color: #fff;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--glow-red);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .new-post-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.4s ease-in-out;
+            transform: skewX(-20deg);
+        }
+
+        .new-post-button:hover::before {
+            left: 100%;
+        }
+
+        .new-post-button:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 0 25px rgba(255, 48, 88, 1);
+        }
+
+        /* Añadido para ocultar el botón de nueva publicación en páginas específicas */
+        .new-post-button.hidden-on-profile {
+            display: none;
+        }
+
+        .right-icons {
+            display: flex;
+            gap: 18px;
+        }
+
+        .icon-button {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: color 0.3s ease, transform 0.2s ease, text-shadow 0.3s ease;
+            padding: 8px;
+            border-radius: 8px;
+        }
+
+        .icon-button:hover {
+            color: var(--light-red);
+            transform: scale(1.15);
+            text-shadow: 0 0 10px var(--light-red);
+        }
+
+        /* --- Contenido Principal --- */
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            position: relative;
+        }
+
+        .page-section {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            opacity: 1;
+            visibility: visible;
+            height: auto;
+            transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out, height 0.4s ease-in-out;
+        }
+
+        .page-section.hidden {
+            opacity: 0;
+            visibility: hidden;
+            height: 0;
+            overflow: hidden;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            pointer-events: none;
+        }
+
+        /* Estilos de Entrada y Botón de Búsqueda (usado ahora en Discover) */
+        .search-input-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            width: 100%;
+            max-width: 650px;
+            margin: 15px auto 0;
+            background-color: rgba(30, 5, 37, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.4), var(--shadow);
+            border: 1px solid rgba(74, 26, 85, 0.6);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-input-group input[type="text"] {
+            flex-grow: 1;
+            background-color: rgba(51, 20, 64, 0.8);
+            border: 1px solid rgba(74, 26, 85, 0.6);
+            border-radius: 25px;
+            padding: 12px 20px;
+            color: #fff;
+            font-size: 1em;
+            box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.3);
+            min-width: 180px;
+            transition: all 0.3s ease;
+        }
+
+        .search-input-group input[type="text"]::placeholder {
+            color: #bbb;
+        }
+
+        .search-input-group input[type="text"]:focus {
+            outline: none;
+            border-color: var(--light-red);
+            box-shadow: 0 0 8px rgba(255, 48, 88, 0.6), inset 0 0 8px rgba(255, 48, 88, 0.4);
+        }
+
+        .search-input-group button {
+            background: var(--gradient-red-light);
+            color: #fff;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            white-space: nowrap;
+        }
+
+        .search-input-group button:hover {
+            background-color: var(--medium-red);
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(255, 48, 88, 0.9);
+        }
+
+        /* --- Pie de Página (main-footer) --- */
+        .main-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(30, 5, 37, 0.8);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-top: 1px solid rgba(74, 26, 85, 0.6);
+            box-shadow: 0 -6px 25px rgba(0, 0, 0, 0.5);
+            padding: 18px 0;
+            z-index: 1000;
+        }
+
+        .footer-nav {
+            display: flex;
+            justify-content: space-around;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #ccc;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            padding: 8px 12px;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-red-light);
+            transform: scaleX(0);
+            transform-origin: bottom right;
+            transition: transform 0.3s ease-out;
+            z-index: -1;
+            border-radius: 10px;
+        }
+
+        .nav-item.active::before,
+        .nav-item:hover::before {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        .nav-item.active,
+        .nav-item:hover {
+            color: #fff;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+        }
+
+        .nav-item.active i,
+        .nav-item:hover i {
+            color: #fff;
+        }
+
+        /* --- Botón de Chat Flotante --- */
+        .floating-chat-button {
+            position: fixed;
+            bottom: 90px;
+            right: 25px;
+            background: var(--gradient-red-light);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 65px;
+            height: 65px;
+            font-size: 2em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: var(--glow-red), var(--shadow);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+
+        .floating-chat-button:hover {
+            background-color: var(--light-red);
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 0 30px rgba(255, 48, 88, 1);
+        }
+
+        /* --- Modales (Popups) Generales --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000; /* Z-index para modales */
+            backdrop-filter: blur(10px);
+            transition: background-color 0.3s ease;
+        }
+
+        .modal-overlay.hidden {
+            display: none;
+        }
+
+        .modal-content {
+            background-color: rgba(30, 5, 37, 0.9);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            max-width: 550px;
+            width: 90%;
+            border: 1px solid rgba(125, 52, 144, 0.7);
+            position: relative;
+            animation: fadeInScale 0.4s ease-out forwards;
+        }
+
+        .modal-content h2 {
+            color: var(--light-red);
+            margin-bottom: 25px;
+            font-size: 2em;
+            text-shadow: 0 0 10px rgba(255, 48, 88, 0.7);
+        }
+
+        .modal-content p.modal-message {
+            margin-bottom: 25px;
+            color: #e8e8e8;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: center;
+            /* Solo un botón, no se necesita espacio, solo centrarlo */
+            /* gap: 25px; */
+            margin-top: 25px;
+        }
+
+        .modal-button {
+            background: var(--gradient-red-light);
+            color: #fff;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1.05em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-button:hover {
+            background-color: var(--medium-red);
+            transform: translateY(-3px);
+            box-shadow: 0 0 15px rgba(255, 48, 88, 0.8);
+        }
+
+        /* Animaciones */
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.85);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .animate-fade-in-up {
+            animation: fadeInScale 0.4s ease-out forwards;
+        }
+
+        /* Indicador de carga */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            color: #fff;
+            font-size: 1.3em;
+        }
+
+        .loading-overlay.hidden {
+            display: none;
+        }
+
+        .spinner {
+            border: 10px solid rgba(255, 255, 255, 0.4);
+            border-top: 10px solid var(--light-red);
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 25px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* --- Menú Lateral Izquierdo (para el botón "Menú") --- */
+        .side-menu-left {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--side-menu-width);
+            height: 100%;
+            background-color: rgba(30, 5, 37, 0.9);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            box-shadow: 8px 0 30px rgba(0, 0, 0, 0.6);
+            z-index: 1500; /* Z-index para menús laterales */
+            display: flex;
+            flex-direction: column;
+            padding-top: 25px;
+            border-right: 1px solid rgba(125, 52, 144, 0.7);
+
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease-in-out;
+            transform: translateX(-100%);
+        }
+
+        .side-menu-left.open {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+        }
+
+        /* Estilos para el área de contenido dentro del menú lateral */
+        .side-menu-content-display {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 0 25px 25px 25px;
+            color: #e0e0e0;
+            line-height: 1.6;
+            text-align: left;
+            display: flex; /* Usar flex para apilar contenido y botón de retroceso */
+            flex-direction: column;
+        }
+
+        .side-menu-content-display h3 {
+            font-size: 1.6em;
+            color: var(--light-red);
+            margin-bottom: 15px;
+            text-shadow: 0 0 8px rgba(255, 48, 88, 0.5);
+        }
+
+        .side-menu-content-display h4 {
+            font-size: 1.3em;
+            color: var(--light-purple);
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .side-menu-content-display p,
+        .side-menu-content-display ul,
+        .side-menu-content-display ol {
+            margin-bottom: 15px;
+        }
+
+        .side-menu-content-display ul,
+        .side-menu-content-display ol {
+            padding-left: 20px;
+        }
+
+        .side-menu-content-display li {
+            margin-bottom: 8px;
+        }
+
+        .side-menu-content-display .back-button {
+            background: var(--gradient-red-light);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            margin-top: auto; /* Empujar hacia abajo */
+            width: 100%;
+            align-self: center; /* Centrar el botón */
+        }
+
+        .side-menu-content-display .back-button:hover {
+            background-color: var(--medium-red);
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(255, 48, 88, 0.9);
+        }
+
+        /* --- Menú Lateral Derecho (para el botón "Recompensas") --- */
+        .side-menu-right {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: var(--side-menu-width);
+            height: 100%;
+            background-color: rgba(30, 5, 37, 0.9);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            box-shadow: -8px 0 30px rgba(0, 0, 0, 0.6);
+            z-index: 1500; /* Z-index para menús laterales */
+            display: flex;
+            flex-direction: column;
+            padding-top: 25px;
+            border-left: 1px solid rgba(125, 52, 144, 0.7);
+
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease-in-out;
+            transform: translateX(100%);
+        }
+
+        .side-menu-right.open {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+        }
+
+        .side-menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 25px 25px 25px;
+            border-bottom: 1px solid rgba(125, 52, 144, 0.7);
+            margin-bottom: 25px;
+        }
+
+        .side-menu-title {
+            font-size: 1.8em;
+            font-weight: 800;
+            color: var(--light-red);
+            text-shadow: 0 0 10px rgba(255, 48, 88, 0.7);
+        }
+
+        .side-menu-close-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 2.5em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .side-menu-close-btn:hover {
+            color: var(--medium-red);
+            transform: scale(1.1) rotate(90deg);
+        }
+
+        .side-menu-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        .side-menu-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            text-decoration: none;
+            color: #e0e0e0;
+            font-size: 1.15em;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .side-menu-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(125, 52, 144, 0.2);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease-out;
+            z-index: -1;
+        }
+
+        .side-menu-item:hover::before {
+            transform: scaleX(1);
+        }
+
+        .side-menu-item:hover {
+            color: #fff;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+
+        .side-menu-item:hover i {
+            color: var(--light-red);
+        }
+
+        /* Estilos para las tarjetas de perfil (profile-card) */
+        .profile-card {
+            background-color: rgba(74, 26, 85, 0.4);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(125, 52, 144, 0.6);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5), 0 0 20px rgba(125, 52, 144, 0.5);
+
+            min-width: 320px;
+            max-width: 350px;
+            width: 100%;
+            flex-shrink: 0;
+            border-radius: 20px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 15px;
+            filter: brightness(0.95);
+            transition: all 0.3s ease;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8), var(--glow-red);
+            border-color: var(--light-red);
+            background-color: rgba(74, 26, 85, 0.6);
+            filter: brightness(1.2);
+        }
+
+        .profile-card .profile-avatar {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--light-red);
+            box-shadow: 0 0 15px rgba(255, 48, 88, 0.8);
+            margin-bottom: 15px;
+        }
+
+        .profile-card .profile-username {
+            font-size: 1.4em;
+            font-weight: 800;
+            color: var(--light-red);
+            text-shadow: 0 0 8px rgba(255, 48, 88, 0.6);
+        }
+
+        .profile-card .profile-bio {
+            font-size: 1em;
+            color: #e8e8e8;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            text-align: left;
+            width: 100%;
+        }
+
+        /* Estilos para el carrusel de imágenes del perfil */
+        .profile-image-carousel {
+            position: relative;
+            width: 100%;
+            height: 150px;
+            overflow: hidden;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(125, 52, 144, 0.6);
+        }
+
+        .profile-image-carousel-container {
+            display: flex;
+            height: 100%;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .profile-carousel-image {
+            min-width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .profile-carousel-navigation {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+            padding: 0 5px;
+            z-index: 10;
+        }
+
+        .profile-carousel-arrow {
+            background-color: rgba(255, 48, 88, 0.7);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 1em;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .profile-carousel-arrow:hover {
+            background-color: var(--red-primary);
+            transform: scale(1.1);
+        }
+
+        /* Estilos para las tags del perfil */
+        .profile-tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
+        .profile-tag {
+            background-color: rgba(125, 52, 144, 0.6);
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(125, 52, 144, 0.8);
+            white-space: nowrap;
+        }
+
+        .profile-tag:hover {
+            background-color: var(--light-purple);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 2px 10px rgba(125, 52, 144, 0.9);
+        }
+
+
+        .profile-card .profile-stats {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+            color: var(--light-purple);
+            font-size: 0.95em;
+            font-weight: 600;
+        }
+
+        .profile-card .profile-stats i {
+            margin-right: 8px;
+            color: var(--light-red);
+            font-size: 1.1em;
+        }
+
+        .profile-card .profile-action-button {
+            background: var(--gradient-red-light);
+            color: #fff;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+        }
+
+        .profile-card .profile-action-button:hover {
+            background-color: var(--medium-red);
+            transform: translateY(-3px);
+            box-shadow: 0 0 15px rgba(255, 48, 88, 0.9);
+        }
+
+        /* --- Nueva Tarjeta de Texto Largo (Long Text Card) --- */
+        .long-text-card {
+            background-color: rgba(74, 26, 85, 0.4);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(125, 52, 144, 0.6);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5), 0 0 20px rgba(125, 52, 144, 0.5);
+            border-radius: 20px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            filter: brightness(0.95);
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .long-text-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8), var(--glow-purple);
+            filter: brightness(1.2);
+            background-color: rgba(74, 26, 85, 0.6);
+            border-color: var(--light-purple);
+        }
+
+        .long-text-card.sponsored-post {
+            border: 2px solid rgba(255, 48, 88, 0.8);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 48, 88, 0.5);
+        }
+
+        .long-text-card.sponsored-post:hover {
+            border-color: var(--light-red);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8), var(--glow-red);
+        }
+
+        .long-text-card .card-header-top {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+            position: relative;
+            flex-wrap: wrap;
+        }
+
+        .long-text-card .card-image-wrapper {
+            width: 100%;
+            height: 200px;
+            background-color: #000;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            border: 3px solid var(--light-red);
+            box-shadow: 0 0 15px rgba(255, 48, 88, 0.7);
+            cursor: pointer; /* Hacer la imagen clickeable */
+        }
+
+        .long-text-card .card-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .long-text-card .card-image-wrapper img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(255, 48, 88, 0.9);
+        }
+
+        .long-text-card .card-user-info-and-avatar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-grow: 1;
+            min-width: 150px;
+            margin-top: 15px;
+        }
+
+        .long-text-card .card-user-avatar {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--light-red);
+            box-shadow: 0 0 10px rgba(255, 48, 88, 0.6);
+            flex-shrink: 0;
+        }
+
+        .long-text-card .card-user-details {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .long-text-card .card-username {
+            font-weight: 800;
+            color: var(--light-red);
+            font-size: 1.1em;
+            text-shadow: 0 0 5px rgba(255, 48, 88, 0.4);
+            margin: 0;
+        }
+
+        .long-text-card .card-user-handle {
+            font-size: 0.9em;
+            color: #ccc;
+            margin: 0;
+        }
+
+        .long-text-card .card-tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+            justify-content: flex-start;
+        }
+
+        .long-text-card .card-tag {
+            background-color: rgba(125, 52, 144, 0.6);
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(125, 52, 144, 0.8);
+            white-space: nowrap;
+        }
+
+        .long-text-card .card-tag:hover {
+            background-color: var(--light-purple);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 2px 10px rgba(125, 52, 144, 0.9);
+        }
+
+        .long-text-card .card-long-text {
+            font-size: 1em;
+            line-height: 1.6;
+            color: #f0f0f0;
+            text-align: left;
+        }
+
+        .long-text-card .card-actions {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-top: 15px;
+            border-top: 1px solid rgba(125, 52, 144, 0.6);
+            padding-top: 15px;
+        }
+
+        .long-text-card .action-button {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.2em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 15px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .long-text-card .action-button:hover {
+            background-color: rgba(74, 26, 85, 0.6);
+            color: var(--light-red);
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px rgba(255, 48, 88, 0.5);
+        }
+
+
+        /* Estilos generales de entrada para entradas de archivo */
+        .modal-input[type="file"] {
+            background-color: rgba(0,0,0,0.3);
+            border: 1px solid var(--medium-purple);
+            border-radius: 5px;
+            padding: 10px;
+            color: white;
+            width: 100%;
+            box-sizing: border-box; /* Incluir relleno y borde en el ancho y alto total del elemento */
+        }
+        .modal-input[type="file"]::file-selector-button {
+            background: var(--gradient-purple-dark);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+        }
+        .modal-input[type="file"]::file-selector-button:hover {
+            background: var(--light-purple);
+            transform: translateY(-1px);
+        }
+
+        /* Estilos para el diseño del modal de edición de perfil (Ajustado) */
+        .profile-edit-form-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px; /* Espacio entre grupos de formulario */
+        }
+
+        .profile-edit-form-group {
+            margin-bottom: 0; /* Restablecer margen inferior predeterminado */
+        }
+
+        .profile-edit-form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--light-red);
+            font-weight: 600;
+        }
+
+        .profile-edit-form-group .modal-input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--medium-purple);
+            background-color: rgba(0,0,0,0.4);
+            color: white;
+            font-size: 1em;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .profile-edit-form-group .modal-input:focus {
+            outline: none;
+            border-color: var(--light-red);
+            box-shadow: 0 0 0 3px rgba(255, 48, 88, 0.3);
+        }
+
+        .profile-edit-form-group textarea.modal-input {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .profile-edit-form-group .color-inputs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 15px;
+        }
+
+        .profile-edit-form-group .color-inputs-grid input[type="color"] {
+            width: 100%;
+            height: 45px;
+            border-radius: 8px;
+            border: 1px solid var(--medium-purple);
+            background-color: rgba(0,0,0,0.4);
+            cursor: pointer;
+        }
+
+        .profile-edit-form-group .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            gap: 8px;
+        }
+
+        .profile-edit-form-group .checkbox-group input[type="checkbox"] {
+            transform: scale(1.2);
+            accent-color: var(--light-red);
+        }
+
+        .profile-edit-form-group .checkbox-group label {
+            margin-bottom: 0;
+            color: #e0e0e0;
+            font-weight: 400;
+        }
+
+        /* Estilos para el nuevo modal de información genérico */
+        .info-modal-content {
+            background-color: rgba(30, 5, 37, 0.95);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            max-width: 600px;
+            width: 90%;
+            border: 1px solid rgba(125, 52, 144, 0.8);
+            position: relative;
+            animation: fadeInScale 0.4s ease-out forwards;
+            display: flex;
+            flex-direction: column;
+            text-align: left; /* Alinear texto a la izquierda */
+            max-height: 80vh; /* Limitar altura para hacer scrollable */
+        }
+
+        .info-modal-content .close-button {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .info-modal-content .close-button:hover {
+            color: var(--medium-red);
+            transform: scale(1.1) rotate(90deg);
+        }
+
+        .info-modal-content h2 {
+            color: var(--light-red);
+            margin-bottom: 15px;
+            font-size: 2em;
+            text-shadow: 0 0 10px rgba(255, 48, 88, 0.7);
+            text-align: center; /* Centrar título */
+        }
+
+        .info-modal-content .modal-intro-text {
+            color: var(--light-purple);
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center; /* Centrar texto de introducción */
+        }
+
+        .info-modal-content .modal-body-content {
+            flex-grow: 1;
+            overflow-y: auto; /* Hacer el contenido scrollable */
+            padding-right: 15px; /* Espacio para la barra de desplazamiento */
+            line-height: 1.6;
+            color: #e0e0e0;
+        }
+
+        .info-modal-content .modal-body-content h3 {
+            font-size: 1.5em;
+            color: var(--light-red);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 5px rgba(255, 48, 88, 0.4);
+        }
+
+        .info-modal-content .modal-body-content h4 {
+            font-size: 1.2em;
+            color: var(--light-purple);
+            margin-top: 15px;
+            margin-bottom: 8px;
+        }
+
+        .info-modal-content .modal-body-content p,
+        .info-modal-content .modal-body-content ul,
+        .info-modal-content .modal-body-content ol {
+            margin-bottom: 15px;
+        }
+
+        .info-modal-content .modal-body-content ul,
+        .info-modal-content .modal-body-content ol {
+            padding-left: 25px;
+        }
+        .info-modal-content .modal-body-content li {
+            margin-bottom: 8px;
+        }
+
+        /* Nuevos estilos para el modal de selección de idioma */
+        .language-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 10px;
+            background-color: rgba(74, 26, 85, 0.4);
+            border: 1px solid rgba(125, 52, 144, 0.6);
+            transition: all 0.3s ease;
+        }
+
+        .language-option:hover {
+            background-color: rgba(125, 52, 144, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .language-option input[type="radio"] {
+            transform: scale(1.5);
+            accent-color: var(--light-red);
+            margin-right: 10px;
+        }
+
+        .language-option label {
+            font-size: 1.1em;
+            color: #e0e0e0;
+            cursor: pointer;
+            flex-grow: 1;
+        }
+
+        /* Estilos para la Sección de Precios */
+        .price-plan-card {
+            background-color: rgba(74, 26, 85, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid var(--light-purple);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .price-plan-card:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6), var(--glow-purple);
+            border-color: var(--light-red);
+        }
+
+        .price-plan-card h3 {
+            color: var(--light-red);
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(255, 48, 88, 0.6);
+        }
+
+        .price-plan-card .price {
+            font-size: 2.5em;
+            font-weight: 800;
+            color: var(--light-purple);
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(125, 52, 144, 0.6);
+        }
+
+        .price-plan-card .price small {
+            font-size: 0.5em;
+            font-weight: 400;
+            color: #ccc;
+        }
+
+        .price-plan-card ul {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 20px;
+            text-align: left;
+            color: #e0e0e0;
+        }
+
+        .price-plan-card ul li {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .price-plan-card ul li i {
+            color: var(--light-red);
+            margin-top: 4px;
+        }
+
+        .price-plan-card .subscribe-button {
+            background: var(--gradient-red-light);
+            color: #fff;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .price-plan-card .subscribe-button:hover {
+            background-color: var(--medium-red);
+            transform: translateY(-3px);
+            box-shadow: 0 0 20px rgba(255, 48, 88, 0.8);
+        }
+
+        /* Estilos específicos del Modal de Pago */
+        .payment-form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .payment-form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--light-red);
+            font-weight: 600;
+        }
+
+        .payment-form-group .modal-input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid var(--medium-purple);
+            background-color: rgba(0,0,0,0.3);
+            color: white;
+            font-size: 1em;
+        }
+
+        .payment-form-group .modal-input:focus {
+            outline: none;
+            border-color: var(--light-red);
+            box-shadow: 0 0 0 2px rgba(255, 48, 88, 0.3);
+        }
+
+        .payment-form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .payment-form-grid .payment-form-group:last-child {
+            grid-column: span 2; /* Hacer que el último grupo ocupe todo el ancho */
+        }
+
+        /* Estilos del Modal de Vista Previa de Publicación */
+        .post-preview-modal-content {
+            background-color: rgba(30, 5, 37, 0.95);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            max-width: 700px;
+            width: 90%;
+            border: 1px solid rgba(125, 52, 144, 0.8);
+            position: relative;
+            animation: fadeInScale 0.4s ease-out forwards;
+            display: flex;
+            flex-direction: column;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .post-preview-modal-content .close-button {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .post-preview-modal-content .close-button:hover {
+            color: var(--medium-red);
+            transform: scale(1.1) rotate(90deg);
+        }
+
+        .post-preview-modal-content h2 {
+            color: var(--light-red);
+            margin-bottom: 15px;
+            font-size: 2em;
+            text-shadow: 0 0 10px rgba(255, 48, 88, 0.7);
+            text-align: center;
+        }
+
+        .post-preview-modal-content .post-image-preview {
+            width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 3px solid var(--light-red);
+            box-shadow: 0 0 15px rgba(255, 48, 88, 0.7);
+        }
+
+        .post-preview-modal-content .post-author-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(125, 52, 144, 0.6);
+        }
+
+        .post-preview-modal-content .post-author-info img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--light-red);
+            box-shadow: 0 0 10px rgba(255, 48, 88, 0.6);
+        }
+
+        .post-preview-modal-content .post-author-details {
+            text-align: left;
+        }
+
+        .post-preview-modal-content .post-author-details .username {
+            font-weight: 800;
+            color: var(--light-red);
+            font-size: 1.2em;
+            text-shadow: 0 0 5px rgba(255, 48, 88, 0.4);
+        }
+
+        .post-preview-modal-content .post-author-details .handle {
+            font-size: 0.95em;
+            color: #ccc;
+        }
+
+        .post-preview-modal-content .post-text {
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #e0e0e0;
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .post-preview-modal-content .post-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .post-preview-modal-content .post-tag {
+            background-color: rgba(125, 52, 144, 0.6);
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid rgba(125, 52, 144, 0.8);
+        }
+
+        .post-preview-modal-content .modal-actions {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+
+        /* Media Queries para Responsividad */
+        @media (max-width: 768px) {
+            .main-header {
+                flex-wrap: wrap;
+                padding: 12px 18px;
+                gap: 12px;
+            }
+
+            .new-post-button {
+                order: 3;
+                width: 100%;
+                margin-top: 12px;
+                font-size: 0.95em;
+                padding: 10px 20px;
+            }
+
+            .right-icons {
+                flex-grow: 1;
+                justify-content: center;
+                gap: 15px;
+                order: 2;
+            }
+
+            .icon-button {
+                font-size: 1.3em;
+                padding: 6px;
+            }
+
+            .icon-button svg {
+                width: 22px;
+                height: 22px;
+            }
+
+            .modal-content, .info-modal-content, .post-preview-modal-content {
+                padding: 25px;
+            }
+
+            .modal-button {
+                padding: 10px 20px;
+                font-size: 1em;
+            }
+
+            .side-menu-header {
+                padding: 0 18px 18px 18px;
+            }
+
+            .side-menu-item {
+                padding: 12px 18px;
+                font-size: 1.05em;
+            }
+
+            .profile-edit-form-group .color-inputs-grid {
+                grid-template-columns: 1fr; /* Apilar entradas de color en pantallas pequeñas */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-header {
+                padding: 10px;
+            }
+
+            .new-post-button {
+                font-size: 0.85em;
+                padding: 8px 15px;
+            }
+
+            .icon-button {
+                font-size: 1.1em;
+                padding: 5px;
+            }
+
+            .icon-button svg {
+                width: 22px;
+                height: 22px;
+            }
+
+            .modal-content, .info-modal-content, .post-preview-modal-content {
+                padding: 25px;
+            }
+
+            .modal-button {
+                padding: 10px 20px;
+                font-size: 1em;
+            }
+
+            .side-menu-header {
+                padding: 0 18px 18px 18px;
+            }
+
+            .side-menu-item {
+                padding: 12px 18px;
+                font-size: 1.05em;
+            }
+        }
+
+        /* CSS Específico de la Página Mi Red (de my-network.css) */
+        /* Estilos específicos de la página Mi Red */
+
+        .my-network-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .my-network-empty-message {
+            text-align: center;
+            color: #ccc;
+            font-size: 1.2em;
+            margin-top: 50px;
+            padding: 20px;
+            background-color: rgba(30, 5, 37, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(125, 52, 144, 0.7);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .my-network-empty-message a {
+            color: var(--light-red);
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .my-network-empty-message a:hover {
+            color: var(--medium-red);
+            text-decoration: underline;
+        }
+
+        /* Reutilización de estilos de .profile-card y .long-text-card de common.css */
+
+        /* Ajustes para el botón de eliminación en las tarjetas de Mi Red */
+        .remove-from-network-button {
+            background: linear-gradient(45deg, #ef4444, #dc2626);
+            color: #fff;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            margin-top: 15px;
+        }
+
+        .remove-from-network-button:hover {
+            background-color: var(--dark-red);
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(255, 48, 88, 0.9);
+        }
+
+        /* Media Queries para Responsividad */
+        @media (max-width: 768px) {
+            .my-network-grid {
+                grid-template-columns: 1fr; /* Apilar en columnas individuales para móviles */
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Fondo de galaxia simulado con gradientes y pseudoelementos -->
+        <div class="background-elements">
+            <div class="blob blob-purple"></div>
+            <div class="blob blob-red"></div>
+            <div class="blob blob-blue"></div>
+            <div class="blob blob-green"></div>
+            <div class="blob blob-yellow"></div>
+        </div>
+
+        <!-- Cabecera -->
+        <header class="main-header">
+            <button class="new-post-button" id="newPostButton">
+                + Nueva Publicación
+            </button>
+
+            <div class="right-icons">
+                <button class="icon-button" id="settingsButton" title="Cambiar idioma, país, moneda">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-globe">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+                        <path d="M2 12h20" />
+                    </svg>
+                </button>
+
+                <button class="icon-button" id="mapButton" title="Acceder al mapa">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucude-layers">
+                        <path d="m12.83 2.112 7.74 3.084a.5.5 0 0 1 .43.43L22 10.16c.07.78-.346 1.487-.999 1.767l-7.227 3.003c-.482.2-.84-.047-.84-.047l-6.825-3.007c-.482-.2-.84-.047-.84-.047L2 7.026c-.07-.78.346-1.487.999-1.767l7.227-3.003c.482-.2.84.047.84.047Z"/>
+                        <path d="M2.527 10.297c-.07.78.346 1.487-.999 1.767l-7.227 3.003c-.482-.2-.84-.047-.84-.047L-4 7.026c-.07-.78-.346-1.487-.999-1.767L-13.227 2.256c-.482-.2-.84.047-.84.047Z"/>
+                        <path d="M12 16.5l-7.227-3.003c-.482-.2-.84-.047-.84-.047L2.527 10.297c-.07.78.346 1.487-.999 1.767l7.227 3.003c-.482-.2-.84.047-.84.047L21 7.026c.07-.78-.346-1.487-.999-1.767L12.774 2.256c-.482-.2-.84.047-.84.047Z"/>
+                    </svg>
+                </button>
+
+                <button class="icon-button" id="profileButton" title="Configuración del perfil">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user">
+                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Contenido principal -->
+        <main class="main-content">
+            <!-- Contenido de la Página Mi Red -->
+            <section id="my-network-page-content" class="page-section">
+                <h1 class="discover-section-header">
+                    <span class="section-title">Mi Red</span>
+                </h1>
+
+                <div id="myNetworkGrid" class="my-network-grid">
+                    <!-- Los perfiles y publicaciones guardados se cargarán aquí -->
+                </div>
+
+                <div id="emptyNetworkMessage" class="my-network-empty-message hidden">
+                    <p>¡Tu red está vacía! Empieza a guardar perfiles y publicaciones que te interesen en la sección de <a href="discover.html">Descubrir</a>.</p>
+                </div>
+            </section> <!-- Fin Contenido de la Página Mi Red -->
+
+        </main>
+
+        <!-- Pie de página (Footer) -->
+        <footer class="main-footer">
+            <nav class="footer-nav">
+                <a href="#" class="nav-item" id="navMenu">
+                    <i class="fas fa-bars"></i>
+                    <span>Menú</span>
+                </a>
+                <a href="home.html" class="nav-item" id="navHome">
+                    <i class="fas fa-home"></i>
+                    <span>Inicio</span>
+                </a>
+                <a href="discover.html" class="nav-item" id="navDiscover">
+                    <i class="fas fa-compass"></i>
+                    <span>Descubrir</span>
+                </a>
+                <a href="my-network.html" class="nav-item active" id="navMyRed">
+                    <i class="fas fa-users"></i>
+                    <span>Mi Red</span>
+                </a>
+                <a href="my-profile.html" class="nav-item" id="navProfile">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Perfil</span>
+                </a>
+                <a href="#" class="nav-item" id="navRewards">
+                    <i class="fas fa-star"></i>
+                    <span>Recompensas</span>
+                </a>
+            </nav>
+        </footer>
+
+        <!-- Botón flotante para la ventana de chat -->
+        <button class="floating-chat-button" id="chatButton">
+            <i class="fas fa-comments"></i>
+        </button>
+
+        <!-- Modales (se incluyen en cada HTML para simplificar, pero se pueden mover a un archivo común si se desea) -->
+        <!-- Modal de confirmación genérico -->
+        <div class="modal-overlay hidden" id="confirmationModal">
+            <div class="modal-content">
+                <p class="modal-message" id="confirmationMessage"></p>
+                <div class="modal-actions">
+                  <button class="modal-button confirm-button" id="confirmOkButton">OK</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Indicador de carga (spinner de carga) -->
+        <div class="loading-overlay hidden" id="loadingOverlay">
+            <div class="spinner"></div>
+            <p>Cargando...</p>
+        </div>
+
+    </div> <!-- Cierre de app-container -->
+
+    <!-- Modal de Edición de Perfil (Solo si es necesario para la página de inicio, de lo contrario mover a my-profile.html) -->
+    <!-- Se mantiene aquí por si se necesita para alguna funcionalidad de "edición rápida" desde home,
+         pero se recomienda moverlo completamente a my-profile.html si la edición solo ocurre allí. -->
+    <div class="modal-overlay hidden" id="profileEditModal">
+        <div class="modal-content">
+            <h2 style="color: var(--light-purple);">Editar Perfil</h2>
+            <div style="text-align: left; max-height: 70vh; overflow-y: auto; padding-right: 15px;">
+                <div class="profile-edit-form-section">
+                    <div class="profile-edit-form-group">
+                        <label for="profileUsernameInput">Nombre de Usuario:</label>
+                        <input type="text" id="profileUsernameInput" class="modal-input">
+                    </div>
+                    <!-- Campo de subida de Avatar -->
+                    <div class="profile-edit-form-group">
+                        <label for="profileAvatarUploadInput">Subir Avatar (Foto de Perfil):</label>
+                        <input type="file" id="profileAvatarUploadInput" class="modal-input" accept="image/*">
+                        <div id="profileAvatarPreview" class="image-upload-preview" style="height: 80px; width: 80px; border-radius: 50%;">
+                            <!-- La vista previa del avatar se cargará aquí -->
+                        </div>
+                    </div>
+                    <!-- Campo de subida de Fondo de Perfil -->
+                    <div class="profile-edit-form-group">
+                        <label for="profileBackgroundUploadInput">Subir Fondo de Perfil:</label>
+                        <input type="file" id="profileBackgroundUploadInput" class="modal-input" accept="image/*">
+                        <div id="profileBackgroundPreview" class="image-upload-preview" style="height: 100px; width: 100%; justify-content: center; align-items: center;">
+                            <!-- La vista previa del fondo se cargará aquí -->
+                        </div>
+                    </div>
+
+                    <h3 style="color: var(--light-purple); margin-top: 10px; margin-bottom: 5px;">Colores del Perfil:</h3>
+                    <div class="profile-edit-form-group color-inputs-grid">
+                        <div>
+                            <label for="profilePrimaryTextColorInput">Color Primario:</label>
+                            <input type="color" id="profilePrimaryTextColorInput" class="modal-input">
+                        </div>
+                        <div>
+                            <label for="profileSecondaryTextColorInput">Color Secundario:</label>
+                            <input type="color" id="profileSecondaryTextColorInput" class="modal-input">
+                        </div>
+                        <div>
+                            <label for="profileCardBackgroundColorInput">Fondo Tarjetas:</label>
+                            <input type="color" id="profileCardBackgroundColorInput" class="modal-input">
+                        </div>
+                        <div>
+                            <label for="profileBorderColorInput">Color Borde:</label>
+                            <input type="color" id="profileBorderColorInput" class="modal-input">
+                        </div>
+                    </div>
+
+                    <h3 style="color: var(--light-purple); margin-top: 10px; margin-bottom: 5px;">Contenido del Perfil:</h3>
+                    <div class="profile-edit-form-group">
+                        <label for="aboutMeContentInput">Acerca de Mí:</label>
+                        <textarea id="aboutMeContentInput" class="modal-input" rows="4" placeholder="Escribe algo sobre ti..."></textarea>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="showAboutMeCheckbox"> <label for="showAboutMeCheckbox">Mostrar sección "Acerca de Mí"</label>
+                        </div>
+                    </div>
+                    <div class="profile-edit-form-group">
+                        <label for="interestsContentInput">Intereses:</label>
+                        <textarea id="interestsContentInput" class="modal-input" rows="3" placeholder="Separar intereses con comas (ej: espacio, ciencia, música)"></textarea>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="showInterestsCheckbox"> <label for="showInterestsCheckbox">Mostrar sección "Intereses"</label>
+                        </div>
+                    </div>
+                    <!-- Campo de subida de Mis Fotos -->
+                    <div class="profile-edit-form-group">
+                        <label for="myPhotosUploadInput">Subir Mis Fotos:</label>
+                        <input type="file" id="myPhotosUploadInput" class="modal-input" accept="image/*" multiple>
+                        <div id="myPhotosPreview" class="image-upload-preview">
+                            <!-- Las vistas previas de Mis Fotos se cargarán aquí -->
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="showMyPhotosCheckbox"> <label for="showMyPhotosCheckbox">Mostrar sección "Mis Fotos"</label>
+                        </div>
+                    </div>
+
+                    <div class="profile-edit-form-group">
+                        <label style="display: block; margin-bottom: 5px; color: var(--light-red);">Enlaces de Música:</label>
+                        <label for="myMusicSpotifyInput" style="display: block; margin-bottom: 5px; color: var(--light-red); font-weight: normal; font-size: 0.9em;">URL Spotify:</label>
+                        <input type="text" id="myMusicSpotifyInput" class="modal-input" placeholder="https://open.spotify.com/artist/...">
+                        <label for="myMusicYoutubeInput" style="display: block; margin-top: 10px; margin-bottom: 5px; color: var(--light-red); font-weight: normal; font-size: 0.9em;">URL YouTube Music:</label>
+                        <input type="text" id="myMusicYoutubeInput" class="modal-input" placeholder="https://www.youtube.com/channel/...">
+                        <label for="myMusicSoundcloudInput" style="display: block; margin-top: 10px; margin-bottom: 5px; color: var(--light-red); font-weight: normal; font-size: 0.9em;">URL SoundCloud:</label>
+                        <input type="text" id="myMusicSoundcloudInput" class="modal-input" placeholder="https://soundcloud.com/...">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="showMyMusicCheckbox"> <label for="showMyMusicCheckbox">Mostrar sección "Mi Música"</label>
+                        </div>
+                    </div>
+                    <div class="profile-edit-form-group">
+                        <label for="customContentInput">Contenido Personalizado (solo texto):</label>
+                        <textarea id="customContentInput" class="modal-input" rows="4" placeholder="Citas, mensajes especiales, etc."></textarea>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="showCustomContentCheckbox"> <label for="showCustomContentCheckbox">Mostrar sección "Contenido Personalizado"</label>
+                        </div>
+                    </div>
+
+                    <h3 style="color: var(--light-purple); margin-top: 10px; margin-bottom: 5px;">Enlaces de Contacto:</h3>
+                    <div class="profile-edit-form-group">
+                        <label for="whatsappUrlInput">URL WhatsApp:</label>
+                        <input type="text" id="whatsappUrlInput" class="modal-input" placeholder="https://wa.me/...">
+                    </div>
+                    <div class="profile-edit-form-group">
+                        <label for="instagramUrlInput">URL Instagram:</label>
+                        <input type="text" id="instagramUrlInput" class="modal-input" placeholder="https://instagram.com/...">
+                    </div>
+                    <div class="profile-edit-form-group">
+                        <label for="facebookUrlInput">URL Facebook:</label>
+                        <input type="text" id="facebookUrlInput" class="modal-input" placeholder="https://facebook.com/...">
+                    </div>
+                    <div class="profile-edit-form-group">
+                        <label for="twitterUrlInput">URL Twitter:</label>
+                        <input type="text" id="twitterUrlInput" class="modal-input" placeholder="https://twitter.com/...">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-actions" style="margin-top: 30px; display: flex; justify-content: center; gap: 20px;">
+                <button class="modal-button" id="saveProfileSettingsButton">Guardar Cambios</button>
+                <button class="modal-button" id="resetProfileSettingsButton" style="background: linear-gradient(45deg, #6b7280, #4b5563);">Restablecer Predeterminados</button>
+                <button class="modal-button" id="closeProfileEditModalButton" style="background: linear-gradient(45deg, #ef4444, #dc2626);">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Nueva Publicación -->
+    <div class="modal-overlay hidden" id="newPostModal">
+        <div class="modal-content">
+            <h2 style="color: var(--light-purple);">Crear Nueva Publicación</h2>
+            <div style="text-align: left; max-height: 70vh; overflow-y: auto; padding-right: 15px;">
+                <div class="profile-edit-form-group">
+                    <label for="newPostTextInput">Texto de la Publicación:</label>
+                    <textarea id="newPostTextInput" class="modal-input" rows="6" placeholder="¿Qué tienes en mente?"></textarea>
+                </div>
+                <!-- CAMBIO: Campo de subida de imagen en lugar de URL -->
+                <div class="profile-edit-form-group">
+                    <label for="newPostImageUploadInput">Subir Imagen (opcional):</label>
+                    <input type="file" id="newPostImageUploadInput" class="modal-input" accept="image/*">
+                    <div id="newPostImagePreview" class="image-upload-preview" style="min-height: 100px; margin-top: 10px;">
+                        <!-- La vista previa de la imagen se cargará aquí -->
+                        <p style="color: #bbb; font-size: 0.9em;">No se ha seleccionado ninguna imagen</p>
+                    </div>
+                </div>
+                <div class="profile-edit-form-group">
+                    <label for="newPostKeywordsInput">Palabras Clave (separadas por comas):</label>
+                    <input type="text" id="newPostKeywordsInput" class="modal-input" placeholder="ej: espacio, ciencia, arte">
+                </div>
+            </div>
+            <div class="modal-actions" style="margin-top: 30px; display: flex; justify-content: center; gap: 20px;">
+                <button class="modal-button" id="submitNewPostButton">Publicar</button>
+                <button class="modal-button" id="closeNewPostModalButton" style="background: linear-gradient(45deg, #ef4444, #dc2626);">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nuevo Modal Genérico para Información (Misión, Quiénes Somos) -->
+    <div class="modal-overlay hidden" id="infoModal">
+        <div class="info-modal-content">
+            <button class="close-button" id="closeInfoModalBtn">×</button>
+            <h2 id="infoModalTitle"></h2>
+            <p class="modal-intro-text" id="infoModalIntroText"></p>
+            <div class="modal-body-content" id="infoModalBodyContent">
+                <!-- El contenido dinámico se cargará aquí -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Nuevo Modal para Configuración de Idioma -->
+    <div class="modal-overlay hidden" id="languageSettingsModal">
+        <div class="modal-content">
+            <h2 style="color: var(--light-purple);">Configuración de Idioma</h2>
+            <div style="text-align: left; padding: 0 15px; max-height: 60vh; overflow-y: auto;">
+                <p class="modal-message" style="text-align: center; font-size: 0.95em; margin-bottom: 20px;">
+                    Selecciona tu idioma preferido para la interfaz de la aplicación.
+                </p>
+                <div class="language-options-group">
+                    <div class="language-option">
+                        <input type="radio" id="lang-es" name="language" value="es" checked>
+                        <label for="lang-es">Español</label>
+                    </div>
+                    <div class="language-option">
+                        <input type="radio" id="lang-en" name="language" value="en">
+                        <label for="lang-en">English</label>
+                    </div>
+                    <!-- Puedes añadir más idiomas aquí -->
+                </div>
+            </div>
+            <div class="modal-actions" style="margin-top: 30px;">
+                <button class="modal-button" id="saveLanguageSettingsButton">Guardar Idioma</button>
+                <button class="modal-button" id="closeLanguageSettingsModalButton" style="background: linear-gradient(45deg, #ef4444, #dc2626);">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nuevo Modal para Pago de Suscripción -->
+    <div class="modal-overlay hidden" id="paymentModal">
+        <div class="modal-content">
+            <h2 id="paymentModalTitle" style="color: var(--light-purple);">Comprar Suscripción</h2>
+            <div style="text-align: left; max-height: 70vh; overflow-y: auto; padding-right: 15px;">
+                <p class="modal-message" style="text-align: center; font-size: 0.95em; margin-bottom: 20px;">
+                    Por favor, introduce tus datos de pago para completar la suscripción.
+                </p>
+                <div class="payment-form-section">
+                    <div class="payment-form-group">
+                        <label for="cardNumberInput">Número de Tarjeta:</label>
+                        <input type="text" id="cardNumberInput" class="modal-input" placeholder="XXXX XXXX XXXX XXXX" maxlength="19">
+                    </div>
+                    <div class="payment-form-grid">
+                        <div class="payment-form-group">
+                            <label for="expiryDateInput">Fecha de Vencimiento (MM/AA):</label>
+                            <input type="text" id="expiryDateInput" class="modal-input" placeholder="MM/AA" maxlength="5">
+                        </div>
+                        <div class="payment-form-group">
+                            <label for="cvcInput">CVC:</label>
+                            <input type="text" id="cvcInput" class="modal-input" placeholder="XXX" maxlength="4">
+                        </div>
+                    </div>
+                    <div class="payment-form-group">
+                        <label for="cardNameInput">Nombre en la Tarjeta:</label>
+                        <input type="text" id="cardNameInput" class="modal-input" placeholder="Nombre Completo">
+                    </div>
+                    <div class="payment-form-group">
+                        <label for="billingAddressInput">Dirección de Facturación:</label>
+                        <input type="text" id="billingAddressInput" class="modal-input" placeholder="Calle, Ciudad, Código Postal">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-actions" style="margin-top: 30px; display: flex; justify-content: center; gap: 20px;">
+                <button class="modal-button" id="processPaymentButton">Pagar</button>
+                <button class="modal-button" id="closePaymentModalButton" style="background: linear-gradient(45deg, #ef4444, #dc2626);">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nuevo Modal para Vista Previa de Publicación -->
+    <div class="modal-overlay hidden" id="postPreviewModal">
+        <div class="post-preview-modal-content">
+            <button class="close-button" id="closePostPreviewModalBtn">×</button>
+            <h2 id="postPreviewTitle"></h2>
+            <img id="postPreviewImage" src="" alt="Post Image" class="post-image-preview">
+            <div class="post-author-info">
+                <img id="postPreviewAuthorAvatar" src="" alt="Author Avatar">
+                <div class="post-author-details">
+                    <span class="username" id="postPreviewAuthorUsername"></span>
+                    <span class="handle" id="postPreviewTimestamp"></span>
+                </div>
+            </div>
+            <p id="postPreviewText" class="post-text"></p>
+            <div id="postPreviewTags" class="post-tags"></div>
+            <div class="modal-actions">
+                <button class="modal-button" id="viewAuthorProfileBtn">Ver Perfil del Autor</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Menú Lateral Izquierdo (para el botón "Menú") -->
+    <div class="side-menu-left" id="sideMenu">
+        <div class="side-menu-header">
+            <span class="side-menu-title" id="sideMenuMainTitle">Menú Principal</span>
+            <button class="side-menu-close-btn" id="closeSideMenuBtn">×</button>
+        </div>
+        <!-- Contenedor para la navegación principal del menú lateral -->
+        <nav class="side-menu-nav" id="sideMenuNavContent">
+            <a href="#" class="side-menu-item" id="sideMenuMission"><i class="fas fa-bullseye"></i> Misión</a>
+            <a href="#" class="side-menu-item" id="sideMenuWhoAreWe"><i class="fas fa-users"></i> Quiénes Somos</a>
+            <a href="#" class="side-menu-item" id="sideMenuPrices"><i class="fas fa-tag"></i> Precios</a> <!-- Nuevo botón Precios -->
+            <a href="#" class="side-menu-item" id="sideMenuSupport"><i class="fas fa-question-circle"></i> Soporte y Ayuda</a>
+            <a href="#" class="side-menu-item" id="sideMenuDevelopers"><i class="fas fa-code"></i> Desarrolladores</a> <!-- Nuevo botón Desarrolladores -->
+            <a href="#" class="side-menu-item" id="sideMenuLogout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+        </nav>
+    </div>
+
+    <!-- Menú Lateral Derecho (para el botón "Recompensas") -->
+    <div class="side-menu-right" id="rewardsSideMenu">
+        <div class="side-menu-header">
+            <span class="side-menu-title">Recompensas</span>
+            <button class="side-menu-close-btn" id="closeRewardsSideMenuBtn">×</button>
+        </div>
+        <nav class="side-menu-nav">
+            <a href="#" class="side-menu-item" data-message="Mostrando tus puntos."><i class="fas fa-star"></i> Mis Puntos</a>
+            <a href="#" class="side-menu-item" data-message="Abriendo la tienda de recompensas."><i class="fas fa-gift"></i> Canjear Recompensas</a>
+            <a href="#" class="side-menu-item" data-message="Mostrando tus logros."><i class="fas fa-trophy"></i> Logros</a>
+            <a href="#" class="side-menu-item" data-message="Consultando tu historial de recompensas."><i class="fas fa-chart-line"></i> Historial</a>
+        </nav>
+    </div>
+
+    <script type="module">
+        // JavaScript Común (de common.js)
+        // Importaciones de Firebase (asegúrate de que estas URLs sean correctas para tu entorno)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, collection, query, onSnapshot, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Variables globales para Firebase (serán proporcionadas por el entorno Canvas)
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        // Inicializar Firebase
+        let app;
+        let db;
+        let auth;
+        let userId = null; // Variable para almacenar el ID del usuario
+
+        // Función para inicializar Firebase y autenticar
+        async function initializeFirebaseAndAuth() {
+            try {
+                app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+
+                // Escuchar cambios en el estado de autenticación
+                onAuthStateChanged(auth, async (user) => {
+                    if (user) {
+                        userId = user.uid;
+                        console.log("Usuario autenticado:", userId);
+                        // Aquí podrías cargar datos específicos del usuario si es necesario
+                    } else {
+                        console.log("No hay usuario autenticado. Intentando autenticación anónima o con token.");
+                        try {
+                            if (initialAuthToken) {
+                                await signInWithCustomToken(auth, initialAuthToken);
+                                userId = auth.currentUser.uid;
+                                console.log("Autenticado con token personalizado:", userId);
+                            } else {
+                                await signInAnonymously(auth);
+                                userId = auth.currentUser.uid;
+                                console.log("Autenticado anónimamente:", userId);
+                            }
+                        } catch (error) {
+                            console.error("Error durante la autenticación:", error);
+                            showConfirmationModal(`Error de autenticación: ${error.message}`);
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error("Error al inicializar Firebase:", error);
+                showConfirmationModal(`Error crítico al inicializar la aplicación. Por favor, recarga la página. Detalles: ${error.message}`);
+            }
+        }
+
+        // Llama a la inicialización de Firebase cuando el DOM esté cargado
+        document.addEventListener('DOMContentLoaded', initializeFirebaseAndAuth);
+
+
+        // --- Funciones de Modales Personalizados (Reemplazo de alert/confirm) ---
+        const confirmationModal = document.getElementById('confirmationModal');
+        const confirmationMessage = document.getElementById('confirmationMessage');
+        const confirmOkButton = document.getElementById('confirmOkButton');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+
+        /**
+         * Muestra un modal de confirmación con un mensaje.
+         * @param {string} message - El mensaje a mostrar.
+         */
+        function showConfirmationModal(message) {
+            confirmationMessage.textContent = message;
+            confirmationModal.classList.remove('hidden');
+            // Asegurarse de que el botón OK cierra el modal
+            confirmOkButton.onclick = () => {
+                confirmationModal.classList.add('hidden');
+            };
+        }
+
+        /**
+         * Muestra el overlay de carga.
+         */
+        function showLoadingOverlay() {
+            loadingOverlay.classList.remove('hidden');
+        }
+
+        /**
+         * Oculta el overlay de carga.
+         */
+        function hideLoadingOverlay() {
+            loadingOverlay.classList.add('hidden');
+        }
+
+        // --- Reemplazo de alerts y click derecho ---
+        document.addEventListener("keydown", e => {
+            if (e.ctrlKey && e.key.toLowerCase() === "u") {
+                showConfirmationModal("Ver código no está permitido, compa");
+                e.preventDefault();
+            }
+        });
+
+        document.addEventListener("contextmenu", e => {
+            e.preventDefault();
+            showConfirmationModal("No se permite usar clic derecho");
+        });
+
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "F12") {
+                e.preventDefault();
+                showConfirmationModal("Inspeccionar está deshabilitado.");
+            }
+        });
+
+        // --- Lógica de Menús Laterales y Navegación de Footer ---
+        const navMenuButton = document.getElementById('navMenu');
+        const sideMenu = document.getElementById('sideMenu');
+        const closeSideMenuBtn = document.getElementById('closeSideMenuBtn');
+        const navRewardsButton = document.getElementById('navRewards');
+        const rewardsSideMenu = document.getElementById('rewardsSideMenu');
+        const closeRewardsSideMenuBtn = document.getElementById('closeRewardsSideMenuBtn');
+        const sideMenuNavContent = document.getElementById('sideMenuNavContent');
+        const sideMenuMainTitle = document.getElementById('sideMenuMainTitle');
+
+        // Modales de información
+        const infoModal = document.getElementById('infoModal');
+        const infoModalTitle = document.getElementById('infoModalTitle');
+        const infoModalIntroText = document.getElementById('infoModalIntroText');
+        const infoModalBodyContent = document.getElementById('infoModalBodyContent');
+        const closeInfoModalBtn = document.getElementById('closeInfoModalBtn');
+
+        // Modal de configuración de idioma
+        const languageSettingsModal = document.getElementById('languageSettingsModal');
+        const saveLanguageSettingsButton = document.getElementById('saveLanguageSettingsButton');
+        const closeLanguageSettingsModalButton = document.getElementById('closeLanguageSettingsModalButton');
+        const langEsRadio = document.getElementById('lang-es');
+        const langEnRadio = document.getElementById('lang-en');
+
+        // Modal de pago
+        const paymentModal = document.getElementById('paymentModal');
+        const paymentModalTitle = document.getElementById('paymentModalTitle');
+        const processPaymentButton = document.getElementById('processPaymentButton');
+        const closePaymentModalButton = document.getElementById('closePaymentModalButton');
+
+        // Modal de nueva publicación
+        const newPostModal = document.getElementById('newPostModal');
+        const newPostButton = document.getElementById('newPostButton');
+        const closeNewPostModalButton = document.getElementById('closeNewPostModalButton');
+        const submitNewPostButton = document.getElementById('submitNewPostButton');
+        const newPostTextInput = document.getElementById('newPostTextInput');
+        const newPostImageUploadInput = document.getElementById('newPostImageUploadInput');
+        const newPostImagePreview = document.getElementById('newPostImagePreview');
+        const newPostKeywordsInput = document.getElementById('newPostKeywordsInput');
+
+        // Modal de vista previa de publicación
+        const postPreviewModal = document.getElementById('postPreviewModal');
+        const closePostPreviewModalBtn = document.getElementById('closePostPreviewModalBtn');
+        const postPreviewTitle = document.getElementById('postPreviewTitle');
+        const postPreviewImage = document.getElementById('postPreviewImage');
+        const postPreviewAuthorAvatar = document.getElementById('postPreviewAuthorAvatar');
+        const postPreviewAuthorUsername = document.getElementById('postPreviewAuthorUsername');
+        const postPreviewTimestamp = document.getElementById('postPreviewTimestamp');
+        const postPreviewText = document.getElementById('postPreviewText');
+        const postPreviewTags = document.getElementById('postPreviewTags');
+        const viewAuthorProfileBtn = document.getElementById('viewAuthorProfileBtn');
+
+
+        // Modal de edición de perfil
+        const profileEditModal = document.getElementById('profileEditModal');
+        const openProfileEditModalButton = document.getElementById('openProfileEditModalButton');
+        const closeProfileEditModalButton = document.getElementById('closeProfileEditModalButton');
+        const saveProfileSettingsButton = document.getElementById('saveProfileSettingsButton');
+        const resetProfileSettingsButton = document.getElementById('resetProfileSettingsButton');
+
+        // Inputs del modal de edición de perfil
+        const profileUsernameInput = document.getElementById('profileUsernameInput');
+        const profileAvatarUploadInput = document.getElementById('profileAvatarUploadInput');
+        const profileAvatarPreview = document.getElementById('profileAvatarPreview');
+        const profileBackgroundUploadInput = document.getElementById('profileBackgroundUploadInput');
+        const profileBackgroundPreview = document.getElementById('profileBackgroundPreview');
+        const profilePrimaryTextColorInput = document.getElementById('profilePrimaryTextColorInput');
+        const profileSecondaryTextColorInput = document.getElementById('profileSecondaryTextColorInput');
+        const profileCardBackgroundColorInput = document.getElementById('profileCardBackgroundColorInput');
+        const profileBorderColorInput = document.getElementById('profileBorderColorInput');
+        const aboutMeContentInput = document.getElementById('aboutMeContentInput');
+        const showAboutMeCheckbox = document.getElementById('showAboutMeCheckbox');
+        const interestsContentInput = document.getElementById('interestsContentInput');
+        const showInterestsCheckbox = document.getElementById('showInterestsCheckbox');
+        const myPhotosUploadInput = document.getElementById('myPhotosUploadInput');
+        const myPhotosPreview = document.getElementById('myPhotosPreview');
+        const showMyPhotosCheckbox = document.getElementById('showMyPhotosCheckbox');
+        const myMusicSpotifyInput = document.getElementById('myMusicSpotifyInput');
+        const myMusicYoutubeInput = document.getElementById('myMusicYoutubeInput');
+        const myMusicSoundcloudInput = document.getElementById('myMusicSoundcloudInput');
+        const showMyMusicCheckbox = document.getElementById('showMyMusicCheckbox');
+        const customContentInput = document.getElementById('customContentInput');
+        const showCustomContentCheckbox = document.getElementById('showCustomContentCheckbox');
+        const whatsappUrlInput = document.getElementById('whatsappUrlInput');
+        const instagramUrlInput = document.getElementById('instagramUrlInput');
+        const facebookUrlInput = document.getElementById('facebookUrlInput');
+        const twitterUrlInput = document.getElementById('twitterUrlInput');
+
+        // Funciones para abrir/cerrar menús laterales
+        if (navMenuButton) {
+            navMenuButton.addEventListener('click', () => {
+                sideMenu.classList.add('open');
+            });
+        }
+        if (closeSideMenuBtn) {
+            closeSideMenuBtn.addEventListener('click', () => {
+                sideMenu.classList.remove('open');
+                // Restaurar el menú principal si se estaba viendo otra cosa
+                sideMenuNavContent.classList.remove('hidden');
+                sideMenuMainTitle.textContent = 'Menú Principal';
+                if (document.getElementById('sideMenuBackButton')) {
+                    document.getElementById('sideMenuBackButton').remove();
+                }
+                infoModalBodyContent.innerHTML = ''; // Limpiar contenido del modal de info
+            });
+        }
+        if (navRewardsButton) {
+            navRewardsButton.addEventListener('click', () => {
+                rewardsSideMenu.classList.add('open');
+            });
+        }
+        if (closeRewardsSideMenuBtn) {
+            closeRewardsSideMenuBtn.addEventListener('click', () => {
+                rewardsSideMenu.classList.remove('open');
+            });
+        }
+
+        // Función para actualizar el estado activo del footer
+        function updateFooterNavActiveState() {
+            const path = window.location.pathname;
+            const navItems = document.querySelectorAll('.footer-nav .nav-item');
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                const href = item.getAttribute('href');
+                if (href && path.includes(href.replace('.html', ''))) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        // Llamar al actualizar el estado activo al cargar la página
+        document.addEventListener('DOMContentLoaded', updateFooterNavActiveState);
+
+
+        // --- Lógica para el botón "Nueva Publicación" (New Post Modal) ---
+        if (newPostButton) {
+            newPostButton.addEventListener('click', () => {
+                newPostModal.classList.remove('hidden');
+                // Limpiar campos al abrir
+                newPostTextInput.value = '';
+                newPostImageUploadInput.value = '';
+                newPostImagePreview.innerHTML = '<p style="color: #bbb; font-size: 0.9em;">No se ha seleccionado ninguna imagen</p>';
+                newPostKeywordsInput.value = '';
+            });
+        }
+
+        if (closeNewPostModalButton) {
+            closeNewPostModalButton.addEventListener('click', () => {
+                newPostModal.classList.add('hidden');
+            });
+        }
+
+        if (newPostImageUploadInput) {
+            newPostImageUploadInput.addEventListener('change', (event) => {
+                handleImageUploadPreview(event, newPostImagePreview, 1); // Solo una imagen para publicación
+            });
+        }
+
+        if (submitNewPostButton) {
+            submitNewPostButton.addEventListener('click', async () => {
+                const postText = newPostTextInput.value.trim();
+                const postImageFile = newPostImageUploadInput.files[0];
+                const postKeywords = newPostKeywordsInput.value.split(',').map(k => k.trim()).filter(k => k !== '');
+
+                if (!postText && !postImageFile) {
+                    showConfirmationModal("Por favor, escribe algo o sube una imagen para tu publicación.");
+                    return;
+                }
+
+                showLoadingOverlay();
+
+                let imageUrl = '';
+                if (postImageFile) {
+                    imageUrl = await convertFileToBase64(postImageFile);
+                }
+
+                const newPost = {
+                    text: postText,
+                    imageUrl: imageUrl,
+                    keywords: postKeywords,
+                    timestamp: new Date().toISOString(),
+                    username: '@CurrentUser', // Esto debería ser dinámico del usuario autenticado
+                    avatarUrl: 'https://placehold.co/40x40/FF3058/ffffff?text=ME', // Esto debería ser dinámico
+                    likes: 0,
+                    comments: 0,
+                    shares: 0
+                };
+
+                try {
+                    if (db && userId) {
+                        // Guardar la publicación en Firestore
+                        const postsCollectionRef = collection(db, `artifacts/${appId}/public/posts`);
+                        await setDoc(doc(postsCollectionRef), newPost); // Usar doc() sin ID para que Firestore genere uno
+
+                        showConfirmationModal("¡Publicación creada exitosamente!");
+                        newPostModal.classList.add('hidden');
+
+                        // Recargar publicaciones en la página actual si es necesario (depende de la página)
+                        // Esto se manejará en los JS específicos de cada página que muestren publicaciones
+                    } else {
+                        showConfirmationModal("Error: No se pudo conectar a la base de datos o no hay usuario autenticado.");
+                    }
+                } catch (error) {
+                    console.error("Error al guardar la publicación:", error);
+                    showConfirmationModal(`Error al crear la publicación: ${error.message}`);
+                } finally {
+                    hideLoadingOverlay();
+                }
+            });
+        }
+
+        // --- Lógica para el Modal de Edición de Perfil ---
+        if (openProfileEditModalButton) {
+            openProfileEditModalButton.addEventListener('click', async () => {
+                showLoadingOverlay();
+                await loadProfileSettings(); // Cargar la configuración actual del perfil
+                profileEditModal.classList.remove('hidden');
+                hideLoadingOverlay();
+            });
+        }
+
+        if (closeProfileEditModalButton) {
+            closeProfileEditModalButton.addEventListener('click', () => {
+                profileEditModal.classList.add('hidden');
+            });
+        }
+
+        if (saveProfileSettingsButton) {
+            saveProfileSettingsButton.addEventListener('click', async () => {
+                showLoadingOverlay();
+                await saveProfileSettings();
+                profileEditModal.classList.add('hidden');
+                hideLoadingOverlay();
+            });
+        }
+
+        if (resetProfileSettingsButton) {
+            resetProfileSettingsButton.addEventListener('click', async () => {
+                const confirmReset = await new Promise(resolve => {
+                    showConfirmationModal("¿Estás seguro de que quieres restablecer la configuración del perfil a los valores predeterminados?");
+                    confirmOkButton.onclick = () => {
+                        confirmationModal.classList.add('hidden');
+                        resolve(true);
+                    };
+                    // No hay botón de cancelar, así que OK es la única opción.
+                });
+
+                if (confirmReset) {
+                    showLoadingOverlay();
+                    await resetProfileSettings();
+                    hideLoadingOverlay();
+                    showConfirmationModal("Configuración de perfil restablecida.");
+                }
+            });
+        }
+
+        // Manejo de carga de imágenes para el modal de edición de perfil
+        if (profileAvatarUploadInput) {
+            profileAvatarUploadInput.addEventListener('change', (event) => {
+                handleImageUploadPreview(event, profileAvatarPreview, 1, true); // Solo una imagen, circular
+            });
+        }
+
+        if (profileBackgroundUploadInput) {
+            profileBackgroundUploadInput.addEventListener('change', (event) => {
+                handleImageUploadPreview(event, profileBackgroundPreview, 1); // Solo una imagen
+            });
+        }
+
+        if (myPhotosUploadInput) {
+            myPhotosUploadInput.addEventListener('change', (event) => {
+                handleImageUploadPreview(event, myPhotosPreview, 5); // Hasta 5 imágenes
+            });
+        }
+
+        /**
+         * Maneja la vista previa de la carga de imágenes.
+         * @param {Event} event - El evento de cambio del input de archivo.
+         * @param {HTMLElement} previewContainer - El contenedor donde se mostrarán las vistas previas.
+         * @param {number} maxFiles - El número máximo de archivos permitidos.
+         * @param {boolean} isCircular - Si la vista previa debe ser circular (para avatares).
+         */
+        async function handleImageUploadPreview(event, previewContainer, maxFiles = 1, isCircular = false) {
+            previewContainer.innerHTML = ''; // Limpiar previas
+            const files = Array.from(event.target.files).slice(0, maxFiles); // Limitar a maxFiles
+
+            if (files.length === 0) {
+                if (maxFiles === 1) {
+                    previewContainer.innerHTML = '<p style="color: #bbb; font-size: 0.9em;">No se ha seleccionado ninguna imagen</p>';
+                }
+                return;
+            }
+
+            for (const file of files) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const imgUrl = e.target.result;
+                    const previewItem = document.createElement('div');
+                    previewItem.classList.add('preview-item');
+                    if (isCircular) {
+                        previewItem.style.borderRadius = '50%';
+                    }
+
+                    const img = document.createElement('img');
+                    img.src = imgUrl;
+                    img.alt = 'Preview';
+                    previewItem.appendChild(img);
+
+                    const removeBtn = document.createElement('button');
+                    removeBtn.classList.add('remove-btn');
+                    removeBtn.textContent = '×';
+                    removeBtn.onclick = () => {
+                        previewItem.remove();
+                        // Opcional: limpiar el archivo del input si es una sola imagen
+                        if (maxFiles === 1) {
+                            event.target.value = ''; // Limpiar el input de archivo
+                            previewContainer.innerHTML = '<p style="color: #bbb; font-size: 0.9em;">No se ha seleccionado ninguna imagen</p>';
+                        }
+                    };
+                    previewItem.appendChild(removeBtn);
+                    previewContainer.appendChild(previewItem);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        /**
+         * Convierte un archivo a una cadena Base64.
+         * @param {File} file - El archivo a convertir.
+         * @returns {Promise<string>} La cadena Base64 del archivo.
+         */
+        function convertFileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+                reader.readAsDataURL(file);
+            });
+        }
+
+        /**
+         * Carga la configuración del perfil del usuario desde Firestore.
+         */
+        async function loadProfileSettings() {
+            if (!db || !userId) {
+                console.warn("Firestore no está inicializado o el userId no está disponible.");
+                return;
+            }
+
+            try {
+                const profileDocRef = doc(db, `artifacts/${appId}/users/${userId}/profile/settings`);
+                const profileDocSnap = await getDoc(profileDocRef);
+
+                let profileData = {};
+                if (profileDocSnap.exists()) {
+                    profileData = profileDocSnap.data();
+                    console.log("Perfil cargado:", profileData);
+                } else {
+                    console.log("No se encontró configuración de perfil. Usando valores predeterminados.");
+                    profileData = getDefaultProfileSettings();
+                }
+
+                // Rellenar el formulario con los datos cargados
+                profileUsernameInput.value = profileData.username || '';
+                profilePrimaryTextColorInput.value = profileData.primaryTextColor || '#ff3058';
+                profileSecondaryTextColorInput.value = profileData.secondaryTextColor || '#7d3490';
+                profileCardBackgroundColorInput.value = profileData.cardBackgroundColor || '#4a1a55';
+                profileBorderColorInput.value = profileData.borderColor || '#ff3058';
+                aboutMeContentInput.value = profileData.aboutMe || '';
+                showAboutMeCheckbox.checked = profileData.showAboutMe !== false; // Default true
+                interestsContentInput.value = (profileData.interests || []).join(', ');
+                showInterestsCheckbox.checked = profileData.showInterests !== false; // Default true
+                myMusicSpotifyInput.value = profileData.musicLinks?.spotify || '';
+                myMusicYoutubeInput.value = profileData.musicLinks?.youtube || '';
+                myMusicSoundcloudInput.value = profileData.musicLinks?.soundcloud || '';
+                showMyMusicCheckbox.checked = profileData.showMyMusic !== false; // Default true
+                customContentInput.value = profileData.customContent || '';
+                showCustomContentCheckbox.checked = profileData.showCustomContent !== false; // Default true
+                whatsappUrlInput.value = profileData.contactLinks?.whatsapp || '';
+                instagramUrlInput.value = profileData.contactLinks?.instagram || '';
+                facebookUrlInput.value = profileData.contactLinks?.facebook || '';
+                twitterUrlInput.value = profileData.contactLinks?.twitter || '';
+
+                // Mostrar vistas previas de imágenes existentes
+                profileAvatarPreview.innerHTML = '';
+                if (profileData.avatarUrl) {
+                    const img = document.createElement('img');
+                    img.src = profileData.avatarUrl;
+                    img.alt = 'Avatar Preview';
+                    const previewItem = document.createElement('div');
+                    previewItem.classList.add('preview-item');
+                    previewItem.style.borderRadius = '50%';
+                    previewItem.appendChild(img);
+                    profileAvatarPreview.appendChild(previewItem);
+                } else {
+                    profileAvatarPreview.innerHTML = '<p style="color: #bbb; font-size: 0.9em;">No se ha seleccionado ninguna imagen</p>';
+                }
+
+                profileBackgroundPreview.innerHTML = '';
+                if (profileData.backgroundUrl) {
+                    const img = document.createElement('img');
+                    img.src = profileData.backgroundUrl;
+                    img.alt = 'Background Preview';
+                    const previewItem = document.createElement('div');
+                    previewItem.classList.add('preview-item');
+                    previewItem.appendChild(img);
+                    profileBackgroundPreview.appendChild(previewItem);
+                } else {
+                    profileBackgroundPreview.innerHTML = '<p style="color: #bbb; font-size: 0.9em;">No se ha seleccionado ninguna imagen</p>';
+                }
+
+                myPhotosPreview.innerHTML = '';
+                if (profileData.myPhotos && profileData.myPhotos.length > 0) {
+                    profileData.myPhotos.forEach(url => {
+                        const img = document.createElement('img');
+                        img.src = url;
+                        img.alt = 'My Photo Preview';
+                        const previewItem = document.createElement('div');
+                        previewItem.classList.add('preview-item');
+                        previewItem.appendChild(img);
+                        myPhotosPreview.appendChild(previewItem);
+                    });
+                } else {
+                    myPhotosPreview.innerHTML = '<p style="color: #bbb; font-size: 0.9em;">No se ha seleccionado ninguna imagen</p>';
+                }
+
+                // Actualizar la vista previa del perfil en la página de perfil si estamos en ella
+                if (window.location.pathname.includes('my-profile.html')) {
+                    renderProfilePreview(profileData);
+                }
+
+            } catch (error) {
+                console.error("Error al cargar la configuración del perfil:", error);
+                showConfirmationModal(`Error al cargar el perfil: ${error.message}`);
+            }
+        }
+
+        /**
+         * Guarda la configuración del perfil del usuario en Firestore.
+         */
+        async function saveProfileSettings() {
+            if (!db || !userId) {
+                showConfirmationModal("Error: No se pudo conectar a la base de datos o no hay usuario autenticado.");
+                return;
+            }
+
+            try {
+                const profileDocRef = doc(db, `artifacts/${appId}/users/${userId}/profile/settings`);
+
+                // Convertir archivos a Base64
+                let avatarUrl = profileAvatarPreview.querySelector('img')?.src || '';
+                if (profileAvatarUploadInput.files.length > 0) {
+                    avatarUrl = await convertFileToBase64(profileAvatarUploadInput.files[0]);
+                }
+
+                let backgroundUrl = profileBackgroundPreview.querySelector('img')?.src || '';
+                if (profileBackgroundUploadInput.files.length > 0) {
+                    backgroundUrl = await convertFileToBase64(profileBackgroundUploadInput.files[0]);
+                }
+
+                let myPhotosUrls = [];
+                const myPhotosPreviewItems = myPhotosPreview.querySelectorAll('.preview-item img');
+                for (const item of myPhotosPreviewItems) {
+                    myPhotosUrls.push(item.src);
+                }
+                // Añadir nuevas fotos subidas
+                if (myPhotosUploadInput.files.length > 0) {
+                    for (const file of Array.from(myPhotosUploadInput.files)) {
+                        myPhotosUrls.push(await convertFileToBase64(file));
+                    }
+                }
+
+
+                const profileData = {
+                    username: profileUsernameInput.value.trim(),
+                    avatarUrl: avatarUrl,
+                    backgroundUrl: backgroundUrl,
+                    primaryTextColor: profilePrimaryTextColorInput.value,
+                    secondaryTextColor: profileSecondaryTextColorInput.value,
+                    cardBackgroundColor: profileCardBackgroundColorInput.value,
+                    borderColor: profileBorderColorInput.value,
+                    aboutMe: aboutMeContentInput.value.trim(),
+                    showAboutMe: showAboutMeCheckbox.checked,
+                    interests: interestsContentInput.value.split(',').map(i => i.trim()).filter(i => i !== ''),
+                    showInterests: showInterestsCheckbox.checked,
+                    myPhotos: myPhotosUrls,
+                    showMyPhotos: showMyPhotosCheckbox.checked,
+                    musicLinks: {
+                        spotify: myMusicSpotifyInput.value.trim(),
+                        youtube: myMusicYoutubeInput.value.trim(),
+                        soundcloud: myMusicSoundcloudInput.value.trim(),
+                    },
+                    showMyMusic: showMyMusicCheckbox.checked,
+                    customContent: customContentInput.value.trim(),
+                    showCustomContent: showCustomContentCheckbox.checked,
+                    contactLinks: {
+                        whatsapp: whatsappUrlInput.value.trim(),
+                        instagram: instagramUrlInput.value.trim(),
+                        facebook: facebookUrlInput.value.trim(),
+                        twitter: twitterUrlInput.value.trim(),
+                    }
+                };
+
+                await setDoc(profileDocRef, profileData, { merge: true });
+                showConfirmationModal("¡Configuración de perfil guardada exitosamente!");
+
+                // Actualizar la vista previa del perfil en la página de perfil si estamos en ella
+                if (window.location.pathname.includes('my-profile.html')) {
+                    renderProfilePreview(profileData);
+                }
+
+            } catch (error) {
+                console.error("Error al guardar la configuración del perfil:", error);
+                showConfirmationModal(`Error al guardar el perfil: ${error.message}`);
+            }
+        }
+
+        /**
+         * Restablece la configuración del perfil a los valores predeterminados.
+         */
+        async function resetProfileSettings() {
+            if (!db || !userId) {
+                showConfirmationModal("Error: No se pudo conectar a la base de datos o no hay usuario autenticado.");
+                return;
+            }
+
+            try {
+                const profileDocRef = doc(db, `artifacts/${appId}/users/${userId}/profile/settings`);
+                const defaultSettings = getDefaultProfileSettings();
+                await setDoc(profileDocRef, defaultSettings); // Sobrescribir con valores predeterminados
+                await loadProfileSettings(); // Recargar el formulario con los valores predeterminados
+            } catch (error) {
+                console.error("Error al restablecer la configuración del perfil:", error);
+                showConfirmationModal(`Error al restablecer el perfil: ${error.message}`);
+            }
+        }
+
+        /**
+         * Obtiene la configuración predeterminada del perfil.
+         * @returns {Object} Un objeto con la configuración predeterminada.
+         */
+        function getDefaultProfileSettings() {
+            return {
+                username: 'Usuario The Red',
+                avatarUrl: 'https://placehold.co/150x150/7d3490/ffffff?text=U',
+                backgroundUrl: 'https://placehold.co/900x300/4a1a55/ffffff?text=Fondo+de+Perfil',
+                primaryTextColor: '#ff3058',
+                secondaryTextColor: '#7d3490',
+                cardBackgroundColor: '#4a1a55',
+                borderColor: '#ff3058',
+                aboutMe: '¡Hola! Soy un usuario de The Red. Me encanta explorar el universo y conectar con mentes creativas.',
+                showAboutMe: true,
+                interests: ['espacio', 'ciencia', 'tecnología', 'arte', 'música'],
+                showInterests: true,
+                myPhotos: [
+                    'https://placehold.co/100x100/7d3490/ffffff?text=Foto1',
+                    'https://placehold.co/100x100/4a1a55/ffffff?text=Foto2',
+                    'https://placehold.co/100x100/ff3058/ffffff?text=Foto3'
+                ],
+                showMyPhotos: true,
+                musicLinks: {
+                    spotify: '',
+                    youtube: '',
+                    soundcloud: ''
+                },
+                showMyMusic: true,
+                customContent: '¡Bienvenido a mi espacio en The Red!',
+                showCustomContent: true,
+                contactLinks: {
+                    whatsapp: '',
+                    instagram: '',
+                    facebook: '',
+                    twitter: ''
+                }
+            };
+        }
+
+        /**
+         * Renderiza la vista previa del perfil en la página de perfil.
+         * @param {Object} profileData - Los datos del perfil a renderizar.
+         */
+        function renderProfilePreview(profileData) {
+            const profilePreviewView = document.getElementById('profilePreviewView');
+            if (!profilePreviewView) return;
+
+            // Aplicar estilos de fondo y colores
+            profilePreviewView.style.backgroundImage = profileData.backgroundUrl ? `url(${profileData.backgroundUrl})` : 'none';
+            profilePreviewView.style.setProperty('--primary-text-color', profileData.primaryTextColor || 'var(--light-red)');
+            profilePreviewView.style.setProperty('--secondary-text-color', profileData.secondaryTextColor || 'var(--light-purple)');
+            profilePreviewView.style.setProperty('--card-background-color', profileData.cardBackgroundColor || 'var(--medium-purple)');
+            profilePreviewView.style.setProperty('--border-color', profileData.borderColor || 'var(--light-red)');
+
+            profilePreviewView.innerHTML = `
+                <div class="profile-grid-container">
+                    <div class="profile-left-column" style="border-color: var(--border-color);">
+                        <img src="${profileData.avatarUrl || 'https://placehold.co/150x150/7d3490/ffffff?text=U'}" alt="Avatar de Perfil" class="profile-avatar-large" style="border-color: var(--border-color);">
+                        <h2 style="color: var(--primary-text-color);">${profileData.username || 'Usuario The Red'}</h2>
+                        <div class="profile-contact-section">
+                            ${profileData.contactLinks?.whatsapp ? `<a href="${profileData.contactLinks.whatsapp}" target="_blank" class="profile-contact-button"><i class="fab fa-whatsapp"></i> WhatsApp</a>` : ''}
+                            ${profileData.contactLinks?.instagram ? `<a href="${profileData.contactLinks.instagram}" target="_blank" class="profile-contact-button"><i class="fab fa-instagram"></i> Instagram</a>` : ''}
+                            ${profileData.contactLinks?.facebook ? `<a href="${profileData.contactLinks.facebook}" target="_blank" class="profile-contact-button"><i class="fab fa-facebook"></i> Facebook</a>` : ''}
+                            ${profileData.contactLinks?.twitter ? `<a href="${profileData.contactLinks.twitter}" target="_blank" class="profile-contact-button"><i class="fab fa-twitter"></i> Twitter</a>` : ''}
+                        </div>
+                        ${profileData.showMyPhotos && profileData.myPhotos && profileData.myPhotos.length > 0 ? `
+                            <h3 class="profile-section-title-purple" style="color: var(--secondary-text-color);">Mis Fotos</h3>
+                            <div class="profile-photo-grid">
+                                ${profileData.myPhotos.map(photo => `<div class="profile-photo-placeholder" style="border: 1px solid var(--border-color);"><img src="${photo}" alt="Mi Foto"></div>`).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                    <div class="profile-right-column">
+                        ${profileData.showAboutMe ? `
+                            <div class="profile-preview-section" style="background-color: var(--card-background-color); border-color: var(--border-color);">
+                                <h3 style="color: var(--primary-text-color);">Acerca de Mí</h3>
+                                <p style="color: var(--secondary-text-color);">${profileData.aboutMe || 'No hay información disponible.'}</p>
+                            </div>
+                        ` : ''}
+                        ${profileData.showInterests && profileData.interests && profileData.interests.length > 0 ? `
+                            <div class="profile-preview-section" style="background-color: var(--card-background-color); border-color: var(--border-color);">
+                                <h3 style="color: var(--primary-text-color);">Intereses</h3>
+                                <ul style="color: var(--secondary-text-color);">
+                                    ${profileData.interests.map(interest => `<li><i class="fas fa-tag"></i> ${interest}</li>`).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                        ${profileData.showMyMusic && (profileData.musicLinks?.spotify || profileData.musicLinks?.youtube || profileData.musicLinks?.soundcloud) ? `
+                            <div class="profile-preview-section" style="background-color: var(--card-background-color); border-color: var(--border-color);">
+                                <h3 style="color: var(--primary-text-color);">Mi Música</h3>
+                                <div class="profile-music-links">
+                                    ${profileData.musicLinks?.spotify ? `<a href="${profileData.musicLinks.spotify}" target="_blank" style="color: var(--primary-text-color);"><i class="fab fa-spotify"></i> Spotify</a>` : ''}
+                                    ${profileData.musicLinks?.youtube ? `<a href="${profileData.musicLinks.youtube}" target="_blank" style="color: var(--primary-text-color);"><i class="fab fa-youtube"></i> YouTube Music</a>` : ''}
+                                    ${profileData.musicLinks?.soundcloud ? `<a href="${profileData.musicLinks.soundcloud}" target="_blank" style="color: var(--primary-text-color);"><i class="fab fa-soundcloud"></i> SoundCloud</a>` : ''}
+                                </div>
+                            </div>
+                        ` : ''}
+                        ${profileData.showCustomContent && profileData.customContent ? `
+                            <div class="profile-preview-section custom-content-area" style="background-color: var(--card-background-color); border-color: var(--border-color);">
+                                <h3 style="color: var(--primary-text-color);">Contenido Personalizado</h3>
+                                <p style="color: var(--secondary-text-color);">${profileData.customContent}</p>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        // --- Lógica para el botón de Configuración (Idioma, etc.) ---
+        const settingsButton = document.getElementById('settingsButton');
+        if (settingsButton) {
+            settingsButton.addEventListener('click', () => {
+                languageSettingsModal.classList.remove('hidden');
+                // Cargar la preferencia de idioma guardada
+                const savedLang = localStorage.getItem('appLanguage') || 'es';
+                if (savedLang === 'es') {
+                    langEsRadio.checked = true;
+                } else {
+                    langEnRadio.checked = true;
+                }
+            });
+        }
+
+        if (closeLanguageSettingsModalButton) {
+            closeLanguageSettingsModalButton.addEventListener('click', () => {
+                languageSettingsModal.classList.add('hidden');
+            });
+        }
+
+        if (saveLanguageSettingsButton) {
+            saveLanguageSettingsButton.addEventListener('click', () => {
+                const selectedLang = document.querySelector('input[name="language"]:checked').value;
+                localStorage.setItem('appLanguage', selectedLang);
+                showConfirmationModal(`Idioma guardado: ${selectedLang === 'es' ? 'Español' : 'English'}. Algunos cambios requieren recargar la página.`);
+                languageSettingsModal.classList.add('hidden');
+            });
+        }
+
+        // --- Lógica para el botón de Mapa (simulado) ---
+        const mapButton = document.getElementById('mapButton');
+        if (mapButton) {
+            mapButton.addEventListener('click', () => {
+                showConfirmationModal("Accediendo al mapa del universo... (Función en desarrollo)");
+            });
+        }
+
+        // --- Lógica para el botón de Perfil (simulado, debería ir a my-profile.html) ---
+        const profileButton = document.getElementById('profileButton');
+        if (profileButton) {
+            profileButton.addEventListener('click', () => {
+                window.location.href = 'my-profile.html';
+            });
+        }
+
+        // --- Lógica para el botón de Chat (simulado) ---
+        const chatButton = document.getElementById('chatButton');
+        if (chatButton) {
+            chatButton.addEventListener('click', () => {
+                showConfirmationModal("Abriendo ventana de chat... (Función en desarrollo)");
+            });
+        }
+
+        // --- Lógica para los elementos del menú lateral (Misión, Quiénes Somos, Precios, etc.) ---
+        const sideMenuMission = document.getElementById('sideMenuMission');
+        const sideMenuWhoAreWe = document.getElementById('sideMenuWhoAreWe');
+        const sideMenuPrices = document.getElementById('sideMenuPrices');
+        const sideMenuSupport = document.getElementById('sideMenuSupport');
+        const sideMenuDevelopers = document.getElementById('sideMenuDevelopers');
+        const sideMenuLogout = document.getElementById('sideMenuLogout');
+
+        if (closeInfoModalBtn) {
+            closeInfoModalBtn.addEventListener('click', () => {
+                infoModal.classList.add('hidden');
+                infoModalBodyContent.innerHTML = ''; // Limpiar contenido
+            });
+        }
+
+        /**
+         * Muestra el modal de información con contenido dinámico.
+         * @param {string} title - Título del modal.
+         * @param {string} introText - Texto introductorio.
+         * @param {string} bodyHtml - Contenido HTML del cuerpo.
+         */
+        function showInfoModal(title, introText, bodyHtml) {
+            infoModalTitle.textContent = title;
+            infoModalIntroText.textContent = introText;
+            infoModalBodyContent.innerHTML = bodyHtml;
+            infoModal.classList.remove('hidden');
+        }
+
+        if (sideMenuMission) {
+            sideMenuMission.addEventListener('click', (e) => {
+                e.preventDefault();
+                showInfoModal(
+                    "Nuestra Misión",
+                    "En The Red, nos dedicamos a...",
+                    `
+                    <h3>Nuestra Misión Principal</h3>
+                    <p>Nuestra misión es ofrecer productos y servicios de calidad excepcional que impacten positivamente la vida de las personas, fomentando la innovación, la creatividad y la conexión en un entorno digital seguro y vibrante.</p>
+                    <h4>Valores Fundamentales:</h4>
+                    <ul>
+                        <li><strong>Innovación:</strong> Buscamos constantemente nuevas formas de mejorar y expandir nuestras ofertas.</li>
+                        <li><strong>Comunidad:</strong> Creemos en el poder de la conexión y el apoyo mutuo entre nuestros usuarios.</li>
+                        <li><strong>Integridad:</strong> Operamos con transparencia y ética en todas nuestras acciones.</li>
+                        <li><strong>Calidad:</strong> Nos comprometemos a entregar experiencias de la más alta calidad.</li>
+                    </ul>
+                    <p>Estamos aquí para empoderar a los creadores, conectar a las personas y construir un futuro digital más brillante.</p>
+                    `
+                );
+                sideMenu.classList.remove('open');
+            });
+        }
+
+        if (sideMenuWhoAreWe) {
+            sideMenuWhoAreWe.addEventListener('click', (e) => {
+                e.preventDefault();
+                showInfoModal(
+                    "Quiénes Somos",
+                    "Somos un equipo apasionado detrás de The Red.",
+                    `
+                    <h3>El Equipo Detrás de The Red</h3>
+                    <p>The Red fue fundado por un grupo de entusiastas de la tecnología y la creatividad con la visión de construir una plataforma donde las ideas florezcan y las conexiones se fortalezcan.</p>
+                    <p>Desde nuestros inicios, nos hemos esforzado por crear un espacio inclusivo y dinámico para artistas, científicos, exploradores y cualquier persona con una pasión por compartir y descubrir.</p>
+                    <h4>Nuestra Historia</h4>
+                    <p>Comenzamos como un pequeño proyecto con grandes sueños, y gracias al apoyo de nuestra creciente comunidad, hemos evolucionado hasta convertirnos en lo que somos hoy. Cada paso que damos está impulsado por el deseo de ofrecer la mejor experiencia posible a nuestros usuarios.</p>
+                    `
+                );
+                sideMenu.classList.remove('open');
+            });
+        }
+
+        if (sideMenuPrices) {
+            sideMenuPrices.addEventListener('click', (e) => {
+                e.preventDefault();
+                showInfoModal(
+                    "Planes de Suscripción",
+                    "Elige el plan que mejor se adapte a tus necesidades.",
+                    `
+                    <div class="price-plan-card">
+                        <h3>Plan Básico</h3>
+                        <p class="price">$5<small>/mes</small></p>
+                        <ul>
+                            <li><i class="fas fa-check-circle"></i> Acceso ilimitado a publicaciones</li>
+                            <li><i class="fas fa-check-circle"></i> Perfil personalizable</li>
+                            <li><i class="fas fa-check-circle"></i> Conexiones con otros usuarios</li>
+                            <li><i class="fas fa-times-circle" style="color: var(--gray-medium);"></i> Sin anuncios</li>
+                            <li><i class="fas fa-times-circle" style="color: var(--gray-medium);"></i> Soporte prioritario</li>
+                        </ul>
+                        <button class="subscribe-button" data-plan="basic">Suscribirse</button>
+                    </div>
+                    <div class="price-plan-card">
+                        <h3>Plan Premium</h3>
+                        <p class="price">$15<small>/mes</small></p>
+                        <ul>
+                            <li><i class="fas fa-check-circle"></i> Todas las características del Básico</li>
+                            <li><i class="fas fa-check-circle"></i> Sin anuncios</li>
+                            <li><i class="fas fa-check-circle"></i> Soporte prioritario 24/7</li>
+                            <li><i class="fas fa-check-circle"></i> Insignia de perfil Premium</li>
+                            <li><i class="fas fa-check-circle"></i> Acceso anticipado a nuevas funciones</li>
+                        </ul>
+                        <button class="subscribe-button" data-plan="premium">Suscribirse</button>
+                    </div>
+                    `
+                );
+                sideMenu.classList.remove('open');
+
+                // Añadir listeners a los botones de suscripción dentro del modal de precios
+                document.querySelectorAll('.subscribe-button').forEach(button => {
+                    button.addEventListener('click', (event) => {
+                        const plan = event.target.dataset.plan;
+                        openPaymentModal(plan);
+                    });
+                });
+            });
+        }
+
+        if (sideMenuSupport) {
+            sideMenuSupport.addEventListener('click', (e) => {
+                e.preventDefault();
+                showInfoModal(
+                    "Soporte y Ayuda",
+                    "Estamos aquí para ayudarte en tu viaje por The Red.",
+                    `
+                    <h3>¿Necesitas Ayuda?</h3>
+                    <p>Si tienes alguna pregunta, problema o sugerencia, no dudes en contactarnos. Nuestro equipo de soporte está disponible para asistirte.</p>
+                    <h4>Opciones de Contacto:</h4>
+                    <ul>
+                        <li><strong>Correo Electrónico:</strong> <a href="mailto:soporte@thered.com" style="color: var(--light-red);">soporte@thered.com</a></li>
+                        <li><strong>Preguntas Frecuentes (FAQ):</strong> Visita nuestra sección de <a href="#" style="color: var(--light-red);" onclick="showConfirmationModal('Cargando preguntas frecuentes...'); return false;">Preguntas Frecuentes</a></li>
+                        <li><strong>Chat en Vivo:</strong> Usa el botón de chat flotante para hablar con un agente.</li>
+                    </ul>
+                    <p>Nos esforzamos por responder a todas las consultas en un plazo de 24 horas.</p>
+                    `
+                );
+                sideMenu.classList.remove('open');
+            });
+        }
+
+        if (sideMenuDevelopers) {
+            sideMenuDevelopers.addEventListener('click', (e) => {
+                e.preventDefault();
+                showInfoModal(
+                    "Para Desarrolladores",
+                    "Únete a nuestra comunidad de desarrolladores.",
+                    `
+                    <h3>API de The Red</h3>
+                    <p>Estamos construyendo una API robusta para que los desarrolladores puedan integrar sus aplicaciones con The Red y extender la funcionalidad de nuestra plataforma.</p>
+                    <h4>Recursos para Desarrolladores:</h4>
+                    <ul>
+                        <li><strong>Documentación de la API:</strong> <a href="#" style="color: var(--light-red);" onclick="showConfirmationModal('Documentación de la API en desarrollo...'); return false;">Próximamente</a></li>
+                        <li><strong>Foro de Desarrolladores:</strong> Conéctate con otros desarrolladores y comparte tus ideas.</li>
+                        <li><strong>GitHub:</strong> Explora nuestros repositorios de código abierto.</li>
+                    </ul>
+                    <p>¡Esperamos ver las increíbles creaciones que construirás con The Red!</p>
+                    `
+                );
+                sideMenu.classList.remove('open');
+            });
+        }
+
+        if (sideMenuLogout) {
+            sideMenuLogout.addEventListener('click', (e) => {
+                e.preventDefault();
+                showConfirmationModal("Cerrando sesión... (Función en desarrollo)");
+                // Aquí iría la lógica real de cerrar sesión de Firebase
+                // auth.signOut().then(() => { /* Redirigir a la página de login */ });
+            });
+        }
+
+        // --- Lógica del Modal de Pago ---
+        /**
+         * Abre el modal de pago para un plan específico.
+         * @param {string} planName - El nombre del plan (ej. 'basic', 'premium').
+         */
+        function openPaymentModal(planName) {
+            paymentModalTitle.textContent = `Comprar Suscripción: ${planName.charAt(0).toUpperCase() + planName.slice(1)}`;
+            paymentModal.classList.remove('hidden');
+            infoModal.classList.add('hidden'); // Cerrar el modal de información si está abierto
+        }
+
+        if (closePaymentModalButton) {
+            closePaymentModalButton.addEventListener('click', () => {
+                paymentModal.classList.add('hidden');
+            });
+        }
+
+        if (processPaymentButton) {
+            processPaymentButton.addEventListener('click', () => {
+                // Aquí iría la lógica de procesamiento de pago real
+                // Por ahora, solo una simulación
+                showLoadingOverlay();
+                setTimeout(() => {
+                    hideLoadingOverlay();
+                    showConfirmationModal("¡Pago procesado exitosamente! Tu suscripción está activa.");
+                    paymentModal.classList.add('hidden');
+                }, 2000);
+            });
+        }
+
+        // --- Lógica de Carruseles de Imágenes de Perfil (dentro de profile-card) ---
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.profile-card').forEach(card => {
+                const carouselContainer = card.querySelector('.profile-image-carousel-container');
+                const leftArrow = card.querySelector('.profile-carousel-arrow[data-direction="left"]');
+                const rightArrow = card.querySelector('.profile-carousel-arrow[data-direction="right"]');
+                let currentIndex = 0;
+
+                if (carouselContainer && leftArrow && rightArrow) {
+                    const totalImages = carouselContainer.children.length;
+
+                    if (totalImages <= 1) { // Ocultar flechas si solo hay 0 o 1 imagen
+                        leftArrow.style.display = 'none';
+                        rightArrow.style.display = 'none';
+                    } else {
+                        leftArrow.style.display = 'flex'; // Asegurarse de que estén visibles si hay más de 1
+                        rightArrow.style.display = 'flex';
+                    }
+
+                    const updateCarousel = () => {
+                        const offset = -currentIndex * 100;
+                        carouselContainer.style.transform = `translateX(${offset}%)`;
+                    };
+
+                    leftArrow.addEventListener('click', () => {
+                        currentIndex = (currentIndex === 0) ? totalImages - 1 : currentIndex - 1;
+                        updateCarousel();
+                    });
+
+                    rightArrow.addEventListener('click', () => {
+                        currentIndex = (currentIndex === totalImages - 1) ? 0 : currentIndex + 1;
+                        updateCarousel();
+                    });
+                }
+            });
+        });
+
+        // --- Lógica para el botón "Ver más" en textos largos ---
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.card-long-text').forEach(textElement => {
+                const fullText = textElement.textContent.trim();
+                const words = fullText.split(' ');
+                const maxWords = 50; // Límite de palabras para mostrar inicialmente
+
+                if (words.length > maxWords) {
+                    const truncatedText = words.slice(0, maxWords).join(' ') + '... ';
+                    textElement.innerHTML = truncatedText + '<span class="read-more-toggle" style="color: var(--light-red); cursor: pointer; font-weight: bold;">Ver más</span>';
+
+                    const readMoreToggle = textElement.querySelector('.read-more-toggle');
+                    readMoreToggle.addEventListener('click', () => {
+                        if (textElement.classList.contains('expanded')) {
+                            textElement.innerHTML = truncatedText + '<span class="read-more-toggle" style="color: var(--light-red); cursor: pointer; font-weight: bold;">Ver más</span>';
+                            textElement.classList.remove('expanded');
+                        } else {
+                            textElement.innerHTML = fullText + ' <span class="read-more-toggle" style="color: var(--light-red); cursor: pointer; font-weight: bold;">Ver menos</span>';
+                            textElement.classList.add('expanded');
+                        }
+                        // Re-attach event listener for the new toggle element
+                        textElement.querySelector('.read-more-toggle').addEventListener('click', arguments.callee);
+                    });
+                }
+            });
+        });
+
+        // --- Lógica para añadir tags/hashtags dinámicamente ---
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.profile-card, .long-text-card').forEach(item => {
+                const keywordsData = item.dataset.keywords;
+                if (keywordsData) {
+                    const keywords = keywordsData.split(',').map(k => k.trim()).filter(k => k !== '');
+                    const tagsContainer = item.querySelector('.profile-tags-container') || item.querySelector('.card-tags-container');
+                    if (tagsContainer) {
+                        tagsContainer.innerHTML = ''; // Limpiar cualquier contenido existente
+                        keywords.forEach(keyword => {
+                            const tagSpan = document.createElement('span');
+                            tagSpan.classList.add('profile-tag'); // O 'card-tag' si es para publicaciones
+                            tagSpan.textContent = `#${keyword}`;
+                            tagsContainer.appendChild(tagSpan);
+                        });
+                    }
+                }
+            });
+        });
+
+        // --- Lógica para el Modal de Vista Previa de Publicación ---
+        // Función para abrir el modal de vista previa de publicación
+        function openPostPreviewModal(postData) {
+            postPreviewTitle.textContent = postData.title || 'Publicación';
+            postPreviewImage.src = postData.imageUrl || 'https://placehold.co/600x350/555/FFFFFF?text=No+Imagen';
+            postPreviewAuthorAvatar.src = postData.avatarUrl || 'https://placehold.co/40x40/FF3058/ffffff?text=U';
+            postPreviewAuthorUsername.textContent = postData.username || '@Usuario';
+            postPreviewTimestamp.textContent = postData.timestamp || 'Fecha desconocida';
+            postPreviewText.textContent = postData.text || 'Sin texto.';
+
+            postPreviewTags.innerHTML = '';
+            if (postData.keywords && postData.keywords.length > 0) {
+                postData.keywords.forEach(tag => {
+                    const tagSpan = document.createElement('span');
+                    tagSpan.classList.add('post-tag');
+                    tagSpan.textContent = `#${tag}`;
+                    postPreviewTags.appendChild(tagSpan);
+                });
+            }
+
+            postPreviewModal.classList.remove('hidden');
+        }
+
+        if (closePostPreviewModalBtn) {
+            closePostPreviewModalBtn.addEventListener('click', () => {
+                postPreviewModal.classList.add('hidden');
+            });
+        }
+
+        if (viewAuthorProfileBtn) {
+            viewAuthorProfileBtn.addEventListener('click', () => {
+                // Lógica para redirigir al perfil del autor.
+                // Podrías pasar el ID del autor si lo tuvieras en postData
+                showConfirmationModal("Redirigiendo al perfil del autor... (Función en desarrollo)");
+                postPreviewModal.classList.add('hidden');
+            });
+        }
+
+        // JavaScript Específico de la Página Mi Red (de my-network.js)
+        document.addEventListener('DOMContentLoaded', () => {
+            const myNetworkGrid = document.getElementById('myNetworkGrid');
+            const emptyNetworkMessage = document.getElementById('emptyNetworkMessage');
+
+            // Asegurarse de que Firebase esté inicializado y el usuario autenticado antes de cargar datos
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    loadMyNetworkItems();
+                } else {
+                    // Si no hay usuario, mostrar mensaje de red vacía
+                    myNetworkGrid.innerHTML = '';
+                    emptyNetworkMessage.classList.remove('hidden');
+                }
+            });
+
+            /**
+             * Carga los elementos guardados en "Mi Red" desde Firestore.
+             */
+            function loadMyNetworkItems() {
+                if (!db || !userId) {
+                    console.warn("Firestore no está inicializado o el userId no está disponible para cargar Mi Red.");
+                    return;
+                }
+
+                showLoadingOverlay();
+
+                const myNetworkCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/my-network`);
+
+                // Usar onSnapshot para escuchar cambios en tiempo real
+                onSnapshot(myNetworkCollectionRef, (snapshot) => {
+                    myNetworkGrid.innerHTML = ''; // Limpiar la cuadrícula existente
+                    if (snapshot.empty) {
+                        emptyNetworkMessage.classList.remove('hidden');
+                        hideLoadingOverlay();
+                        return;
+                    }
+
+                    emptyNetworkMessage.classList.add('hidden'); // Ocultar mensaje de vacío
+
+                    snapshot.forEach(doc => {
+                        const itemData = doc.data();
+                        const itemId = doc.id; // Obtener el ID del documento para eliminación
+                        renderNetworkItem(itemData, itemId);
+                    });
+                    hideLoadingOverlay();
+                }, (error) => {
+                    console.error("Error al cargar los elementos de Mi Red:", error);
+                    showConfirmationModal(`Error al cargar tu red: ${error.message}`);
+                    hideLoadingOverlay();
+                });
+            }
+
+            /**
+             * Renderiza un elemento (perfil o publicación) en la cuadrícula de Mi Red.
+             * @param {Object} itemData - Los datos del elemento.
+             * @param {string} itemId - El ID del documento en Firestore.
+             */
+            function renderNetworkItem(itemData, itemId) {
+                let itemHtml = '';
+                // Determinar si es un perfil o una publicación basándose en la estructura de datos
+                // Asumimos que los perfiles tienen 'bio' y las publicaciones tienen 'text'
+                if (itemData.bio) { // Es un perfil
+                    itemHtml = `
+                        <div class="profile-card" data-item-id="${itemId}" data-keywords="${itemData.keywords ? itemData.keywords.join(',') : ''}">
+                            <img src="${itemData.avatarUrl || 'https://placehold.co/110x110/FF3058/ffffff?text=U'}" alt="Avatar" class="profile-avatar">
+                            <h4 class="profile-username">${itemData.username || 'Usuario'}</h4>
+                            <span class="timestamp">${itemData.timestamp || ''}</span>
+                            <div class="profile-image-carousel">
+                                <div class="profile-image-carousel-container">
+                                    ${(itemData.myPhotos || []).map(photo => `<img src="${photo}" alt="Profile Image" class="profile-carousel-image">`).join('')}
+                                </div>
+                                <div class="profile-carousel-navigation">
+                                    <button class="profile-carousel-arrow" data-direction="left"><i class="fas fa-chevron-left"></i></button>
+                                    <button class="profile-carousel-arrow" data-direction="right"><i class="fas fa-chevron-right"></i></button>
+                                </div>
+                            </div>
+                            <div class="profile-tags-container"></div>
+                            <p class="profile-bio">
+                                ${itemData.bio}
+                                <span class="read-more-toggle"></span>
+                            </p>
+                            <div class="profile-stats">
+                                <span><i class="fas fa-users"></i> ${itemData.followers || '0'}</span>
+                                <span><i class="fas fa-image"></i> ${itemData.posts || '0'}</span>
+                            </div>
+                            <button class="profile-action-button view-profile-btn">Ver Perfil</button>
+                            <button class="remove-from-network-button" data-item-id="${itemId}">Eliminar de Mi Red</button>
+                        </div>
+                    `;
+                } else if (itemData.text) { // Es una publicación
+                    itemHtml = `
+                        <div class="long-text-card" data-item-id="${itemId}" data-keywords="${itemData.keywords ? itemData.keywords.join(',') : ''}"
+                             data-username="${itemData.username}" data-avatar-url="${itemData.avatarUrl}" data-image-url="${itemData.imageUrl}">
+                            <div class="card-header-top">
+                                <div class="card-image-wrapper">
+                                    <img src="${itemData.imageUrl || 'https://placehold.co/600x350/555/FFFFFF?text=No+Imagen'}" alt="Image from Post" class="card-image">
+                                </div>
+                                <div class="card-user-info-and-avatar">
+                                    <img src="${itemData.avatarUrl || 'https://placehold.co/40x40/FF3058/ffffff?text=U'}" alt="Avatar de Usuario" class="card-user-avatar">
+                                    <div class="card-user-details">
+                                        <span class="card-username">${itemData.username || '@Usuario'}</span>
+                                        <span class="card-user-handle">${itemData.timestamp || ''}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-tags-container"></div>
+                            <p class="card-long-text">
+                                ${itemData.text}
+                                <span class="read-more-toggle"></span>
+                            </p>
+                            <div class="card-actions">
+                                <button class="action-button view-post-btn"><i class="fas fa-eye"></i> Ver Publicación</button>
+                                <button class="remove-from-network-button" data-item-id="${itemId}"><i class="fas fa-trash"></i> Eliminar</button>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                if (itemHtml) {
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = itemHtml.trim();
+                    const itemElement = tempDiv.firstChild;
+                    myNetworkGrid.appendChild(itemElement);
+
+                    // Re-aplicar lógica de "Ver más"
+                    const textElement = itemElement.querySelector('.card-long-text') || itemElement.querySelector('.profile-bio');
+                    if (textElement) {
+                        const fullText = textElement.textContent.trim();
+                        const words = fullText.split(' ');
+                        const maxWords = 50;
+                        if (words.length > maxWords) {
+                            const truncatedText = words.slice(0, maxWords).join(' ') + '... ';
+                            textElement.innerHTML = truncatedText + '<span class="read-more-toggle" style="color: var(--light-red); cursor: pointer; font-weight: bold;">Ver más</span>';
+                            const readMoreToggle = textElement.querySelector('.read-more-toggle');
+                            readMoreToggle.addEventListener('click', function() {
+                                if (textElement.classList.contains('expanded')) {
+                                    textElement.innerHTML = truncatedText + '<span class="read-more-toggle" style="color: var(--light-red); cursor: pointer; font-weight: bold;">Ver más</span>';
+                                    textElement.classList.remove('expanded');
+                                } else {
+                                    textElement.innerHTML = fullText + ' <span class="read-more-toggle" style="color: var(--light-red); cursor: pointer; font-weight: bold;">Ver menos</span>';
+                                    textElement.classList.add('expanded');
+                                }
+                                textElement.querySelector('.read-more-toggle').addEventListener('click', arguments.callee);
+                            });
+                        }
+                    }
+
+                    // Re-aplicar lógica de tags
+                    const keywordsData = itemElement.dataset.keywords;
+                    if (keywordsData) {
+                        const keywords = keywordsData.split(',').map(k => k.trim()).filter(k => k !== '');
+                        const tagsContainer = itemElement.querySelector('.profile-tags-container') || itemElement.querySelector('.card-tags-container');
+                        if (tagsContainer) {
+                            tagsContainer.innerHTML = '';
+                            keywords.forEach(keyword => {
+                                const tagSpan = document.createElement('span');
+                                tagSpan.classList.add('profile-tag');
+                                tagSpan.textContent = `#${keyword}`;
+                                tagsContainer.appendChild(tagSpan);
+                            });
+                        }
+                    }
+
+                    // Re-aplicar lógica de carrusel de imágenes de perfil
+                    const carouselContainer = itemElement.querySelector('.profile-image-carousel-container');
+                    const leftArrow = itemElement.querySelector('.profile-carousel-arrow[data-direction="left"]');
+                    const rightArrow = itemElement.querySelector('.profile-carousel-arrow[data-direction="right"]');
+                    if (carouselContainer && leftArrow && rightArrow) {
+                        let currentIndex = 0;
+                        const totalImages = carouselContainer.children.length;
+
+                        if (totalImages <= 1) {
+                            leftArrow.style.display = 'none';
+                            rightArrow.style.display = 'none';
+                        } else {
+                            leftArrow.style.display = 'flex';
+                            rightArrow.style.display = 'flex';
+                        }
+
+                        const updateCarousel = () => {
+                            const offset = -currentIndex * 100;
+                            carouselContainer.style.transform = `translateX(${offset}%)`;
+                        };
+
+                        leftArrow.addEventListener('click', () => {
+                            currentIndex = (currentIndex === 0) ? totalImages - 1 : currentIndex - 1;
+                            updateCarousel();
+                        });
+
+                        rightArrow.addEventListener('click', () => {
+                            currentIndex = (currentIndex === totalImages - 1) ? 0 : currentIndex + 1;
+                            updateCarousel();
+                        });
+                    }
+                }
+            }
+
+            // Listener para botones de acción en los elementos de la red (eliminar, ver perfil/publicación)
+            myNetworkGrid.addEventListener('click', async (event) => {
+                const removeButton = event.target.closest('.remove-from-network-button');
+                const viewProfileButton = event.target.closest('.profile-action-button.view-profile-btn');
+                const viewPostButton = event.target.closest('.action-button.view-post-btn');
+                const postImageClicked = event.target.closest('.card-image-wrapper img');
+
+                if (removeButton) {
+                    const itemId = removeButton.dataset.itemId;
+                    const confirmRemove = await new Promise(resolve => {
+                        showConfirmationModal("¿Estás seguro de que quieres eliminar este elemento de tu red?");
+                        confirmOkButton.onclick = () => {
+                            confirmationModal.classList.add('hidden');
+                            resolve(true);
+                        };
+                        // No hay botón de cancelar en este modal, solo OK
+                    });
+
+                    if (confirmRemove) {
+                        deleteNetworkItem(itemId);
+                    }
+                } else if (viewProfileButton) {
+                    const card = viewProfileButton.closest('.profile-card');
+                    if (card) {
+                        const username = card.querySelector('.profile-username').textContent;
+                        showConfirmationModal(`Redirigiendo al perfil de ${username}... (Función en desarrollo)`);
+                        // En una aplicación real, redirigirías a la página de perfil de ese usuario
+                        // window.location.href = `my-profile.html?user=${username}`;
+                    }
+                } else if (viewPostButton || postImageClicked) {
+                    const card = event.target.closest('.long-text-card');
+                    if (card) {
+                        const postData = {
+                            title: 'Publicación de ' + card.dataset.username,
+                            imageUrl: card.dataset.imageUrl,
+                            avatarUrl: card.dataset.avatarUrl,
+                            username: card.dataset.username,
+                            timestamp: card.querySelector('.card-user-handle').textContent,
+                            text: card.querySelector('.card-long-text').textContent.replace(/Ver más|Ver menos/g, '').trim(),
+                            keywords: card.dataset.keywords ? card.dataset.keywords.split(',').map(k => k.trim()) : []
+                        };
+                        openPostPreviewModal(postData);
+                    }
+                }
+            });
+
+            /**
+             * Elimina un elemento de la colección "my-network" del usuario.
+             * @param {string} itemId - El ID del documento a eliminar.
+             */
+            async function deleteNetworkItem(itemId) {
+                if (!db || !userId) {
+                    showConfirmationModal("Error: No se pudo conectar a la base de datos o no hay usuario autenticado.");
+                    return;
+                }
+
+                showLoadingOverlay();
+                try {
+                    const itemDocRef = doc(db, `artifacts/${appId}/users/${userId}/my-network`, itemId);
+                    await deleteDoc(itemDocRef);
+                    showConfirmationModal("Elemento eliminado de tu red.");
+                } catch (error) {
+                    console.error("Error al eliminar de Mi Red:", error);
+                    showConfirmationModal(`Error al eliminar: ${error.message}`);
+                } finally {
+                    hideLoadingOverlay();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

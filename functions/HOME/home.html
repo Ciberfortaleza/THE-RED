@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bienvenido</title>
+  <link rel="stylesheet" href="homestyles.css"/>
+</head>
+<body>
+
+  
+
+  <!-- Botón del menú -->
+  <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+
+  <!-- Barra lateral -->
+  <aside id="sidebar" class="sidebar">
+    <a href="index.html" class="logo-container">
+      <img src="logo.png" alt="Logo de empresa" class="sidebar-logo"/>
+    </a>
+    <nav class="sidebar-menu">
+      <a href="home.html">Home</a>
+      <a href="discover.html">Discover</a>
+      <a href="#" onclick="openModal('mission'); return false;">Mission</a>
+      <a href="#" onclick="openModal('who'); return false;">Who Are We</a>
+      <a href="myred.html">My Red</a>
+      <a href="profile.html">Profile</a>
+      <a href="404.html">Log In</a>
+      <a href="404.html">Sign Up</a>
+    </nav>
+  </aside>
+
+  <!-- Fondos para cerrar la barra -->
+  <div id="overlay" class="overlay" onclick="closeSidebar()"></div>
+
+  <!-- Popup de bienvenida al iniciar -->
+<div id="welcome-popup" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeWelcomePopup()">&times;</span>
+    <h2>¡Bienvenido a The Red!</h2>
+    <p>
+      The Red es una red pensada para conectar personas, organizaciones y negocios en un espacio colaborativo moderno y eficiente. Descubre, comparte y conecta.
+    </p>
+  </div>
+</div>
+
+
+  <!-- Modal para Mission -->
+  <div id="modal-mission" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('mission')">&times;</span>
+      <h2>Misión</h2>
+      <p>Nuestra misión es conectar a las personas y organizaciones para crear redes más fuertes.</p>
+    </div>
+  </div>
+
+  <!-- Modal para Who Are We -->
+  <div id="modal-who" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('who')">&times;</span>
+      <h2>¿Quiénes somos?</h2>
+      <p>Somos una comunidad innovadora enfocada en tecnología, redes y colaboración.</p>
+    </div>
+  </div>
+
+  <!-- Contenido principal -->
+  <div class="container">
+    <h1 class="bienvenida">¡Bienvenido a The Red!</h1>
+    
+    <div class="logo-container">
+      <img src="logo.png" alt="Logo de empresa" class="logo"/>
+    </div>
+
+    <nav class="menu">
+      <a href="#"></a>
+      <a href="#">/DISCOVER/</a>
+      <a href="#">MY RED</a>
+      <a href="#">PROFILE</a>
+    </nav>
+
+    <div class="galerias">
+      <div class="galeria">
+        <h3>Negocio</h3>
+        <div class="imagenes-slider" id="slider1"></div>
+      </div>
+      <div class="galeria">
+        <h3>Organización</h3>
+        <div class="imagenes-slider" id="slider2"></div>
+      </div>
+      <div class="galeria">
+        <h3>Usuario</h3>
+        <div class="imagenes-slider" id="slider3"></div>
+      </div>
+      <div class="galeria">
+        <h3>Empresa</h3>
+        <div class="imagenes-slider" id="slider4"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="scriptshome.js"></script>
+</body>
+</html>
