@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+l<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -49,7 +49,7 @@
         }
 
         body {
-            background-image: url('assets/background.png');
+            background-image: url('background.png');
             color: #fff;
             min-height: 100vh;
             display: flex;
@@ -890,20 +890,18 @@
         // =================================================================================
         // SECCIÓN 1: INICIALIZACIÓN Y CONFIGURACIÓN DE FIREBASE
         // =================================================================================
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, getDocs, where } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-firestore.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-storage.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, getDocs, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyApU8UbfqfzBH1UPU3a1CQGf1p995Rf0y4",
             authDomain: "the-red-loggin.firebaseapp.com",
-            databaseURL: "https://the-red-loggin-default-rtdb.firebaseio.com",
             projectId: "the-red-loggin",
             storageBucket: "the-red-loggin.appspot.com",
             messagingSenderId: "40265573777",
-            appId: "1:40265573777:web:1651cb4119969010ea2630",
-            measurementId: "G-DPLC00RS2V"
+            appId: "1:40265573777:web:1651cb4119969010ea2630"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -935,7 +933,7 @@
             } else {
                 currentUser = null;
                 console.log("Usuario no autenticado. Redirigiendo al login.");
-                window.location.href = '404.html';
+                window.location.href = '../login.html';
             }
         });
 
@@ -952,7 +950,7 @@
             showLoadingOverlay();
             discoverPostsFeed.innerHTML = '';
             
-            const postsCollection = collection(db, "publicaciones");
+            const postsCollection = collection(db, "posts");
             let q; 
 
             if (searchTerm) {
@@ -1014,8 +1012,8 @@
                 };
 
                 // ***** LA CONEXIÓN CLAVE ESTÁ AQUÍ *****
-                await addDoc(collection(db, "publicaciones"), postData);
-                await addDoc(collection(db, "usuarios", currentUser.uid, "publicaciones"), postData);
+                await addDoc(collection(db, "posts"), postData);
+                await addDoc(collection(db, "users", currentUser.uid, "posts"), postData);
 
                 newPostModal.classList.add('hidden');
                 showConfirmationModal("Publicación creada con éxito.");
@@ -1037,16 +1035,28 @@
             postElement.classList.add('long-text-card');
             const postDate = post.timestamp ? new Date(post.timestamp.seconds * 1000).toLocaleString() : 'Recién publicado';
 
+            // Agregar data attributes para navegación
+            postElement.dataset.userId = post.authorId;
+            postElement.dataset.username = post.authorName;
+            postElement.dataset.avatarUrl = post.authorAvatar;
+            postElement.dataset.imageUrl = post.imageUrl || '';
+            postElement.dataset.keywords = post.keywords ? post.keywords.join(',') : '';
+
             postElement.innerHTML = `
                 <div class="card-user-info-and-avatar">
-                    <img src="${post.authorAvatar}" alt="Avatar" class="card-user-avatar">
+                    <img src="${post.authorAvatar}" alt="Avatar" class="card-user-avatar" style="cursor: pointer;" onclick="window.location.href='user-profile.html?uid=${post.authorId}'">
                     <div class="card-user-details">
-                        <span class="card-username">${post.authorName}</span>
+                        <span class="card-username" style="cursor: pointer;" onclick="window.location.href='user-profile.html?uid=${post.authorId}'">${post.authorName}</span>
                         <span class="card-user-handle">${postDate}</span>
                     </div>
                 </div>
                 ${post.imageUrl ? `<div class="card-image-wrapper"><img src="${post.imageUrl}" alt="Imagen de la publicación"></div>` : ''}
                 <p class="card-long-text">${post.text || ''}</p>
+                ${post.keywords && post.keywords.length > 0 ? `
+                    <div class="post-tags" style="margin-top: 10px;">
+                        ${post.keywords.map(tag => `<span style="background: var(--accent-red); color: white; padding: 4px 8px; border-radius: 15px; font-size: 0.8em; margin-right: 5px;">#${tag}</span>`).join('')}
+                    </div>
+                ` : ''}
             `;
             discoverPostsFeed.appendChild(postElement);
         }
@@ -1124,6 +1134,89 @@
         document.getElementById('confirmOkButton').addEventListener('click', () => confirmationModal.classList.add('hidden'));
         function showLoadingOverlay() { loadingOverlay.classList.remove('hidden'); }
         function hideLoadingOverlay() { loadingOverlay.classList.add('hidden'); }
+
+        // --- Event Listeners Faltantes ---
+        // Botón de configuración
+        const settingsButton = document.getElementById('settingsButton');
+        if (settingsButton) {
+            settingsButton.addEventListener('click', () => {
+                showConfirmationModal('Configuración en desarrollo. Próximamente disponible.');
+            });
+        }
+
+        // Botón de perfil
+        const profileButton = document.getElementById('profileButton');
+        if (profileButton) {
+            profileButton.addEventListener('click', () => {
+                window.location.href = 'my-profile.html';
+            });
+        }
+
+        // Botón de chat flotante
+        const chatButton = document.getElementById('chatButton');
+        if (chatButton) {
+            chatButton.addEventListener('click', () => {
+                showConfirmationModal('Chat en desarrollo. Próximamente disponible.');
+            });
+        }
+
+        // Búsqueda con Enter
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const term = searchInput.value.trim();
+                if (term) cargarPublicaciones(term);
+            }
+        });
+
+        // Interacciones con publicaciones
+        discoverPostsFeed.addEventListener('click', (event) => {
+            const card = event.target.closest('.long-text-card');
+            if (!card) return;
+
+            // Click en imagen para expandir
+            if (event.target.closest('.card-image-wrapper img')) {
+                const imageUrl = card.dataset.imageUrl;
+                if (imageUrl) {
+                    showImageModal(imageUrl, card.dataset.username);
+                }
+            }
+        });
+
+        // Función para mostrar imagen expandida
+        function showImageModal(imageUrl, username) {
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay';
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width: 90vw; max-height: 90vh; padding: 20px;">
+                    <h3 style="color: var(--light-purple); margin-bottom: 15px;">Publicación de ${username}</h3>
+                    <img src="${imageUrl}" alt="Imagen expandida" style="max-width: 100%; max-height: 70vh; object-fit: contain; border-radius: 10px;">
+                    <div class="modal-actions" style="margin-top: 20px;">
+                        <button class="modal-button" onclick="this.closest('.modal-overlay').remove()">Cerrar</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            // Cerrar con click fuera del modal
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
+        }
+
+        // Prevenir comportamientos no deseados
+        document.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            showConfirmationModal('Clic derecho deshabilitado');
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.key === 'u')) {
+                e.preventDefault();
+                showConfirmationModal('Herramientas de desarrollador deshabilitadas');
+            }
+        });
 
     </script>
 </body>

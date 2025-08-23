@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Usuario - THE RED</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-bg: linear-gradient(135deg, #1a0b2e 0%, #16213e 50%, #0f3460 100%);
+            --card-bg: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #b8c5d6;
+            --accent-purple: #7d3490;
+            --accent-red: #ff3058;
+            --border-radius: 15px;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto Flex', sans-serif;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            background-image: url('background.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--card-bg);
+            border: none;
+            color: var(--text-primary);
+            padding: 12px 16px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 16px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .profile-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .profile-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            border: 4px solid var(--accent-purple);
+            object-fit: cover;
+        }
+
+        .profile-username {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--accent-red);
+        }
+
+        .profile-email {
+            color: var(--text-secondary);
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+
+        .profile-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: 700;
+            color: var(--accent-purple);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9em;
+        }
+
+        .profile-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+        }
+
+        .profile-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .profile-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+        }
+
+        .card-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--accent-purple);
+        }
+
+        .interests-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .interest-tag {
+            background: var(--accent-purple);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+
+        .contact-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+
+        .contact-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .posts-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .post-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .post-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .post-info h4 {
+            color: var(--text-primary);
+            margin-bottom: 5px;
+        }
+
+        .post-date {
+            color: var(--text-secondary);
+            font-size: 0.9em;
+        }
+
+        .post-content {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .post-image {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .post-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .post-tag {
+            background: var(--accent-red);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 15px;
+            font-size: 0.8em;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+
+        .no-posts {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .follow-btn {
+            background: var(--accent-purple);
+            color: white;
+        }
+
+        .follow-btn:hover {
+            background: #6a2d7a;
+            transform: translateY(-2px);
+        }
+
+        .message-btn {
+            background: var(--accent-red);
+            color: white;
+        }
+
+        .message-btn:hover {
+            background: #e02a4f;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .profile-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .profile-stats {
+                gap: 20px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .back-button {
+                position: relative;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="history.back()">
+        <i class="fas fa-arrow-left"></i> Volver
+    </button>
+
+    <div class="container">
+        <div class="profile-header">
+            <img id="userAvatar" src="https://placehold.co/150x150/7d3490/ffffff?text=U" alt="Avatar" class="profile-avatar">
+            <h1 id="userName" class="profile-username">Cargando...</h1>
+            <p id="userEmail" class="profile-email">Cargando...</p>
+            
+            <div class="action-buttons">
+                <button class="action-btn follow-btn" id="followBtn">
+                    <i class="fas fa-user-plus"></i> Seguir
+                </button>
+                <button class="action-btn message-btn" id="messageBtn">
+                    <i class="fas fa-envelope"></i> Mensaje
+                </button>
+            </div>
+
+            <div class="profile-stats">
+                <div class="stat-item">
+                    <div id="postsCount" class="stat-number">0</div>
+                    <div class="stat-label">Publicaciones</div>
+                </div>
+                <div class="stat-item">
+                    <div id="followersCount" class="stat-number">0</div>
+                    <div class="stat-label">Seguidores</div>
+                </div>
+                <div class="stat-item">
+                    <div id="followingCount" class="stat-number">0</div>
+                    <div class="stat-label">Siguiendo</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-content">
+            <div class="profile-sidebar">
+                <div class="profile-card" id="aboutCard" style="display: none;">
+                    <h3 class="card-title">Acerca de</h3>
+                    <p id="aboutText"></p>
+                </div>
+
+                <div class="profile-card" id="interestsCard" style="display: none;">
+                    <h3 class="card-title">Intereses</h3>
+                    <div id="interestsList" class="interests-list"></div>
+                </div>
+
+                <div class="profile-card" id="contactCard" style="display: none;">
+                    <h3 class="card-title">Contacto</h3>
+                    <div id="contactLinks" class="contact-links"></div>
+                </div>
+            </div>
+
+            <div class="posts-section">
+                <div class="profile-card">
+                    <h3 class="card-title">Publicaciones</h3>
+                    <div id="postsContainer">
+                        <div class="loading">Cargando publicaciones...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, collection, query, orderBy, getDocs, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyApU8UbfqfzBH1UPU3a1CQGf1p995Rf0y4",
+            authDomain: "the-red-loggin.firebaseapp.com",
+            projectId: "the-red-loggin",
+            storageBucket: "the-red-loggin.appspot.com",
+            messagingSenderId: "40265573777",
+            appId: "1:40265573777:web:1651cb4119969010ea2630"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUser = null;
+        let profileUserId = null;
+
+        // Obtener el ID del usuario del perfil desde la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        profileUserId = urlParams.get('uid');
+
+        if (!profileUserId) {
+            alert('ID de usuario no especificado');
+            history.back();
+        }
+
+        // Verificar autenticación
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                loadUserProfile();
+                loadUserPosts();
+                updateFollowButton();
+            } else {
+                window.location.href = '../login.html';
+            }
+        });
+
+        async function loadUserProfile() {
+            try {
+                const userDoc = await getDoc(doc(db, 'users', profileUserId));
+                
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    
+                    // Actualizar información básica
+                    document.getElementById('userName').textContent = userData.username || 'Usuario';
+                    document.getElementById('userEmail').textContent = userData.email || '';
+                    document.getElementById('userAvatar').src = userData.avatarUrl || `https://placehold.co/150x150/7d3490/ffffff?text=${userData.username?.charAt(0) || 'U'}`;
+
+                    // Mostrar información adicional si está disponible
+                    if (userData.aboutMe) {
+                        document.getElementById('aboutCard').style.display = 'block';
+                        document.getElementById('aboutText').textContent = userData.aboutMe;
+                    }
+
+                    if (userData.interests && userData.interests.length > 0) {
+                        document.getElementById('interestsCard').style.display = 'block';
+                        const interestsList = document.getElementById('interestsList');
+                        interestsList.innerHTML = userData.interests.map(interest => 
+                            `<span class="interest-tag">${interest}</span>`
+                        ).join('');
+                    }
+
+                    // Mostrar enlaces de contacto
+                    const contactLinks = userData.contactLinks || {};
+                    const hasContacts = Object.values(contactLinks).some(link => link);
+                    
+                    if (hasContacts) {
+                        document.getElementById('contactCard').style.display = 'block';
+                        const contactContainer = document.getElementById('contactLinks');
+                        let contactHTML = '';
+                        
+                        if (contactLinks.whatsapp) contactHTML += `<a href="${contactLinks.whatsapp}" class="contact-link" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>`;
+                        if (contactLinks.instagram) contactHTML += `<a href="${contactLinks.instagram}" class="contact-link" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>`;
+                        if (contactLinks.facebook) contactHTML += `<a href="${contactLinks.facebook}" class="contact-link" target="_blank"><i class="fab fa-facebook"></i> Facebook</a>`;
+                        if (contactLinks.twitter) contactHTML += `<a href="${contactLinks.twitter}" class="contact-link" target="_blank"><i class="fab fa-twitter"></i> Twitter</a>`;
+                        
+                        contactContainer.innerHTML = contactHTML;
+                    }
+                } else {
+                    alert('Usuario no encontrado');
+                    history.back();
+                }
+            } catch (error) {
+                console.error('Error cargando perfil:', error);
+                alert('Error cargando el perfil del usuario');
+            }
+        }
+
+        async function loadUserPosts() {
+            try {
+                const postsQuery = query(
+                    collection(db, 'users', profileUserId, 'posts'),
+                    orderBy('timestamp', 'desc')
+                );
+                
+                const postsSnapshot = await getDocs(postsQuery);
+                const postsContainer = document.getElementById('postsContainer');
+                
+                if (postsSnapshot.empty) {
+                    postsContainer.innerHTML = '<div class="no-posts">Este usuario aún no ha publicado nada.</div>';
+                    document.getElementById('postsCount').textContent = '0';
+                    return;
+                }
+
+                let postsHTML = '';
+                postsSnapshot.forEach((doc) => {
+                    const post = doc.data();
+                    const postDate = post.timestamp ? new Date(post.timestamp.seconds * 1000).toLocaleDateString() : 'Fecha desconocida';
+                    
+                    postsHTML += `
+                        <div class="post-card">
+                            <div class="post-header">
+                                <img src="${post.authorAvatar || 'https://placehold.co/50x50/7d3490/ffffff?text=U'}" alt="Avatar" class="post-avatar">
+                                <div class="post-info">
+                                    <h4>${post.authorName || 'Usuario'}</h4>
+                                    <div class="post-date">${postDate}</div>
+                                </div>
+                            </div>
+                            ${post.imageUrl ? `<img src="${post.imageUrl}" alt="Imagen del post" class="post-image">` : ''}
+                            <div class="post-content">${post.text || ''}</div>
+                            ${post.keywords && post.keywords.length > 0 ? `
+                                <div class="post-tags">
+                                    ${post.keywords.map(tag => `<span class="post-tag">#${tag}</span>`).join('')}
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                });
+
+                postsContainer.innerHTML = postsHTML;
+                document.getElementById('postsCount').textContent = postsSnapshot.size;
+            } catch (error) {
+                console.error('Error cargando publicaciones:', error);
+                document.getElementById('postsContainer').innerHTML = '<div class="no-posts">Error cargando las publicaciones.</div>';
+            }
+        }
+
+        async function updateFollowButton() {
+            if (!currentUser || currentUser.uid === profileUserId) {
+                // Si es el mismo usuario, ocultar botones de acción
+                document.querySelector('.action-buttons').style.display = 'none';
+                return;
+            }
+
+            const followBtn = document.getElementById('followBtn');
+            
+            try {
+                // Verificar si ya sigue a este usuario
+                const followDoc = await getDoc(doc(db, 'users', currentUser.uid, 'following', profileUserId));
+                
+                if (followDoc.exists()) {
+                    followBtn.innerHTML = '<i class="fas fa-user-check"></i> Siguiendo';
+                    followBtn.classList.add('following');
+                } else {
+                    followBtn.innerHTML = '<i class="fas fa-user-plus"></i> Seguir';
+                    followBtn.classList.remove('following');
+                }
+            } catch (error) {
+                console.error('Error verificando seguimiento:', error);
+            }
+        }
+
+        // Funcionalidad de seguir/dejar de seguir
+        document.getElementById('followBtn').addEventListener('click', async () => {
+            if (!currentUser) return;
+
+            const followBtn = document.getElementById('followBtn');
+            const isFollowing = followBtn.classList.contains('following');
+
+            try {
+                if (isFollowing) {
+                    // Dejar de seguir
+                    await deleteDoc(doc(db, 'users', currentUser.uid, 'following', profileUserId));
+                    await deleteDoc(doc(db, 'users', profileUserId, 'followers', currentUser.uid));
+                    
+                    followBtn.innerHTML = '<i class="fas fa-user-plus"></i> Seguir';
+                    followBtn.classList.remove('following');
+                } else {
+                    // Seguir
+                    await setDoc(doc(db, 'users', currentUser.uid, 'following', profileUserId), {
+                        username: document.getElementById('userName').textContent,
+                        avatarUrl: document.getElementById('userAvatar').src,
+                        followedAt: new Date()
+                    });
+                    
+                    await setDoc(doc(db, 'users', profileUserId, 'followers', currentUser.uid), {
+                        username: currentUser.displayName || 'Usuario',
+                        avatarUrl: currentUser.photoURL || '',
+                        followedAt: new Date()
+                    });
+                    
+                    followBtn.innerHTML = '<i class="fas fa-user-check"></i> Siguiendo';
+                    followBtn.classList.add('following');
+                }
+            } catch (error) {
+                console.error('Error al seguir/dejar de seguir:', error);
+                alert('Error al procesar la acción');
+            }
+        });
+
+        // Funcionalidad de mensaje (placeholder)
+        document.getElementById('messageBtn').addEventListener('click', () => {
+            showConfirmationModal('Funcionalidad de mensajes en desarrollo');
+        });
+
+        // Funcionalidades adicionales faltantes
+        
+        // Función showConfirmationModal
+        function showConfirmationModal(message) {
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <p class="modal-message">${message}</p>
+                    <div class="modal-actions">
+                        <button class="modal-button" onclick="this.closest('.modal-overlay').remove()">OK</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            // Cerrar con click fuera del modal
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
+        }
+
+        // Botón de configuración
+        const settingsButton = document.getElementById('settingsButton');
+        if (settingsButton) {
+            settingsButton.addEventListener('click', () => {
+                showConfirmationModal('Configuración en desarrollo. Próximamente disponible.');
+            });
+        }
+
+        // Botón de chat flotante
+        const chatButton = document.getElementById('chatButton');
+        if (chatButton) {
+            chatButton.addEventListener('click', () => {
+                showConfirmationModal('Chat en desarrollo. Próximamente disponible.');
+            });
+        }
+
+        // Navegación del footer
+        const footerNavItems = document.querySelectorAll('.footer-nav .nav-item');
+        footerNavItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const href = item.getAttribute('href');
+                if (href && href !== '#') {
+                    window.location.href = href;
+                }
+            });
+        });
+
+        // Interacciones con publicaciones
+        const postsContainer = document.getElementById('postsContainer');
+        if (postsContainer) {
+            postsContainer.addEventListener('click', (event) => {
+                // Click en imagen para expandir
+                if (event.target.closest('.card-image-wrapper img')) {
+                    const card = event.target.closest('.long-text-card');
+                    if (card) {
+                        const imageUrl = card.dataset.imageUrl;
+                        const username = card.dataset.username;
+                        if (imageUrl) {
+                            showImageModal(imageUrl, username);
+                        }
+                    }
+                }
+            });
+        }
+
+        // Función para mostrar imagen expandida
+        function showImageModal(imageUrl, username) {
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay';
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width: 90vw; max-height: 90vh; padding: 20px;">
+                    <h3 style="color: var(--light-purple); margin-bottom: 15px;">Publicación de ${username}</h3>
+                    <img src="${imageUrl}" alt="Imagen expandida" style="max-width: 100%; max-height: 70vh; object-fit: contain; border-radius: 10px;">
+                    <div class="modal-actions" style="margin-top: 20px;">
+                        <button class="modal-button" onclick="this.closest('.modal-overlay').remove()">Cerrar</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            // Cerrar con click fuera del modal
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
+        }
+
+        // Prevenir comportamientos no deseados
+        document.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            showConfirmationModal('Clic derecho deshabilitado');
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.key === 'u')) {
+                e.preventDefault();
+                showConfirmationModal('Herramientas de desarrollador deshabilitadas');
+            }
+        });
+    </script>
+</body>
+</html>

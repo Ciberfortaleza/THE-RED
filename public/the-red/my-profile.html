@@ -55,7 +55,7 @@
         }
 
         body {
-            background-image: url('assets/background.png');
+            background-image: url('background.png');
             color: #fff;
             min-height: 100vh;
             display: flex;
@@ -1660,7 +1660,7 @@
             width: 100%;
             max-width: 900px;
             margin: 20px auto;
-            background-image: url('assets/background.png'); /* Ruta corregida */
+            background-image: url('background.png'); /* Ruta corregida */
             background-size: cover;
             background-position: center;
             border-radius: 25px;
@@ -2523,20 +2523,18 @@
 
     <script type="module">
         // --- INICIALIZACIÓN DE FIREBASE (Sintaxis Moderna v9+) ---
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-firestore.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-storage.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyApU8UbfqfzBH1UPU3a1CQGf1p995Rf0y4",
             authDomain: "the-red-loggin.firebaseapp.com",
-            databaseURL: "https://the-red-loggin-default-rtdb.firebaseio.com",
             projectId: "the-red-loggin",
-            storageBucket: "the-red-loggin.appspot.com", // Corregido: .appspot.com es más común
+            storageBucket: "the-red-loggin.appspot.com",
             messagingSenderId: "40265573777",
-            appId: "1:40265573777:web:1651cb4119969010ea2630",
-            measurementId: "G-DPLC00RS2V"
+            appId: "1:40265573777:web:1651cb4119969010ea2630"
         };
 
         // Inicializar Firebase
@@ -2556,7 +2554,7 @@
                 // Si no hay usuario, redirige a la página de login
                 console.log("Ningún usuario autenticado, redirigiendo al login.");
                 // Asegúrate de que la ruta a tu archivo de login sea correcta
-                window.location.href = '404.html';
+                window.location.href = '../login.html';
             }
         });
 
@@ -2577,34 +2575,130 @@
         // =========================================================
 
         async function cargarYMostrarDatosPerfil(uid) {
-            const userRef = doc(db, 'usuarios', uid);
+            const userRef = doc(db, 'users', uid);
             const docSnap = await getDoc(userRef);
 
             if (docSnap.exists()) {
                 const userData = docSnap.data();
                 console.log("Datos del perfil cargados:", userData);
                 
+                // Aplicar colores personalizados
                 document.documentElement.style.setProperty('--primary-text-color', userData.primaryTextColor || 'var(--light-red)');
                 document.documentElement.style.setProperty('--secondary-text-color', userData.secondaryTextColor || 'var(--light-purple)');
                 document.documentElement.style.setProperty('--card-background-color', userData.cardBackgroundColor || 'rgba(74, 26, 85, 0.4)');
                 document.documentElement.style.setProperty('--border-color', userData.borderColor || 'var(--light-red)');
                 
                 const profileView = document.getElementById('profilePreviewView');
+                
+                // Actualizar imagen de fondo
                 if (userData.backgroundUrl) {
                     profileView.style.backgroundImage = `url(${userData.backgroundUrl})`;
                 } else {
                     profileView.style.backgroundImage = "url('https://placehold.co/900x300/4a1a55/ffffff?text=Fondo+de+Perfil')";
                 }
 
+                // Actualizar avatar y nombre
                 const avatarImg = profileView.querySelector('.profile-avatar-large');
-                avatarImg.src = userData.avatarUrl || `https://placehold.co/150x150/7d3490/ffffff?text=${(userData.username || 'U').charAt(0)}`;
-                profileView.querySelector('h2').textContent = userData.username || 'Usuario The Red';
+                if (avatarImg) {
+                    avatarImg.src = userData.avatarUrl || `https://placehold.co/150x150/7d3490/ffffff?text=${(userData.username || 'U').charAt(0)}`;
+                }
+                
+                const usernameElement = profileView.querySelector('h2');
+                if (usernameElement) {
+                    usernameElement.textContent = userData.username || 'Usuario The Red';
+                }
+
+                // Actualizar sección "Acerca de Mí"
+                const aboutMeSection = document.querySelector('#aboutMeSectionContainer p');
+                if (aboutMeSection && userData.aboutMe) {
+                    aboutMeSection.textContent = userData.aboutMe;
+                }
+
+                // Actualizar sección "Intereses"
+                const interestsSection = document.querySelector('#interestsSectionContainer ul');
+                if (interestsSection && userData.interests) {
+                    const interestsList = userData.interests.split(',').map(interest => 
+                        `<li><i class="fas fa-tag"></i> ${interest.trim()}</li>`
+                    ).join('');
+                    interestsSection.innerHTML = interestsList;
+                }
+
+                // Actualizar enlaces de contacto
+                const contactSection = profileView.querySelector('.profile-contact-section');
+                if (contactSection) {
+                    let contactHTML = '';
+                    if (userData.website) {
+                        contactHTML += `<a href="${userData.website}" target="_blank" class="contact-link"><i class="fas fa-globe"></i> Sitio Web</a>`;
+                    }
+                    if (userData.twitter) {
+                        contactHTML += `<a href="https://twitter.com/${userData.twitter}" target="_blank" class="contact-link"><i class="fab fa-twitter"></i> Twitter</a>`;
+                    }
+                    if (userData.instagram) {
+                        contactHTML += `<a href="https://instagram.com/${userData.instagram}" target="_blank" class="contact-link"><i class="fab fa-instagram"></i> Instagram</a>`;
+                    }
+                    if (userData.linkedin) {
+                        contactHTML += `<a href="https://linkedin.com/in/${userData.linkedin}" target="_blank" class="contact-link"><i class="fab fa-linkedin"></i> LinkedIn</a>`;
+                    }
+                    contactSection.innerHTML = contactHTML;
+                }
+
+                // Actualizar fotos del perfil
+                const photoGrid = profileView.querySelector('.profile-photo-grid');
+                if (photoGrid && userData.photos && userData.photos.length > 0) {
+                    const photosHTML = userData.photos.map(photo => 
+                        `<div class="profile-photo-item">
+                            <img src="${photo}" alt="Foto del perfil" onclick="showImageModal('${photo}', '${userData.username}')">
+                        </div>`
+                    ).join('');
+                    photoGrid.innerHTML = photosHTML;
+                }
+
+                // Actualizar contenido personalizado
+                const customContent = document.querySelector('#customContentSectionContainer p');
+                if (customContent && userData.customContent) {
+                    customContent.textContent = userData.customContent;
+                }
                 
                 cargarDatosEnModalEdicion(userData);
 
             } else {
                 console.error("Error: No se encontró un documento de perfil para el usuario.");
-                showConfirmationModal("No se encontró el perfil del usuario. Por favor, contacta a soporte.");
+                // Crear perfil por defecto si no existe
+                await crearPerfilPorDefecto(uid);
+                // Intentar cargar de nuevo
+                cargarYMostrarDatosPerfil(uid);
+            }
+        }
+
+        // Función para crear perfil por defecto
+        async function crearPerfilPorDefecto(uid) {
+            const defaultProfile = {
+                username: 'Usuario The Red',
+                aboutMe: '¡Hola! Soy un usuario de The Red. Me encanta explorar el universo y conectar con mentes creativas.',
+                interests: 'espacio, ciencia, tecnología',
+                location: '',
+                website: '',
+                twitter: '',
+                instagram: '',
+                linkedin: '',
+                avatarUrl: '',
+                backgroundUrl: '',
+                photos: [],
+                customContent: '¡Bienvenido a mi espacio en The Red!',
+                primaryTextColor: 'var(--light-red)',
+                secondaryTextColor: 'var(--light-purple)',
+                cardBackgroundColor: 'rgba(74, 26, 85, 0.4)',
+                borderColor: 'var(--light-red)',
+                createdAt: new Date(),
+                updatedAt: new Date()
+            };
+
+            try {
+                const userRef = doc(db, 'users', uid);
+                await setDoc(userRef, defaultProfile, { merge: true });
+                console.log('Perfil por defecto creado');
+            } catch (error) {
+                console.error('Error al crear perfil por defecto:', error);
             }
         }
 
@@ -2612,7 +2706,7 @@
         async function cargarPublicacionesUsuario(uid) {
             const postsContainer = document.getElementById('posts-container');
             // La ruta debe ser 'usuarios/{uid}/publicaciones'
-            const postsRef = collection(db, 'usuarios', uid, 'publicaciones');
+            const postsRef = collection(db, 'users', uid, 'posts');
             const q = query(postsRef, orderBy('timestamp', 'desc')); // Ordenar por más recientes
 
             try {
@@ -2644,26 +2738,49 @@
         }
 
         function cargarDatosEnModalEdicion(userData) {
-            document.getElementById('profileUsernameInput').value = userData.username || '';
-            document.getElementById('aboutMeContentInput').value = userData.aboutMe || '';
-            document.getElementById('interestsContentInput').value = userData.interests || '';
-            document.getElementById('customContentInput').value = userData.customContent || '';
-            document.getElementById('showAboutMeCheckbox').checked = userData.showAboutMe || false;
-            document.getElementById('showInterestsCheckbox').checked = userData.showInterests || false;
-            document.getElementById('showMyPhotosCheckbox').checked = userData.showMyPhotos || false;
-            document.getElementById('showMyMusicCheckbox').checked = userData.showMyMusic || false;
-            document.getElementById('showCustomContentCheckbox').checked = userData.showCustomContent || false;
-            document.getElementById('profilePrimaryTextColorInput').value = userData.primaryTextColor || '#ff3058';
-            document.getElementById('profileSecondaryTextColorInput').value = userData.secondaryTextColor || '#7d3490';
-            document.getElementById('profileCardBackgroundColorInput').value = userData.cardBackgroundColor || '#4a1a55';
-            document.getElementById('profileBorderColorInput').value = userData.borderColor || '#ff3058';
-            document.getElementById('myMusicSpotifyInput').value = userData.myMusicSpotifyUrl || '';
-            document.getElementById('myMusicYoutubeInput').value = userData.myMusicYoutubeUrl || '';
-            document.getElementById('myMusicSoundcloudInput').value = userData.myMusicSoundcloudUrl || '';
-            document.getElementById('whatsappUrlInput').value = userData.whatsappUrl || '';
-            document.getElementById('instagramUrlInput').value = userData.instagramUrl || '';
-            document.getElementById('facebookUrlInput').value = userData.facebookUrl || '';
-            document.getElementById('twitterUrlInput').value = userData.twitterUrl || '';
+            // Campos básicos del perfil
+            const setInputValue = (id, value) => {
+                const element = document.getElementById(id);
+                if (element) element.value = value || '';
+            };
+
+            const setCheckboxValue = (id, value) => {
+                const element = document.getElementById(id);
+                if (element) element.checked = value || false;
+            };
+
+            // Cargar datos básicos
+            setInputValue('profileUsernameInput', userData.username);
+            setInputValue('aboutMeContentInput', userData.aboutMe);
+            setInputValue('interestsContentInput', userData.interests);
+            setInputValue('locationContentInput', userData.location);
+            setInputValue('websiteContentInput', userData.website);
+            setInputValue('twitterContentInput', userData.twitter);
+            setInputValue('instagramContentInput', userData.instagram);
+            setInputValue('linkedinContentInput', userData.linkedin);
+            setInputValue('customContentInput', userData.customContent);
+
+            // Checkboxes de visibilidad
+            setCheckboxValue('showAboutMeCheckbox', userData.showAboutMe);
+            setCheckboxValue('showInterestsCheckbox', userData.showInterests);
+            setCheckboxValue('showMyPhotosCheckbox', userData.showMyPhotos);
+            setCheckboxValue('showMyMusicCheckbox', userData.showMyMusic);
+            setCheckboxValue('showCustomContentCheckbox', userData.showCustomContent);
+
+            // Colores personalizados
+            setInputValue('profilePrimaryTextColorInput', userData.primaryTextColor || '#ff3058');
+            setInputValue('profileSecondaryTextColorInput', userData.secondaryTextColor || '#7d3490');
+            setInputValue('profileCardBackgroundColorInput', userData.cardBackgroundColor || '#4a1a55');
+            setInputValue('profileBorderColorInput', userData.borderColor || '#ff3058');
+
+            // Enlaces de música y redes sociales
+            setInputValue('myMusicSpotifyInput', userData.myMusicSpotifyUrl);
+            setInputValue('myMusicYoutubeInput', userData.myMusicYoutubeUrl);
+            setInputValue('myMusicSoundcloudInput', userData.myMusicSoundcloudUrl);
+            setInputValue('whatsappUrlInput', userData.whatsappUrl);
+            setInputValue('instagramUrlInput', userData.instagramUrl);
+            setInputValue('facebookUrlInput', userData.facebookUrl);
+            setInputValue('twitterUrlInput', userData.twitterUrl);
 
             const avatarPreview = document.getElementById('profileAvatarPreview');
             if (userData.avatarUrl) {
@@ -2727,7 +2844,7 @@
                     showMyMusic: false,
                     showCustomContent: false,
                 };
-                await setDoc(doc(db, 'usuarios', user.uid), defaultData, { merge: true });
+                await setDoc(doc(db, 'users', user.uid), defaultData, { merge: true });
                 await cargarYMostrarDatosPerfil(user.uid);
                 showConfirmationModal('Configuración de perfil restablecida con éxito.');
             }
@@ -2754,7 +2871,7 @@
                 let newAvatarUrl = user.photoURL;
                 let newBackgroundUrl = null;
                 let newMyPhotosUrls = [];
-                const docSnap = await getDoc(doc(db, 'usuarios', user.uid));
+                const docSnap = await getDoc(doc(db, 'users', user.uid));
                 if (docSnap.exists()) {
                     newBackgroundUrl = docSnap.data().backgroundUrl || null;
                     newMyPhotosUrls = docSnap.data().myPhotos || [];
@@ -2796,7 +2913,7 @@
                     photoURL: profileData.avatarUrl
                 });
 
-                const userDocRef = doc(db, 'usuarios', user.uid);
+                const userDocRef = doc(db, 'users', user.uid);
                 await updateDoc(userDocRef, profileData);
 
                 showConfirmationModal('Perfil actualizado con éxito!');
@@ -2810,6 +2927,143 @@
             }
         };
 
+        // Event listener para el botón de guardar perfil
+        saveProfileSettingsButton.addEventListener('click', async () => {
+            const user = auth.currentUser;
+            if (!user) {
+                showConfirmationModal('Error: Usuario no autenticado');
+                return;
+            }
+
+            const btn = saveProfileSettingsButton;
+            btn.disabled = true;
+
+            try {
+                // Obtener valores de todos los campos
+                const profileData = {
+                    username: document.getElementById('profileUsernameInput')?.value.trim() || '',
+                    aboutMe: document.getElementById('aboutMeContentInput')?.value.trim() || '',
+                    interests: document.getElementById('interestsContentInput')?.value.trim() || '',
+                    location: document.getElementById('locationContentInput')?.value.trim() || '',
+                    website: document.getElementById('websiteContentInput')?.value.trim() || '',
+                    twitter: document.getElementById('twitterContentInput')?.value.trim() || '',
+                    instagram: document.getElementById('instagramContentInput')?.value.trim() || '',
+                    linkedin: document.getElementById('linkedinContentInput')?.value.trim() || '',
+                    customContent: document.getElementById('customContentInput')?.value.trim() || '',
+                    
+                    // Configuraciones de visibilidad
+                    showAboutMe: document.getElementById('showAboutMeCheckbox')?.checked || false,
+                    showInterests: document.getElementById('showInterestsCheckbox')?.checked || false,
+                    showMyPhotos: document.getElementById('showMyPhotosCheckbox')?.checked || false,
+                    showMyMusic: document.getElementById('showMyMusicCheckbox')?.checked || false,
+                    showCustomContent: document.getElementById('showCustomContentCheckbox')?.checked || false,
+                    
+                    // Colores personalizados
+                    primaryTextColor: document.getElementById('profilePrimaryTextColorInput')?.value || '#ff3058',
+                    secondaryTextColor: document.getElementById('profileSecondaryTextColorInput')?.value || '#7d3490',
+                    cardBackgroundColor: document.getElementById('profileCardBackgroundColorInput')?.value || '#4a1a55',
+                    borderColor: document.getElementById('profileBorderColorInput')?.value || '#ff3058',
+                    
+                    // Enlaces de música y redes sociales
+                    myMusicSpotifyUrl: document.getElementById('myMusicSpotifyInput')?.value.trim() || '',
+                    myMusicYoutubeUrl: document.getElementById('myMusicYoutubeInput')?.value.trim() || '',
+                    myMusicSoundcloudUrl: document.getElementById('myMusicSoundcloudInput')?.value.trim() || '',
+                    whatsappUrl: document.getElementById('whatsappUrlInput')?.value.trim() || '',
+                    instagramUrl: document.getElementById('instagramUrlInput')?.value.trim() || '',
+                    facebookUrl: document.getElementById('facebookUrlInput')?.value.trim() || '',
+                    twitterUrl: document.getElementById('twitterUrlInput')?.value.trim() || '',
+                    
+                    updatedAt: new Date()
+                };
+
+                // Validaciones básicas
+                if (!profileData.username) {
+                    showConfirmationModal('El nombre de usuario es obligatorio');
+                    return;
+                }
+
+                const userRef = doc(db, 'users', user.uid);
+                await setDoc(userRef, profileData, { merge: true });
+                
+                showConfirmationModal('Perfil actualizado con éxito!');
+                document.getElementById('profileEditModal').classList.add('hidden');
+                
+                // Recargar el perfil para mostrar los cambios
+                await cargarYMostrarDatosPerfil(user.uid);
+                
+            } catch (error) {
+                console.error('Error al guardar el perfil:', error);
+                showConfirmationModal('Error al guardar los cambios: ' + error.message);
+            } finally {
+                btn.disabled = false;
+            }
+        });
+
+        // Funcionalidades adicionales faltantes
+        
+        // Botón de configuración
+        const settingsButton = document.getElementById('settingsButton');
+        if (settingsButton) {
+            settingsButton.addEventListener('click', () => {
+                showConfirmationModal('Configuración en desarrollo. Próximamente disponible.');
+            });
+        }
+
+        // Botón de chat flotante
+        const chatButton = document.getElementById('chatButton');
+        if (chatButton) {
+            chatButton.addEventListener('click', () => {
+                showConfirmationModal('Chat en desarrollo. Próximamente disponible.');
+            });
+        }
+
+        // Navegación del footer
+        const footerNavItems = document.querySelectorAll('.footer-nav .nav-item');
+        footerNavItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const href = item.getAttribute('href');
+                if (href && href !== '#') {
+                    window.location.href = href;
+                }
+            });
+        });
+
+        // Función showImageModal faltante
+        function showImageModal(imageUrl, username) {
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay';
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width: 90vw; max-height: 90vh; padding: 20px;">
+                    <h3 style="color: var(--light-purple); margin-bottom: 15px;">Foto de ${username}</h3>
+                    <img src="${imageUrl}" alt="Imagen expandida" style="max-width: 100%; max-height: 70vh; object-fit: contain; border-radius: 10px;">
+                    <div class="modal-actions" style="margin-top: 20px;">
+                        <button class="modal-button" onclick="this.closest('.modal-overlay').remove()">Cerrar</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            // Cerrar con click fuera del modal
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
+        }
+
+        // Prevenir comportamientos no deseados
+        document.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            showConfirmationModal('Clic derecho deshabilitado');
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.key === 'u')) {
+                e.preventDefault();
+                showConfirmationModal('Herramientas de desarrollador deshabilitadas');
+            }
+        });
 
         // Ejemplo: Botón para cerrar sesión
         const sideMenuLogout = document.getElementById('sideMenuLogout');
@@ -2818,7 +3072,7 @@
                 e.preventDefault();
                 signOut(auth).then(() => {
                     console.log('Sesión cerrada');
-                    window.location.href = '/404.html';
+                    window.location.href = '../login.html';
                 }).catch(error => {
                     console.error('Error al cerrar sesión:', error);
                 });

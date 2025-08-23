@@ -49,7 +49,7 @@
         }
 
         body {
-            background-image: url('assets/background.png');
+            background-image: url('background.png');
             color: #fff;
             min-height: 100vh;
             display: flex;
@@ -2126,23 +2126,19 @@
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, collection, query, onSnapshot, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Variables globales para Firebase (serán proporcionadas por el entorno Canvas)
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        const firebaseConfig = {
+            apiKey: "AIzaSyApU8UbfqfzBH1UPU3a1CQGf1p995Rf0y4",
+            authDomain: "the-red-loggin.firebaseapp.com",
+            projectId: "the-red-loggin",
+            storageBucket: "the-red-loggin.appspot.com",
+            messagingSenderId: "40265573777",
+            appId: "1:40265573777:web:1651cb4119969010ea2630"
+        };
 
-        // Inicializar Firebase
-        let app;
-        let db;
-        let auth;
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
         let userId = null; // Variable para almacenar el ID del usuario
-
-        // Función para inicializar Firebase y autenticar
-        async function initializeFirebaseAndAuth() {
-            try {
-                app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
-                auth = getAuth(app);
 
                 // Escuchar cambios en el estado de autenticación
                 onAuthStateChanged(auth, async (user) => {
@@ -2151,31 +2147,10 @@
                         console.log("Usuario autenticado:", userId);
                         // Aquí podrías cargar datos específicos del usuario si es necesario
                     } else {
-                        console.log("No hay usuario autenticado. Intentando autenticación anónima o con token.");
-                        try {
-                            if (initialAuthToken) {
-                                await signInWithCustomToken(auth, initialAuthToken);
-                                userId = auth.currentUser.uid;
-                                console.log("Autenticado con token personalizado:", userId);
-                            } else {
-                                await signInAnonymously(auth);
-                                userId = auth.currentUser.uid;
-                                console.log("Autenticado anónimamente:", userId);
-                            }
-                        } catch (error) {
-                            console.error("Error durante la autenticación:", error);
-                            showConfirmationModal(`Error de autenticación: ${error.message}`);
-                        }
+                        console.log("Usuario no autenticado. Redirigiendo al login.");
+                        window.location.href = '../login.html';
                     }
                 });
-            } catch (error) {
-                console.error("Error al inicializar Firebase:", error);
-                showConfirmationModal(`Error crítico al inicializar la aplicación. Por favor, recarga la página. Detalles: ${error.message}`);
-            }
-        }
-
-        // Llama a la inicialización de Firebase cuando el DOM esté cargado
-        document.addEventListener('DOMContentLoaded', initializeFirebaseAndAuth);
 
 
         // --- Funciones de Modales Personalizados (Reemplazo de alert/confirm) ---
@@ -2422,7 +2397,7 @@
                 try {
                     if (db && userId) {
                         // Guardar la publicación en Firestore
-                        const postsCollectionRef = collection(db, `artifacts/${appId}/public/posts`);
+                        const postsCollectionRef = collection(db, "posts");
                         await setDoc(doc(postsCollectionRef), newPost); // Usar doc() sin ID para que Firestore genere uno
 
                         showConfirmationModal("¡Publicación creada exitosamente!");
@@ -3277,7 +3252,7 @@
 
                 showLoadingOverlay();
 
-                const myNetworkCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/my-network`);
+                const myNetworkCollectionRef = collection(db, "users", userId, "network");
 
                 // Usar onSnapshot para escuchar cambios en tiempo real
                 onSnapshot(myNetworkCollectionRef, (snapshot) => {
@@ -3475,7 +3450,7 @@
                         const username = card.querySelector('.profile-username').textContent;
                         showConfirmationModal(`Redirigiendo al perfil de ${username}... (Función en desarrollo)`);
                         // En una aplicación real, redirigirías a la página de perfil de ese usuario
-                        // window.location.href = `my-profile.html?user=${username}`;
+                        window.location.href = `user-profile.html?uid=${card.dataset.userId}`;
                     }
                 } else if (viewPostButton || postImageClicked) {
                     const card = event.target.closest('.long-text-card');
@@ -3506,9 +3481,12 @@
 
                 showLoadingOverlay();
                 try {
-                    const itemDocRef = doc(db, `artifacts/${appId}/users/${userId}/my-network`, itemId);
+                    const itemDocRef = doc(db, "users", userId, "network", itemId);
                     await deleteDoc(itemDocRef);
                     showConfirmationModal("Elemento eliminado de tu red.");
+                    
+                    // Recargar la red después de eliminar
+                    cargarMiRed();
                 } catch (error) {
                     console.error("Error al eliminar de Mi Red:", error);
                     showConfirmationModal(`Error al eliminar: ${error.message}`);

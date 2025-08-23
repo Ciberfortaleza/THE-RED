@@ -5,14 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login - THE RED</title>
 
-  <!-- No se necesitan los scripts de Firebase aquí, se importarán en el script de abajo -->
-
   <style>
-    /* TU CSS ORIGINAL - SIN CAMBIOS */
     body {
       margin: 0;
       font-family: 'Roboto Flex', sans-serif;
-      background: url('background_Login.png') no-repeat center center fixed; /* Asegúrate que la ruta a tu imagen sea correcta */
+      background: url('background_Login.png') no-repeat center center fixed;
       background-size: cover;
       height: 100vh;
       display: flex;
@@ -77,11 +74,11 @@
     }
 
     .form-group.terms-group input[type="checkbox"] {
-        width: auto; /* Para que el checkbox no ocupe todo el ancho */
+        width: auto;
     }
     
     .form-group.terms-group label {
-        margin-bottom: 0; /* Quitar margen inferior del label del checkbox */
+        margin-bottom: 0;
     }
 
     input, select {
@@ -259,9 +256,6 @@
   </div>
 
   <script type="module">
-    // --- SCRIPT COMPLETAMENTE CORREGIDO PARA LOGIN.HTML ---
-
-    // 1. Importar funciones de Firebase (sin cambios)
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
     import { 
         getAuth, 
@@ -272,11 +266,10 @@
         GoogleAuthProvider,
         signInWithPopup,
         sendPasswordResetEmail,
-        signOut // Importamos signOut para usarlo si es necesario
+        signOut
     } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
     import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-    // 2. Configuración de tu proyecto Firebase (sin cambios)
     const firebaseConfig = {
       apiKey: "AIzaSyApU8UbfqfzBH1UPU3a1CQGf1p995Rf0y4",
       authDomain: "the-red-loggin.firebaseapp.com",
@@ -286,33 +279,30 @@
       appId: "1:40265573777:web:1651cb4119969010ea2630"
     };
 
-    // 3. Inicializar Firebase (sin cambios)
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // --- LÓGICA DE LA PÁGINA ---
-
-    // Elementos del DOM y cambio de formularios (sin cambios)
+    // Elementos del DOM y cambio de formularios
     const loginForm = document.getElementById("login-form");
     const registerForm = document.getElementById("register-form");
     const showRegisterLink = document.getElementById("show-register");
     const showLoginLink = document.getElementById("show-login");
+    
     showRegisterLink.addEventListener('click', () => {
         loginForm.classList.remove('active');
         registerForm.classList.add('active');
     });
+    
     showLoginLink.addEventListener('click', () => {
         registerForm.classList.remove('active');
         loginForm.classList.add('active');
     });
 
-    // << CAMBIO 1: LÓGICA DE REDIRECCIÓN CORREGIDA >>
-    // Redirige si el usuario ya está logueado, SIN importar si ha verificado el email.
+    // Redirige si el usuario ya está logueado
     onAuthStateChanged(auth, (user) => {
         if (user) {
             console.log("Usuario detectado, redirigiendo a la página principal...");
-            // Usamos la ruta RELATIVA correcta que establecimos antes.
             window.location.href = "the-red/home.html";
         }
     });
@@ -323,28 +313,20 @@
     const loginPasswordInput = document.getElementById('login-password');
     const loginError = document.getElementById('login-error');
 
-    // << CAMBIO 2: LÓGICA DE LOGIN SIMPLIFICADA >>
     loginButton.addEventListener('click', async () => {
         const email = loginEmailInput.value;
         const password = loginPasswordInput.value;
-        loginError.textContent = ''; // Limpiar errores
+        loginError.textContent = '';
 
         try {
-            // Simplemente intentamos iniciar sesión.
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            
-            // Si el login es exitoso, el `onAuthStateChanged` de arriba se activará
-            // y hará la redirección automáticamente. No necesitamos hacer nada más aquí.
-            // La verificación del email se hará en las páginas internas.
-
         } catch (error) {
-            // Si hay un error (contraseña incorrecta, etc.), lo mostramos.
             loginError.textContent = 'Email o contraseña incorrectos.';
             console.error("Error de login:", error.message);
         }
     });
     
-    // --- FUNCIONALIDAD DE LOGIN CON GOOGLE (Sin cambios, ya era correcta) ---
+    // --- FUNCIONALIDAD DE LOGIN CON GOOGLE ---
     const googleLoginButton = document.getElementById('google-login-button');
     googleLoginButton.addEventListener('click', async () => {
         const provider = new GoogleAuthProvider();
@@ -355,22 +337,25 @@
             const docSnap = await getDoc(userDocRef);
             if (!docSnap.exists()) {
                 await setDoc(userDocRef, {
-                    username: user.displayName, email: user.email, phone: user.phoneNumber || "",
-                    birthdate: "", country: "", createdAt: serverTimestamp()
+                    username: user.displayName, 
+                    email: user.email, 
+                    phone: user.phoneNumber || "",
+                    birthdate: "", 
+                    country: "", 
+                    createdAt: serverTimestamp()
                 });
             }
-            // onAuthStateChanged se encarga de redirigir.
         } catch (error) {
             loginError.textContent = 'Error al iniciar sesión con Google.';
             console.error("Error con Google:", error);
         }
     });
 
-
-    // --- FUNCIONALIDAD DE REGISTRO (Sin cambios, ya era correcta) ---
+    // --- FUNCIONALIDAD DE REGISTRO ---
     const registerButton = document.getElementById('register-button');
     const registerError = document.getElementById('register-error');
     const registerSuccess = document.getElementById('register-success');
+    
     registerButton.addEventListener('click', async () => {
         const username = document.getElementById("register-username").value.trim();
         const email = document.getElementById("register-email").value.trim();
@@ -379,24 +364,34 @@
         const birthdate = document.getElementById("register-birthdate").value;
         const country = document.getElementById("register-country").value;
         const terms = document.getElementById("terms-checkbox").checked;
+        
         registerError.textContent = '';
         registerSuccess.textContent = '';
+        
         if (!username || !email || !password || !phone || !birthdate || !country) {
-            registerError.textContent = "Por favor, completa todos los campos."; return;
+            registerError.textContent = "Por favor, completa todos los campos."; 
+            return;
         }
         if (password.length < 6) {
-            registerError.textContent = "La contraseña debe tener al menos 6 caracteres."; return;
+            registerError.textContent = "La contraseña debe tener al menos 6 caracteres."; 
+            return;
         }
         if (!terms) {
-            registerError.textContent = "Debes aceptar los términos y condiciones."; return;
+            registerError.textContent = "Debes aceptar los términos y condiciones."; 
+            return;
         }
+        
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
             await sendEmailVerification(user);
             await setDoc(doc(db, "users", user.uid), {
-                username: username, email: email, phone: phone, birthdate: birthdate,
-                country: country, createdAt: serverTimestamp()
+                username: username, 
+                email: email, 
+                phone: phone, 
+                birthdate: birthdate,
+                country: country, 
+                createdAt: serverTimestamp()
             });
             registerSuccess.textContent = '¡Registro exitoso! Revisa tu correo para verificar tu cuenta.';
         } catch (error) {
@@ -409,20 +404,96 @@
         }
     });
     
-    // --- RECUPERAR CONTRASEÑA (Sin cambios, ya era correcta) ---
+    // --- RECUPERAR CONTRASEÑA ---
     const forgotPasswordLink = document.getElementById('forgot-password-link');
     forgotPasswordLink.addEventListener('click', async () => {
         const email = loginEmailInput.value;
         if (!email) {
-            loginError.textContent = 'Ingresa tu email para recuperar la contraseña.'; return;
+            loginError.textContent = 'Ingresa tu email para recuperar la contraseña.'; 
+            return;
         }
         try {
             await sendPasswordResetEmail(auth, email);
             loginError.textContent = 'Se ha enviado un enlace de recuperación a tu correo.';
         } catch (error) {
-            loginError.textContent = 'No se pudo enviar el correo. Verifica la dirección.';
-            console.error("Error al recuperar contraseña:", error);
+            console.error('Error al enviar email de recuperación:', error);
+            loginError.textContent = 'Error al enviar el email de recuperación.';
         }
     });
 
-</script>
+    // Funcionalidades adicionales faltantes
+    
+    // Prevenir comportamientos no deseados
+    document.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        alert('Clic derecho deshabilitado');
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.key === 'u')) {
+            e.preventDefault();
+            alert('Herramientas de desarrollador deshabilitadas');
+        }
+    });
+
+    // Validación en tiempo real de formularios
+    const emailInputs = document.querySelectorAll('input[type="email"]');
+    emailInputs.forEach(input => {
+        input.addEventListener('input', (e) => {
+            const email = e.target.value;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (email && !emailRegex.test(email)) {
+                e.target.style.borderColor = '#ff4757';
+            } else {
+                e.target.style.borderColor = '';
+            }
+        });
+    });
+
+    // Validación de contraseña
+    const passwordInputs = document.querySelectorAll('input[type="password"]');
+    passwordInputs.forEach(input => {
+        input.addEventListener('input', (e) => {
+            const password = e.target.value;
+            if (password && password.length < 6) {
+                e.target.style.borderColor = '#ff4757';
+            } else {
+                e.target.style.borderColor = '';
+            }
+        });
+    });
+
+    // Enter para enviar formularios
+    loginEmailInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            loginPasswordInput.focus();
+        }
+    });
+
+    loginPasswordInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            loginButton.click();
+        }
+    });
+
+    document.getElementById('register-username').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            document.getElementById('register-email').focus();
+        }
+    });
+
+    document.getElementById('register-email').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            document.getElementById('register-password').focus();
+        }
+    });
+
+    document.getElementById('register-password').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            registerButton.click();
+        }
+    });
+    
+    </script>
+</body>
+</html>
