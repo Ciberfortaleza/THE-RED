@@ -3608,13 +3608,29 @@ Su Telegram: @lamezcladetodo Mastodon: @lamezcladetodo@mastodon social</p>
         }
 
         if (sideMenuLogout) {
-            sideMenuLogout.addEventListener('click', (e) => {
-                e.preventDefault();
-                showConfirmationModal("Cerrando sesión... (Función en desarrollo)");
-                // Aquí iría la lógica real de cerrar sesión de Firebase
-                // auth.signOut().then(() => { /* Redirigir a la página de login */ });
+    sideMenuLogout.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        
+        showConfirmationModal("Cerrando sesión...");
+
+        // Cerrar sesión en Firebase
+        auth.signOut()
+            .then(() => {
+                // Limpiar datos locales
+                localStorage.removeItem("usuario");
+                sessionStorage.clear();
+
+                
+                window.location.href = "/login.html";
+            })
+            .catch((error) => {
+                console.error("Error al cerrar sesión:", error);
+                showConfirmationModal("Error al cerrar sesión. Intenta nuevamente.");
             });
-        }
+    });
+}
+
 
         // --- Lógica del Modal de Pago ---
         /**
