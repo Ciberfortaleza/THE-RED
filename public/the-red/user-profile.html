@@ -3,7 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil de Usuario - THE RED</title>
+    <title>THE RED - Perfil de Usuario | Conecta y Descubre</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Ve el perfil de otros usuarios en THE RED. Descubre sus publicaciones, conecta con nuevas personas y explora la diversidad de nuestra comunidad.">
+    <meta name="keywords" content="THE RED, perfil usuario, conectar, seguir, publicaciones, comunidad, red social">
+    <meta name="author" content="THE RED Team">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="THE RED - Perfil de Usuario">
+    <meta property="og:description" content="Descubre perfiles de usuarios y conecta con la comunidad en THE RED.">
+    <meta property="og:type" content="profile">
+    <meta property="og:url" content="https://the-red-loggin.web.app/the-red/user-profile.html">
+    <meta property="og:image" content="https://the-red-loggin.web.app/logo.png">
+    <meta property="og:site_name" content="THE RED">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="THE RED - Perfil de Usuario">
+    <meta name="twitter:description" content="Descubre perfiles y conecta con la comunidad.">
+    <meta name="twitter:image" content="https://the-red-loggin.web.app/logo.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="apple-touch-icon" href="../logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap" rel="stylesheet">
@@ -383,7 +407,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, collection, query, orderBy, getDocs, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = {

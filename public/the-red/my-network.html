@@ -3,7 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Red - Mi Red</title>
+    <title>THE RED - Mi Red | Conecta con tu Comunidad</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Gestiona tu red de contactos en THE RED. Conecta con amigos, encuentra nuevas personas y administra tus conexiones en la red social más innovadora.">
+    <meta name="keywords" content="THE RED, mi red, contactos, amigos, conexiones, comunidad, red social, networking">
+    <meta name="author" content="THE RED Team">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="THE RED - Mi Red | Conecta con tu Comunidad">
+    <meta property="og:description" content="Gestiona tu red de contactos y conecta con tu comunidad en THE RED.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://the-red-loggin.web.app/the-red/my-network.html">
+    <meta property="og:image" content="https://the-red-loggin.web.app/logo.png">
+    <meta property="og:site_name" content="THE RED">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="THE RED - Mi Red">
+    <meta name="twitter:description" content="Gestiona tu red de contactos en THE RED.">
+    <meta name="twitter:image" content="https://the-red-loggin.web.app/logo.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="apple-touch-icon" href="../logo.png">
     <!-- Font Awesome para íconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Fuentes de Google Fonts -->
@@ -2123,7 +2147,7 @@
         // JavaScript Común (de common.js)
         // Importaciones de Firebase (asegúrate de que estas URLs sean correctas para tu entorno)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, collection, query, onSnapshot, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -3065,11 +3089,17 @@
         }
 
         if (sideMenuLogout) {
-            sideMenuLogout.addEventListener('click', (e) => {
+            sideMenuLogout.addEventListener('click', async (e) => {
                 e.preventDefault();
-                showConfirmationModal("Cerrando sesión... (Función en desarrollo)");
-                // Aquí iría la lógica real de cerrar sesión de Firebase
-                // auth.signOut().then(() => { /* Redirigir a la página de login */ });
+                try {
+                    showConfirmationModal("Cerrando sesión...");
+                    await signOut(auth);
+                    console.log('Sesión cerrada exitosamente');
+                    window.location.href = '../login.html';
+                } catch (error) {
+                    console.error('Error al cerrar sesión:', error);
+                    showConfirmationModal("Error al cerrar sesión. Inténtalo de nuevo.");
+                }
             });
         }
 

@@ -3,7 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Red - Inicio</title>
+    <title>THE RED - Inicio | Red Social Innovadora</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Bienvenido a THE RED, tu dashboard personal en la red social más innovadora. Conecta, comparte y descubre contenido único en nuestra comunidad.">
+    <meta name="keywords" content="THE RED, red social, dashboard, inicio, comunidad, publicaciones, conectar, compartir">
+    <meta name="author" content="THE RED Team">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="THE RED - Inicio | Red Social Innovadora">
+    <meta property="og:description" content="Tu dashboard personal en THE RED. Conecta, comparte y descubre contenido único en nuestra comunidad digital.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://the-red-loggin.web.app/the-red/home.html">
+    <meta property="og:image" content="https://the-red-loggin.web.app/logo.png">
+    <meta property="og:site_name" content="THE RED">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="THE RED - Inicio | Red Social Innovadora">
+    <meta name="twitter:description" content="Tu dashboard personal en THE RED. Conecta, comparte y descubre contenido único.">
+    <meta name="twitter:image" content="https://the-red-loggin.web.app/logo.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="apple-touch-icon" href="../logo.png">
     <!-- Font Awesome para íconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Fuentes de Google Fonts -->
@@ -2576,7 +2600,8 @@ Su Telegram: @lamezcladetodo Mastodon: @lamezcladetodo@mastodon social</p>
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
   import {
     getAuth,
-    onAuthStateChanged
+    onAuthStateChanged,
+    signOut
   } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
   import {
     getFirestore,
@@ -3608,15 +3633,20 @@ Su Telegram: @lamezcladetodo Mastodon: @lamezcladetodo@mastodon social</p>
         }
 
         if (sideMenuLogout) {
-            sideMenuLogout.addEventListener('click', (e) => {
+            sideMenuLogout.addEventListener('click', async (e) => {
                 e.preventDefault();
-                showConfirmationModal("Cerrando sesión... (Función en desarrollo)");
-                // Aquí iría la lógica real de cerrar sesión de Firebase
-                // auth.signOut().then(() => { /* Redirigir a la página de login */ });
+                try {
+                    showConfirmationModal("Cerrando sesión...");
+                    await signOut(auth);
+                    console.log('Sesión cerrada exitosamente');
+                    window.location.href = '../login.html';
+                } catch (error) {
+                    console.error('Error al cerrar sesión:', error);
+                    showConfirmationModal("Error al cerrar sesión. Inténtalo de nuevo.");
+                }
             });
         }
 
-        // --- Lógica del Modal de Pago ---
         /**
          * Abre el modal de pago para un plan específico.
          * @param {string} planName - El nombre del plan (ej. 'basic', 'premium').
@@ -3959,5 +3989,8 @@ Su Telegram: @lamezcladetodo Mastodon: @lamezcladetodo@mastodon social</p>
             }
         });
     </script>
+    
+    <!-- Global Menu Component -->
+    <script src="global-menu.js"></script>
 </body>
 </html>

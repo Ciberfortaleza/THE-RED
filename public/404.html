@@ -3,7 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login - THE RED</title>
+  <title>404 - Página no encontrada | THE RED</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Página no encontrada en THE RED. La página que buscas no existe o ha sido movida. Regresa al inicio y continúa explorando nuestra red social.">
+  <meta name="keywords" content="404, error, página no encontrada, THE RED">
+  <meta name="author" content="THE RED Team">
+  <meta name="robots" content="noindex, nofollow">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="apple-touch-icon" href="logo.png">
 
   <!-- No se necesitan los scripts de Firebase aquí, se importarán en el script de abajo -->
 
@@ -40,15 +50,16 @@
       50% { transform: translateY(-52%) translateX(-5px); }
     }
 
-    .form-container {
-      margin-left: auto;
-      margin-right: 80px;
-      background-color: rgba(64, 0, 64, 0.85);
-      border-radius: 20px;
-      padding: 30px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
-      width: 100%;
-      max-width: 420px;
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 40px 30px;
+      background: rgba(30, 5, 37, 0.95);
+      border-radius: 25px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.7);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(125, 52, 144, 0.3);
     }
 
     .form-panel { display: none; }
@@ -182,79 +193,101 @@
         box-sizing: border-box;
       }
     }
+
+    .btn-container {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 40px;
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(45deg, #ff3058, #e01030);
+      color: white;
+      padding: 18px 35px;
+      text-decoration: none;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 1.1em;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 20px rgba(255, 48, 88, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      transition: left 0.4s ease;
+      transform: skewX(-20deg);
+    }
+
+    .error-code {
+      color: #ff3058;
+      font-size: 8em;
+      font-weight: 900;
+      margin-bottom: 10px;
+      text-shadow: 0 0 30px rgba(255, 48, 88, 0.9);
+      line-height: 1;
+      background: linear-gradient(45deg, #ff3058, #e01030);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    h1 {
+      color: #fff;
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      font-weight: 700;
+    }
   </style>
 </head>
 <body>
 
-  <div class="logo-container">
-    <img src="logo.png" alt="Logo THE RED" onerror="this.style.display='none'">
-  </div>
-
-  <div class="form-container">
-    <!-- LOGIN -->
-    <div id="login-form" class="form-panel active">
-      <h1>Glad to see Ya!</h1>
-      <div class="form-group">
-        <label for="login-email">Email</label>
-        <input type="email" id="login-email" required />
+  <div class="container">
+    <img src="logo.png" alt="THE RED Logo" class="logo">
+    <div class="error-code">404</div>
+    <h1>¡Página no encontrada!</h1>
+    <p class="subtitle">La página que buscas no existe o ha sido movida</p>
+    <p>No te preocupes, esto pasa a veces. Mientras tanto, ¿por qué no exploras lo que THE RED tiene para ofrecerte?</p>
+    
+    <div class="features">
+      <div class="feature">
+        <i class="fas fa-users"></i>
+        <h3>Conecta</h3>
+        <p>Encuentra y conecta con personas increíbles en nuestra comunidad</p>
       </div>
-      <div class="form-group">
-        <label for="login-password">Password</label>
-        <input type="password" id="login-password" required />
+      <div class="feature">
+        <i class="fas fa-share-alt"></i>
+        <h3>Comparte</h3>
+        <p>Publica contenido único y comparte tus experiencias</p>
       </div>
-      <button id="login-button">LOGIN</button>
-      <button id="google-login-button" class="google-btn">Login with Google</button>
-      <p class="messages" id="login-error"></p>
-      <a class="forgot-password" id="forgot-password-link">¿Olvidaste tu contraseña?</a>
-      <div class="toggle-form">
-        ¿No tienes cuenta? <a id="show-register">Regístrate aquí</a>
+      <div class="feature">
+        <i class="fas fa-compass"></i>
+        <h3>Descubre</h3>
+        <p>Explora contenido fascinante de creadores de todo el mundo</p>
       </div>
     </div>
-
-    <!-- REGISTRO -->
-    <div id="register-form" class="form-panel">
-      <h1>Create Your Account</h1>
-      <div class="form-group">
-        <label for="register-username">Username</label>
-        <input type="text" id="register-username" required />
-      </div>
-      <div class="form-group">
-        <label for="register-email">Email</label>
-        <input type="email" id="register-email" required />
-      </div>
-      <div class="form-group">
-        <label for="register-password">Password</label>
-        <input type="password" id="register-password" required />
-      </div>
-      <div class="form-group">
-        <label for="register-phone">Phone Number</label>
-        <input type="tel" id="register-phone" required />
-      </div>
-      <div class="form-group">
-        <label for="register-birthdate">Date of Birth</label>
-        <input type="date" id="register-birthdate" required />
-      </div>
-      <div class="form-group">
-        <label for="register-country">Country</label>
-        <select id="register-country" required>
-          <option value="">Select country</option>
-          <option value="MX">Mexico</option>
-          <option value="AR">Argentina</option>
-          <option value="ES">Spain</option>
-          <option value="US">USA</option>
-          <option value="Other">Other</option>
-        </select>
-      </div>
-      <div class="form-group terms-group">
-        <input type="checkbox" id="terms-checkbox" required />
-        <label for="terms-checkbox">I agree to the terms and conditions</label>
-      </div>
-      <button id="register-button">CREATE ACCOUNT</button>
-      <p class="messages" id="register-error"></p>
-      <p class="messages success" id="register-success"></p>
-      <div class="toggle-form">
-        ¿Ya tienes cuenta? <a id="show-login">Inicia sesión aquí</a>
-      </div>
+    
+    <div class="btn-container">
+      <a href="login.html" class="btn">
+        <i class="fas fa-home"></i>
+        Ir al Inicio
+      </a>
+      <a href="the-red/discover.html" class="btn btn-secondary">
+        <i class="fas fa-compass"></i>
+        Explorar
+      </a>
     </div>
   </div>
 

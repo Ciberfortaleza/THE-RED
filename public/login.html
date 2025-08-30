@@ -3,7 +3,31 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login - THE RED</title>
+  <title>Login - THE RED | Red Social Innovadora</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Inicia sesión en THE RED, la red social innovadora donde conectas, compartes y descubres contenido único. Únete a nuestra comunidad digital.">
+  <meta name="keywords" content="red social, login, THE RED, comunidad, conectar, compartir, innovación">
+  <meta name="author" content="THE RED Team">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="Login - THE RED | Red Social Innovadora">
+  <meta property="og:description" content="Inicia sesión en THE RED, la red social innovadora donde conectas, compartes y descubres contenido único.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://the-red-loggin.web.app/login.html">
+  <meta property="og:image" content="https://the-red-loggin.web.app/logo.png">
+  <meta property="og:site_name" content="THE RED">
+  
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Login - THE RED | Red Social Innovadora">
+  <meta name="twitter:description" content="Inicia sesión en THE RED, la red social innovadora donde conectas, compartes y descubres contenido único.">
+  <meta name="twitter:image" content="https://the-red-loggin.web.app/logo.png">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="apple-touch-icon" href="logo.png">
 
   <style>
     body {
@@ -113,6 +137,72 @@
       cursor: not-allowed;
     }
 
+    .loading {
+      position: relative;
+      color: transparent;
+    }
+
+    .loading::after {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      top: 50%;
+      left: 50%;
+      margin-left: -8px;
+      margin-top: -8px;
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      border-top-color: transparent;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .password-strength {
+      margin-top: 5px;
+      font-size: 12px;
+    }
+
+    .strength-weak { color: #e74c3c; }
+    .strength-medium { color: #f39c12; }
+    .strength-strong { color: #2ecc71; }
+
+    .phone-error {
+      color: #e74c3c;
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .age-error {
+      color: #e74c3c;
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .logout-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+    }
+
+    .logout-btn {
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .logout-btn:hover {
+      background-color: #c0392b;
+    }
+
     .toggle-form {
       margin-top: 15px;
       text-align: center;
@@ -187,6 +277,11 @@
     <img src="logo.png" alt="Logo THE RED" onerror="this.style.display='none'">
   </div>
 
+  <!-- Logout button (only visible when user is logged in) -->
+  <div id="logout-container" class="logout-container" style="display: none;">
+    <button id="logout-btn" class="logout-btn">Logout</button>
+  </div>
+
   <div class="form-container">
     <!-- LOGIN -->
     <div id="login-form" class="form-panel active">
@@ -222,14 +317,17 @@
       <div class="form-group">
         <label for="register-password">Password</label>
         <input type="password" id="register-password" required />
+        <div id="password-strength" class="password-strength"></div>
       </div>
       <div class="form-group">
         <label for="register-phone">Phone Number</label>
-        <input type="tel" id="register-phone" required />
+        <input type="tel" id="register-phone" required placeholder="+52 123 456 7890" />
+        <div id="phone-error" class="phone-error"></div>
       </div>
       <div class="form-group">
-        <label for="register-birthdate">Date of Birth</label>
+        <label for="register-birthdate">Date of Birth (Must be 18+)</label>
         <input type="date" id="register-birthdate" required />
+        <div id="age-error" class="age-error"></div>
       </div>
       <div class="form-group">
         <label for="register-country">Country</label>
@@ -244,7 +342,7 @@
       </div>
       <div class="form-group terms-group">
         <input type="checkbox" id="terms-checkbox" required />
-        <label for="terms-checkbox">I agree to the terms and conditions</label>
+        <label for="terms-checkbox">Acepto los <a href="terms-and-conditions.html" target="_blank" style="color: #4b9dd8; text-decoration: underline;">términos y condiciones</a></label>
       </div>
       <button id="register-button">CREATE ACCOUNT</button>
       <p class="messages" id="register-error"></p>
@@ -270,13 +368,14 @@
     } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
     import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
+    // Firebase config - En producción usar variables de entorno
     const firebaseConfig = {
-      apiKey: "AIzaSyApU8UbfqfzBH1UPU3a1CQGf1p995Rf0y4",
-      authDomain: "the-red-loggin.firebaseapp.com",
-      projectId: "the-red-loggin",
-      storageBucket: "the-red-loggin.appspot.com",
-      messagingSenderId: "40265573777",
-      appId: "1:40265573777:web:1651cb4119969010ea2630"
+      apiKey: window.FIREBASE_CONFIG?.apiKey || "AIzaSyApU8UbfqfzBH1UPU3a1CQGf1p995Rf0y4",
+      authDomain: window.FIREBASE_CONFIG?.authDomain || "the-red-loggin.firebaseapp.com",
+      projectId: window.FIREBASE_CONFIG?.projectId || "the-red-loggin",
+      storageBucket: window.FIREBASE_CONFIG?.storageBucket || "the-red-loggin.appspot.com",
+      messagingSenderId: window.FIREBASE_CONFIG?.messagingSenderId || "40265573777",
+      appId: window.FIREBASE_CONFIG?.appId || "1:40265573777:web:1651cb4119969010ea2630"
     };
 
     const app = initializeApp(firebaseConfig);
@@ -299,11 +398,31 @@
         loginForm.classList.add('active');
     });
 
+    // Variables para rate limiting
+    let loginAttempts = 0;
+    let lastLoginAttempt = 0;
+    const MAX_LOGIN_ATTEMPTS = 3;
+    const LOCKOUT_TIME = 300000; // 5 minutos
+
     // Redirige si el usuario ya está logueado
     onAuthStateChanged(auth, (user) => {
         if (user) {
             console.log("Usuario detectado, redirigiendo a la página principal...");
-            window.location.href = "the-red/home.html";
+            // Mostrar botón de logout si está en login page
+            const logoutContainer = document.getElementById('logout-container');
+            if (logoutContainer) {
+                logoutContainer.style.display = 'block';
+            }
+            // Solo redirigir si no está ya en una página interna
+            if (!window.location.pathname.includes('/the-red/')) {
+                window.location.href = "the-red/home.html";
+            }
+        } else {
+            // Ocultar botón de logout
+            const logoutContainer = document.getElementById('logout-container');
+            if (logoutContainer) {
+                logoutContainer.style.display = 'none';
+            }
         }
     });
 
@@ -318,11 +437,34 @@
         const password = loginPasswordInput.value;
         loginError.textContent = '';
 
+        // Rate limiting check
+        const now = Date.now();
+        if (loginAttempts >= MAX_LOGIN_ATTEMPTS) {
+            const timeLeft = LOCKOUT_TIME - (now - lastLoginAttempt);
+            if (timeLeft > 0) {
+                const minutes = Math.ceil(timeLeft / 60000);
+                loginError.textContent = `Demasiados intentos fallidos. Intenta de nuevo en ${minutes} minuto(s).`;
+                return;
+            } else {
+                loginAttempts = 0;
+            }
+        }
+
+        // Loading state
+        loginButton.classList.add('loading');
+        loginButton.disabled = true;
+
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            loginAttempts = 0; // Reset on success
         } catch (error) {
+            loginAttempts++;
+            lastLoginAttempt = now;
             loginError.textContent = 'Email o contraseña incorrectos.';
             console.error("Error de login:", error.message);
+        } finally {
+            loginButton.classList.remove('loading');
+            loginButton.disabled = false;
         }
     });
     
@@ -330,6 +472,11 @@
     const googleLoginButton = document.getElementById('google-login-button');
     googleLoginButton.addEventListener('click', async () => {
         const provider = new GoogleAuthProvider();
+        
+        // Loading state
+        googleLoginButton.classList.add('loading');
+        googleLoginButton.disabled = true;
+        
         try {
             const result = await signInWithPopup(auth, provider);
             const user = result.user;
@@ -337,17 +484,38 @@
             const docSnap = await getDoc(userDocRef);
             if (!docSnap.exists()) {
                 await setDoc(userDocRef, {
-                    username: user.displayName, 
-                    email: user.email, 
-                    phone: user.phoneNumber || "",
-                    birthdate: "", 
-                    country: "", 
-                    createdAt: serverTimestamp()
-                });
+                username: user.displayName, 
+                email: user.email, 
+                phone: user.phoneNumber || "",
+                birthdate: "", 
+                country: "",
+                aboutMe: `¡Hola! Soy ${user.displayName}. Me encanta explorar el universo y conectar con mentes creativas.`,
+                interests: 'espacio, ciencia, tecnología',
+                location: '',
+                website: '',
+                twitter: '',
+                instagram: '',
+                linkedin: '',
+                avatarUrl: user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName)}&size=150&background=7d3490&color=ffffff&bold=true`,
+                backgroundUrl: '',
+                photos: [],
+                customContent: `¡Bienvenido a mi espacio en The Red!`,
+                primaryTextColor: '#ff3058',
+                secondaryTextColor: '#7d3490',
+                cardBackgroundColor: 'rgba(74, 26, 85, 0.4)',
+                borderColor: '#ff3058',
+                createdAt: serverTimestamp(),
+                updatedAt: serverTimestamp()
+            });
             }
+            // Redirigir después del login exitoso
+            window.location.href = './the-red/home.html';
         } catch (error) {
             loginError.textContent = 'Error al iniciar sesión con Google.';
             console.error("Error con Google:", error);
+        } finally {
+            googleLoginButton.classList.remove('loading');
+            googleLoginButton.disabled = false;
         }
     });
 
@@ -372,14 +540,34 @@
             registerError.textContent = "Por favor, completa todos los campos."; 
             return;
         }
-        if (password.length < 6) {
-            registerError.textContent = "La contraseña debe tener al menos 6 caracteres."; 
+        
+        // Validación de edad (18+)
+        if (!validateAge(birthdate)) {
+            registerError.textContent = "Debes ser mayor de 18 años para registrarte."; 
             return;
         }
+        
+        // Validación de teléfono
+        if (!validatePhone(phone)) {
+            registerError.textContent = "Formato de teléfono inválido. Usa formato: +52 123 456 7890"; 
+            return;
+        }
+        
+        // Validación de contraseña robusta
+        const passwordValidation = validatePassword(password);
+        if (!passwordValidation.isValid) {
+            registerError.textContent = passwordValidation.message; 
+            return;
+        }
+        
         if (!terms) {
             registerError.textContent = "Debes aceptar los términos y condiciones."; 
             return;
         }
+        
+        // Loading state
+        registerButton.classList.add('loading');
+        registerButton.disabled = true;
         
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -390,10 +578,30 @@
                 email: email, 
                 phone: phone, 
                 birthdate: birthdate,
-                country: country, 
-                createdAt: serverTimestamp()
+                country: country,
+                aboutMe: `¡Hola! Soy ${username}. Me encanta explorar el universo y conectar con mentes creativas.`,
+                interests: 'espacio, ciencia, tecnología',
+                location: country,
+                website: '',
+                twitter: '',
+                instagram: '',
+                linkedin: '',
+                avatarUrl: `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&size=150&background=7d3490&color=ffffff&bold=true`,
+                backgroundUrl: '',
+                photos: [],
+                customContent: `¡Bienvenido a mi espacio en The Red!`,
+                primaryTextColor: '#ff3058',
+                secondaryTextColor: '#7d3490',
+                cardBackgroundColor: 'rgba(74, 26, 85, 0.4)',
+                borderColor: '#ff3058',
+                createdAt: serverTimestamp(),
+                updatedAt: serverTimestamp()
             });
             registerSuccess.textContent = '¡Registro exitoso! Revisa tu correo para verificar tu cuenta.';
+            // Redirigir después del registro exitoso
+            setTimeout(() => {
+                window.location.href = './the-red/home.html';
+            }, 2000);
         } catch (error) {
             if (error.code === 'auth/email-already-in-use') {
                 registerError.textContent = 'Este correo electrónico ya está en uso.';
@@ -401,6 +609,9 @@
                 registerError.textContent = 'Ocurrió un error durante el registro.';
             }
             console.error("Error de registro:", error.message);
+        } finally {
+            registerButton.classList.remove('loading');
+            registerButton.disabled = false;
         }
     });
     
@@ -420,6 +631,83 @@
             loginError.textContent = 'Error al enviar el email de recuperación.';
         }
     });
+
+    // --- FUNCIONES DE VALIDACIÓN ---
+    function validateAge(birthdate) {
+        const today = new Date();
+        const birth = new Date(birthdate);
+        const age = today.getFullYear() - birth.getFullYear();
+        const monthDiff = today.getMonth() - birth.getMonth();
+        
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+            return (age - 1) >= 18;
+        }
+        return age >= 18;
+    }
+
+    function validatePhone(phone) {
+        // Acepta formatos: +52 123 456 7890, +1 234 567 8900, etc.
+        const phoneRegex = /^\+\d{1,3}\s\d{3}\s\d{3}\s\d{4}$/;
+        return phoneRegex.test(phone);
+    }
+
+    function validatePassword(password) {
+        const minLength = 8;
+        const hasUpperCase = /[A-Z]/.test(password);
+        const hasLowerCase = /[a-z]/.test(password);
+        const hasNumbers = /\d/.test(password);
+        const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+        
+        if (password.length < minLength) {
+            return { isValid: false, message: 'La contraseña debe tener al menos 8 caracteres.' };
+        }
+        if (!hasUpperCase) {
+            return { isValid: false, message: 'La contraseña debe contener al menos una letra mayúscula.' };
+        }
+        if (!hasLowerCase) {
+            return { isValid: false, message: 'La contraseña debe contener al menos una letra minúscula.' };
+        }
+        if (!hasNumbers) {
+            return { isValid: false, message: 'La contraseña debe contener al menos un número.' };
+        }
+        if (!hasSpecialChar) {
+            return { isValid: false, message: 'La contraseña debe contener al menos un carácter especial (!@#$%^&*...).' };
+        }
+        
+        return { isValid: true, message: 'Contraseña válida' };
+    }
+
+    function getPasswordStrength(password) {
+        let score = 0;
+        if (password.length >= 8) score++;
+        if (/[A-Z]/.test(password)) score++;
+        if (/[a-z]/.test(password)) score++;
+        if (/\d/.test(password)) score++;
+        if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) score++;
+        
+        if (score < 3) return { strength: 'weak', text: 'Débil' };
+        if (score < 5) return { strength: 'medium', text: 'Media' };
+        return { strength: 'strong', text: 'Fuerte' };
+    }
+
+    // --- FUNCIONALIDAD DE LOGOUT ---
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                console.log('Usuario desconectado exitosamente');
+                // Limpiar cualquier caché local
+                localStorage.clear();
+                sessionStorage.clear();
+                // Redirigir al login
+                window.location.href = '/login.html';
+            } catch (error) {
+                console.error('Error al cerrar sesión:', error);
+                alert('Error al cerrar sesión. Intenta de nuevo.');
+            }
+        });
+    }
 
     // Funcionalidades adicionales faltantes
     
@@ -450,10 +738,78 @@
         });
     });
 
-    // Validación de contraseña
-    const passwordInputs = document.querySelectorAll('input[type="password"]');
-    passwordInputs.forEach(input => {
-        input.addEventListener('input', (e) => {
+    // Validación de contraseña en tiempo real
+    const registerPasswordInput = document.getElementById('register-password');
+    const passwordStrengthDiv = document.getElementById('password-strength');
+    
+    if (registerPasswordInput && passwordStrengthDiv) {
+        registerPasswordInput.addEventListener('input', (e) => {
+            const password = e.target.value;
+            if (password) {
+                const strength = getPasswordStrength(password);
+                passwordStrengthDiv.textContent = `Fortaleza: ${strength.text}`;
+                passwordStrengthDiv.className = `password-strength strength-${strength.strength}`;
+                
+                const validation = validatePassword(password);
+                if (!validation.isValid) {
+                    e.target.style.borderColor = '#ff4757';
+                } else {
+                    e.target.style.borderColor = '#2ecc71';
+                }
+            } else {
+                passwordStrengthDiv.textContent = '';
+                e.target.style.borderColor = '';
+            }
+        });
+    }
+    
+    // Validación de teléfono en tiempo real
+    const phoneInput = document.getElementById('register-phone');
+    const phoneErrorDiv = document.getElementById('phone-error');
+    
+    if (phoneInput && phoneErrorDiv) {
+        phoneInput.addEventListener('input', (e) => {
+            const phone = e.target.value;
+            if (phone) {
+                if (validatePhone(phone)) {
+                    e.target.style.borderColor = '#2ecc71';
+                    phoneErrorDiv.textContent = '';
+                } else {
+                    e.target.style.borderColor = '#ff4757';
+                    phoneErrorDiv.textContent = 'Formato: +52 123 456 7890';
+                }
+            } else {
+                e.target.style.borderColor = '';
+                phoneErrorDiv.textContent = '';
+            }
+        });
+    }
+    
+    // Validación de edad en tiempo real
+    const birthdateInput = document.getElementById('register-birthdate');
+    const ageErrorDiv = document.getElementById('age-error');
+    
+    if (birthdateInput && ageErrorDiv) {
+        birthdateInput.addEventListener('change', (e) => {
+            const birthdate = e.target.value;
+            if (birthdate) {
+                if (validateAge(birthdate)) {
+                    e.target.style.borderColor = '#2ecc71';
+                    ageErrorDiv.textContent = '';
+                } else {
+                    e.target.style.borderColor = '#ff4757';
+                    ageErrorDiv.textContent = 'Debes ser mayor de 18 años';
+                }
+            } else {
+                e.target.style.borderColor = '';
+                ageErrorDiv.textContent = '';
+            }
+        });
+    }
+    
+    // Validación de contraseña de login
+    if (loginPasswordInput) {
+        loginPasswordInput.addEventListener('input', (e) => {
             const password = e.target.value;
             if (password && password.length < 6) {
                 e.target.style.borderColor = '#ff4757';
@@ -461,38 +817,52 @@
                 e.target.style.borderColor = '';
             }
         });
-    });
+    }
 
     // Enter para enviar formularios
-    loginEmailInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            loginPasswordInput.focus();
-        }
-    });
+    if (loginEmailInput) {
+        loginEmailInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                if (loginPasswordInput) loginPasswordInput.focus();
+            }
+        });
+    }
 
-    loginPasswordInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            loginButton.click();
-        }
-    });
+    if (loginPasswordInput) {
+        loginPasswordInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                if (loginButton) loginButton.click();
+            }
+        });
+    }
 
-    document.getElementById('register-username').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            document.getElementById('register-email').focus();
-        }
-    });
+    const registerUsernameInput = document.getElementById('register-username');
+    const registerEmailInput = document.getElementById('register-email');
+    const registerPasswordInputField = document.getElementById('register-password');
 
-    document.getElementById('register-email').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            document.getElementById('register-password').focus();
-        }
-    });
+    if (registerUsernameInput) {
+        registerUsernameInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                if (registerEmailInput) registerEmailInput.focus();
+            }
+        });
+    }
 
-    document.getElementById('register-password').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            registerButton.click();
-        }
-    });
+    if (registerEmailInput) {
+        registerEmailInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                if (registerPasswordInputField) registerPasswordInputField.focus();
+            }
+        });
+    }
+
+    if (registerPasswordInputField) {
+        registerPasswordInputField.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                if (registerButton) registerButton.click();
+            }
+        });
+    }
     
     </script>
 </body>

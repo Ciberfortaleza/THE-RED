@@ -3,7 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Red - Mi Perfil</title>
+    <title>THE RED - Mi Perfil | Gestiona tu Cuenta</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Gestiona tu perfil en THE RED. Edita tu información personal, sube fotos, configura tu privacidad y ve tus publicaciones en la red social más innovadora.">
+    <meta name="keywords" content="THE RED, mi perfil, configuración, cuenta, editar perfil, red social, privacidad">
+    <meta name="author" content="THE RED Team">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="THE RED - Mi Perfil | Gestiona tu Cuenta">
+    <meta property="og:description" content="Gestiona tu perfil personal en THE RED. Edita información, configura privacidad y administra tus publicaciones.">
+    <meta property="og:type" content="profile">
+    <meta property="og:url" content="https://the-red-loggin.web.app/the-red/my-profile.html">
+    <meta property="og:image" content="https://the-red-loggin.web.app/logo.png">
+    <meta property="og:site_name" content="THE RED">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="THE RED - Mi Perfil">
+    <meta name="twitter:description" content="Gestiona tu perfil personal en THE RED.">
+    <meta name="twitter:image" content="https://the-red-loggin.web.app/logo.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="apple-touch-icon" href="../logo.png">
     <!-- Font Awesome para íconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Fuentes de Google Fonts -->
@@ -1848,6 +1872,69 @@
             text-align: left;
         }
 
+        /* Estilos para las tarjetas de publicaciones */
+        .post-card {
+            background-color: var(--card-background-color);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .post-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .post-card img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .post-card p {
+            color: #fff;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .post-date {
+            color: var(--gray-medium);
+            font-size: 0.9em;
+            font-style: italic;
+        }
+
+        .post-tags {
+            margin-top: 10px;
+        }
+
+        .post-tags .tag {
+            background: var(--light-purple);
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin-right: 8px;
+            margin-bottom: 5px;
+            display: inline-block;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .no-posts-message {
+            text-align: center;
+            color: var(--gray-medium);
+            font-style: italic;
+            padding: 30px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            border: 1px dashed var(--gray-medium);
+        }
+
         .profile-preview-section h3 {
             font-size: 1.5em;
             font-weight: 700;
@@ -2525,8 +2612,100 @@
         // --- INICIALIZACIÓN DE FIREBASE (Sintaxis Moderna v9+) ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, getDocs, query, orderBy, onSnapshot, enableNetwork, disableNetwork, where, limit } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
+
+        // --- SISTEMA DE CACHÉ PARA OPTIMIZACIÓN ---
+        class ProfileCache {
+            constructor() {
+                this.cache = new Map();
+                this.timestamps = new Map();
+                this.CACHE_DURATION = 5 * 60 * 1000; // 5 minutos
+                this.loadingStates = new Map();
+            }
+
+            isValid(key) {
+                const timestamp = this.timestamps.get(key);
+                if (!timestamp) return false;
+                return (Date.now() - timestamp) < this.CACHE_DURATION;
+            }
+
+            set(key, data) {
+                this.cache.set(key, data);
+                this.timestamps.set(key, Date.now());
+                // Guardar en localStorage para persistencia
+                try {
+                    localStorage.setItem(`profile_cache_${key}`, JSON.stringify({
+                        data,
+                        timestamp: Date.now()
+                    }));
+                } catch (e) {
+                    console.warn('No se pudo guardar en localStorage:', e);
+                }
+            }
+
+            get(key) {
+                // Primero verificar caché en memoria
+                if (this.isValid(key)) {
+                    return this.cache.get(key);
+                }
+
+                // Verificar localStorage
+                try {
+                    const stored = localStorage.getItem(`profile_cache_${key}`);
+                    if (stored) {
+                        const { data, timestamp } = JSON.parse(stored);
+                        if ((Date.now() - timestamp) < this.CACHE_DURATION) {
+                            this.cache.set(key, data);
+                            this.timestamps.set(key, timestamp);
+                            return data;
+                        } else {
+                            localStorage.removeItem(`profile_cache_${key}`);
+                        }
+                    }
+                } catch (e) {
+                    console.warn('Error al leer localStorage:', e);
+                }
+
+                return null;
+            }
+
+            invalidate(key) {
+                this.cache.delete(key);
+                this.timestamps.delete(key);
+                try {
+                    localStorage.removeItem(`profile_cache_${key}`);
+                } catch (e) {
+                    console.warn('Error al limpiar localStorage:', e);
+                }
+            }
+
+            clear() {
+                this.cache.clear();
+                this.timestamps.clear();
+                // Limpiar localStorage
+                try {
+                    Object.keys(localStorage).forEach(key => {
+                        if (key.startsWith('profile_cache_')) {
+                            localStorage.removeItem(key);
+                        }
+                    });
+                } catch (e) {
+                    console.warn('Error al limpiar localStorage:', e);
+                }
+            }
+
+            setLoading(key, isLoading) {
+                this.loadingStates.set(key, isLoading);
+            }
+
+            isLoading(key) {
+                return this.loadingStates.get(key) || false;
+            }
+        }
+
+        // Instancia global del caché
+        const profileCache = new ProfileCache();
 
         const firebaseConfig = {
             apiKey: "AIzaSyApU8UbfqfzBH1UPU3a1CQGf1p995Rf0y4",
@@ -2544,16 +2723,33 @@
         const storage = getStorage(app);
 
         // --- MANEJO DE LA SESIÓN DEL USUARIO ---
-        onAuthStateChanged(auth, user => {
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Si el usuario está autenticado, carga sus datos
                 console.log("Usuario autenticado:", user.uid);
-                cargarYMostrarDatosPerfil(user.uid);
-                cargarPublicacionesUsuario(user.uid); // <-- LLAMADA A LA NUEVA FUNCIÓN
+                
+                try {
+                    // Verificar token de autenticación sin delay innecesario
+                    const token = await user.getIdToken();
+                    console.log("Token de autenticación obtenido");
+                    
+                    // Limpiar contador de reintentos al iniciar sesión exitosa
+                    profileCache.invalidate(`retry_count_${user.uid}`);
+                    
+                    await cargarYMostrarDatosPerfil(user.uid);
+                    await cargarPublicacionesUsuario(user.uid);
+                } catch (error) {
+                    console.error("Error en la autenticación inicial:", error);
+                    if (error.code === 'permission-denied') {
+                        showConfirmationModal("Error de permisos de Firestore. Contacta al administrador.");
+                    } else {
+                        showConfirmationModal("Error de autenticación. Por favor, inicia sesión nuevamente.");
+                        setTimeout(() => {
+                            window.location.href = '../login.html';
+                        }, 3000);
+                    }
+                }
             } else {
-                // Si no hay usuario, redirige a la página de login
                 console.log("Ningún usuario autenticado, redirigiendo al login.");
-                // Asegúrate de que la ruta a tu archivo de login sea correcta
                 window.location.href = '../login.html';
             }
         });
@@ -2574,121 +2770,232 @@
         // === LÓGICA PRINCIPAL DE LA PÁGINA DE PERFIL (ACTUALIZADA) ===
         // =========================================================
 
-        async function cargarYMostrarDatosPerfil(uid) {
-            const userRef = doc(db, 'users', uid);
-            const docSnap = await getDoc(userRef);
+        // --- FUNCIONES OPTIMIZADAS CON CACHÉ ---
+        
+        // Función para mostrar/ocultar loading spinner
+        function showLoadingSpinner(containerId, show = true) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            if (show) {
+                container.innerHTML = `
+                    <div class="loading-spinner" style="text-align: center; padding: 40px;">
+                        <div style="border: 4px solid rgba(255, 48, 88, 0.3); border-top: 4px solid var(--light-red); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+                        <p style="color: var(--gray-medium); margin-top: 15px;">Cargando...</p>
+                    </div>
+                    <style>
+                        @keyframes spin {
+                            0% { transform: rotate(0deg); }
+                            100% { transform: rotate(360deg); }
+                        }
+                    </style>
+                `;
+            }
+        }
 
-            if (docSnap.exists()) {
-                const userData = docSnap.data();
-                console.log("Datos del perfil cargados:", userData);
+        async function cargarYMostrarDatosPerfil(uid, forceRefresh = false) {
+            const cacheKey = `profile_${uid}`;
+            
+            // Verificar si ya está cargando para evitar consultas duplicadas
+            if (profileCache.isLoading(cacheKey) && !forceRefresh) {
+                console.log("Perfil ya está cargando, esperando...");
+                return;
+            }
+            
+            // Verificar caché primero si no es refresh forzado
+            if (!forceRefresh) {
+                const cachedData = profileCache.get(cacheKey);
+                if (cachedData) {
+                    console.log("Datos del perfil cargados desde caché");
+                    aplicarDatosPerfilAUI(cachedData);
+                    cargarDatosEnModalEdicion(cachedData);
+                    return;
+                }
+            }
+            
+            try {
+                profileCache.setLoading(cacheKey, true);
+                console.log("Cargando perfil desde Firestore para UID:", uid);
                 
-                // Aplicar colores personalizados
-                document.documentElement.style.setProperty('--primary-text-color', userData.primaryTextColor || 'var(--light-red)');
-                document.documentElement.style.setProperty('--secondary-text-color', userData.secondaryTextColor || 'var(--light-purple)');
-                document.documentElement.style.setProperty('--card-background-color', userData.cardBackgroundColor || 'rgba(74, 26, 85, 0.4)');
-                document.documentElement.style.setProperty('--border-color', userData.borderColor || 'var(--light-red)');
+                // Verificar autenticación antes de hacer consultas
+                const user = auth.currentUser;
+                if (!user) {
+                    console.error("Usuario no autenticado");
+                    window.location.href = 'login.html';
+                    return;
+                }
                 
-                const profileView = document.getElementById('profilePreviewView');
+                // Obtener token fresco para asegurar permisos
+                await user.getIdToken(true);
                 
-                // Actualizar imagen de fondo
-                if (userData.backgroundUrl) {
-                    profileView.style.backgroundImage = `url(${userData.backgroundUrl})`;
+                // Cargar datos del perfil
+                const userDocRef = doc(db, 'users', uid);
+                const docSnap = await getDoc(userDocRef);
+                
+                if (docSnap.exists()) {
+                    const userData = docSnap.data();
+                    console.log("Datos del perfil obtenidos:", userData);
+                    
+                    // Guardar en caché
+                    profileCache.set(cacheKey, userData);
+                    
+                    // Aplicar datos a la UI
+                    await aplicarDatosPerfilAUI(userData);
+                    cargarDatosEnModalEdicion(userData);
+                    
+                    // Cargar publicaciones después del perfil
+                    await cargarPublicacionesUsuario(uid, forceRefresh);
+                    
                 } else {
-                    profileView.style.backgroundImage = "url('https://placehold.co/900x300/4a1a55/ffffff?text=Fondo+de+Perfil')";
-                }
-
-                // Actualizar avatar y nombre
-                const avatarImg = profileView.querySelector('.profile-avatar-large');
-                if (avatarImg) {
-                    avatarImg.src = userData.avatarUrl || `https://placehold.co/150x150/7d3490/ffffff?text=${(userData.username || 'U').charAt(0)}`;
+                    console.log("Perfil no existe, creando perfil por defecto...");
+                    await crearPerfilPorDefecto(uid);
+                    // Recargar después de crear el perfil
+                    await cargarYMostrarDatosPerfil(uid, true);
                 }
                 
-                const usernameElement = profileView.querySelector('h2');
-                if (usernameElement) {
-                    usernameElement.textContent = userData.username || 'Usuario The Red';
-                }
-
-                // Actualizar sección "Acerca de Mí"
-                const aboutMeSection = document.querySelector('#aboutMeSectionContainer p');
-                if (aboutMeSection && userData.aboutMe) {
-                    aboutMeSection.textContent = userData.aboutMe;
-                }
-
-                // Actualizar sección "Intereses"
-                const interestsSection = document.querySelector('#interestsSectionContainer ul');
-                if (interestsSection && userData.interests) {
-                    const interestsList = userData.interests.split(',').map(interest => 
-                        `<li><i class="fas fa-tag"></i> ${interest.trim()}</li>`
-                    ).join('');
-                    interestsSection.innerHTML = interestsList;
-                }
-
-                // Actualizar enlaces de contacto
-                const contactSection = profileView.querySelector('.profile-contact-section');
-                if (contactSection) {
-                    let contactHTML = '';
-                    if (userData.website) {
-                        contactHTML += `<a href="${userData.website}" target="_blank" class="contact-link"><i class="fas fa-globe"></i> Sitio Web</a>`;
+            } catch (error) {
+                console.error("Error al cargar datos del perfil:", error);
+                
+                // Manejo específico de errores de permisos
+                if (error.code === 'permission-denied') {
+                    console.log("Error de permisos detectado, verificando autenticación...");
+                    
+                    const user = auth.currentUser;
+                    if (!user) {
+                        console.error("Usuario no autenticado, redirigiendo al login");
+                        window.location.href = 'login.html';
+                        return;
                     }
-                    if (userData.twitter) {
-                        contactHTML += `<a href="https://twitter.com/${userData.twitter}" target="_blank" class="contact-link"><i class="fab fa-twitter"></i> Twitter</a>`;
+                    
+                    try {
+                        // Intentar renovar token una vez más
+                        await user.getIdToken(true);
+                        console.log("Token renovado, reintentando en 2 segundos...");
+                        
+                        setTimeout(() => {
+                            cargarYMostrarDatosPerfil(uid, true);
+                        }, 2000);
+                        return;
+                        
+                    } catch (tokenError) {
+                        console.error("Error al renovar token:", tokenError);
                     }
-                    if (userData.instagram) {
-                        contactHTML += `<a href="https://instagram.com/${userData.instagram}" target="_blank" class="contact-link"><i class="fab fa-instagram"></i> Instagram</a>`;
-                    }
-                    if (userData.linkedin) {
-                        contactHTML += `<a href="https://linkedin.com/in/${userData.linkedin}" target="_blank" class="contact-link"><i class="fab fa-linkedin"></i> LinkedIn</a>`;
-                    }
-                    contactSection.innerHTML = contactHTML;
-                }
-
-                // Actualizar fotos del perfil
-                const photoGrid = profileView.querySelector('.profile-photo-grid');
-                if (photoGrid && userData.photos && userData.photos.length > 0) {
-                    const photosHTML = userData.photos.map(photo => 
-                        `<div class="profile-photo-item">
-                            <img src="${photo}" alt="Foto del perfil" onclick="showImageModal('${photo}', '${userData.username}')">
-                        </div>`
-                    ).join('');
-                    photoGrid.innerHTML = photosHTML;
-                }
-
-                // Actualizar contenido personalizado
-                const customContent = document.querySelector('#customContentSectionContainer p');
-                if (customContent && userData.customContent) {
-                    customContent.textContent = userData.customContent;
                 }
                 
-                cargarDatosEnModalEdicion(userData);
+                // Mostrar error en la UI
+                const profileView = document.querySelector('.profile-view');
+                if (profileView) {
+                    profileView.innerHTML = `
+                        <div class="error-message" style="text-align: center; padding: 2rem; color: #ff6b6b; background: rgba(255, 107, 107, 0.1); border-radius: 12px; margin: 1rem;">
+                            <i class="fas fa-exclamation-triangle" style="font-size: 3em; margin-bottom: 1rem;"></i>
+                            <h3>Error al cargar el perfil</h3>
+                            <p style="margin: 1rem 0;">${error.message}</p>
+                            <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1.5rem;">
+                                <button onclick="cargarYMostrarDatosPerfil('${uid}', true)" class="btn-primary">
+                                    <i class="fas fa-redo"></i> Reintentar
+                                </button>
+                                <button onclick="location.reload()" class="btn-secondary">
+                                    <i class="fas fa-refresh"></i> Recargar
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }
+            } finally {
+                profileCache.setLoading(cacheKey, false);
+            }
+        }
 
-            } else {
-                console.error("Error: No se encontró un documento de perfil para el usuario.");
-                // Crear perfil por defecto si no existe
-                await crearPerfilPorDefecto(uid);
-                // Intentar cargar de nuevo
-                cargarYMostrarDatosPerfil(uid);
+        // Función separada para aplicar datos a la UI
+        async function aplicarDatosPerfilAUI(userData) {
+            const profileView = document.querySelector('.profile-view');
+            if (!profileView) return;
+
+            // Actualizar imagen de avatar con loading optimizado
+            const avatarImg = profileView.querySelector('.profile-avatar img');
+            if (avatarImg) {
+                const avatarUrl = userData.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(userData.username || 'Usuario')}&size=150&background=7d3490&color=ffffff&bold=true`;
+                
+                // Precargar imagen para evitar parpadeo
+                const img = new Image();
+                img.onload = () => {
+                    avatarImg.src = avatarUrl;
+                };
+                img.src = avatarUrl;
+            }
+            
+            const usernameElement = profileView.querySelector('h2');
+            if (usernameElement) {
+                usernameElement.textContent = userData.username || 'Usuario The Red';
+            }
+
+            // Actualizar secciones en paralelo usando DocumentFragment para mejor rendimiento
+            const fragment = document.createDocumentFragment();
+            
+            // Actualizar sección "Acerca de Mí"
+            const aboutMeSection = document.querySelector('#aboutMeSectionContainer p');
+            if (aboutMeSection && userData.aboutMe) {
+                aboutMeSection.textContent = userData.aboutMe;
+            }
+
+            // Actualizar sección "Intereses" con mejor rendimiento
+            const interestsSection = document.querySelector('#interestsSectionContainer ul');
+            if (interestsSection && userData.interests) {
+                const interests = userData.interests.split(',');
+                const interestsList = interests.map(interest => 
+                    `<li><i class="fas fa-tag"></i> ${interest.trim()}</li>`
+                ).join('');
+                interestsSection.innerHTML = interestsList;
+            }
+
+            // Actualizar enlaces de contacto
+            const contactSection = profileView.querySelector('.profile-contact-section');
+            if (contactSection) {
+                const contactLinks = [
+                    userData.website && `<a href="${userData.website}" target="_blank" class="contact-link"><i class="fas fa-globe"></i> Sitio Web</a>`,
+                    userData.twitter && `<a href="https://twitter.com/${userData.twitter}" target="_blank" class="contact-link"><i class="fab fa-twitter"></i> Twitter</a>`,
+                    userData.instagram && `<a href="https://instagram.com/${userData.instagram}" target="_blank" class="contact-link"><i class="fab fa-instagram"></i> Instagram</a>`,
+                    userData.linkedin && `<a href="https://linkedin.com/in/${userData.linkedin}" target="_blank" class="contact-link"><i class="fab fa-linkedin"></i> LinkedIn</a>`
+                ].filter(Boolean);
+                
+                contactSection.innerHTML = contactLinks.join('');
+            }
+
+            // Actualizar fotos del perfil con lazy loading
+            const photoGrid = profileView.querySelector('.profile-photo-grid');
+            if (photoGrid && userData.photos && userData.photos.length > 0) {
+                const photosHTML = userData.photos.map(photo => 
+                    `<div class="profile-photo-item">
+                        <img src="${photo}" alt="Foto del perfil" loading="lazy" onclick="showImageModal('${photo}', '${userData.username}')">
+                    </div>`
+                ).join('');
+                photoGrid.innerHTML = photosHTML;
             }
         }
 
         // Función para crear perfil por defecto
         async function crearPerfilPorDefecto(uid) {
+            const user = auth.currentUser;
+            const username = user?.displayName || 'Usuario The Red';
+            
             const defaultProfile = {
-                username: 'Usuario The Red',
-                aboutMe: '¡Hola! Soy un usuario de The Red. Me encanta explorar el universo y conectar con mentes creativas.',
+                username: username,
+                email: user?.email || '',
+                aboutMe: `¡Hola! Soy ${username}. Me encanta explorar el universo y conectar con mentes creativas.`,
                 interests: 'espacio, ciencia, tecnología',
                 location: '',
                 website: '',
                 twitter: '',
                 instagram: '',
                 linkedin: '',
-                avatarUrl: '',
+                avatarUrl: user?.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&size=150&background=7d3490&color=ffffff&bold=true`,
                 backgroundUrl: '',
                 photos: [],
-                customContent: '¡Bienvenido a mi espacio en The Red!',
-                primaryTextColor: 'var(--light-red)',
-                secondaryTextColor: 'var(--light-purple)',
+                customContent: `¡Bienvenido a mi espacio en The Red!`,
+                primaryTextColor: '#ff3058',
+                secondaryTextColor: '#7d3490',
                 cardBackgroundColor: 'rgba(74, 26, 85, 0.4)',
-                borderColor: 'var(--light-red)',
+                borderColor: '#ff3058',
                 createdAt: new Date(),
                 updatedAt: new Date()
             };
@@ -2702,39 +3009,174 @@
             }
         }
 
-        // === NUEVA FUNCIÓN PARA CARGAR PUBLICACIONES ===
-        async function cargarPublicacionesUsuario(uid) {
+        // === FUNCIÓN OPTIMIZADA PARA CARGAR PUBLICACIONES CON CACHÉ ===
+        async function cargarPublicacionesUsuario(uid, forceRefresh = false) {
             const postsContainer = document.getElementById('posts-container');
-            // La ruta debe ser 'usuarios/{uid}/publicaciones'
-            const postsRef = collection(db, 'users', uid, 'posts');
-            const q = query(postsRef, orderBy('timestamp', 'desc')); // Ordenar por más recientes
+            if (!postsContainer) {
+                console.log("Contenedor de posts no encontrado");
+                return;
+            }
 
-            try {
-                const querySnapshot = await getDocs(q);
-                if (querySnapshot.empty) {
-                    postsContainer.innerHTML = '<p class="no-posts-message">Aún no has creado ninguna publicación.</p>';
+            const cacheKey = `posts_${uid}`;
+            
+            // Verificar si ya está cargando
+            if (profileCache.isLoading(cacheKey) && !forceRefresh) {
+                console.log("Publicaciones ya están cargando, esperando...");
+                return;
+            }
+
+            // Verificar caché primero
+            if (!forceRefresh) {
+                const cachedPosts = profileCache.get(cacheKey);
+                if (cachedPosts) {
+                    console.log("Publicaciones cargadas desde caché:", cachedPosts.length);
+                    renderizarPublicaciones(cachedPosts, postsContainer);
                     return;
                 }
+            }
 
-                let postsHTML = '';
-                querySnapshot.forEach((doc) => {
-                    const post = doc.data();
-                    const postDate = post.timestamp ? new Date(post.timestamp.seconds * 1000).toLocaleString() : 'Fecha no disponible';
+            try {
+                profileCache.setLoading(cacheKey, true);
+                console.log("Cargando publicaciones desde Firestore para UID:", uid);
+                
+                // Mostrar loading spinner
+                postsContainer.innerHTML = '<div style="text-align: center; padding: 2rem;"><div class="spinner"></div><p>Cargando publicaciones...</p></div>';
+                
+                // Intentar cargar desde subcollección del usuario primero
+                let userPosts = [];
+                
+                try {
+                    // Opción 1: Cargar desde subcollección del usuario (más eficiente)
+                    const userPostsRef = collection(db, 'users', uid, 'posts');
+                    const userQuery = query(userPostsRef, orderBy('timestamp', 'desc'), limit(20));
+                    const userSnapshot = await getDocs(userQuery);
                     
-                    postsHTML += `
-                        <div class="post-card">
-                            ${post.imageUrl ? `<img src="${post.imageUrl}" alt="Imagen de la publicación">` : ''}
-                            <p>${post.text}</p>
-                            <span class="post-date">${postDate}</span>
-                        </div>
-                    `;
-                });
-                postsContainer.innerHTML = postsHTML;
+                    userSnapshot.forEach((doc) => {
+                        userPosts.push({ id: doc.id, ...doc.data() });
+                    });
+                    
+                    console.log("Publicaciones del usuario desde subcollección:", userPosts.length);
+                    
+                } catch (subcollectionError) {
+                    console.log("Error en subcollección, intentando consulta global:", subcollectionError.message);
+                    
+                    // Opción 2: Fallback a consulta global sin orderBy para evitar índices
+                    try {
+                        const globalPostsRef = collection(db, 'posts');
+                        const globalQuery = query(globalPostsRef, where('authorId', '==', uid), limit(20));
+                        const globalSnapshot = await getDocs(globalQuery);
+                        
+                        globalSnapshot.forEach((doc) => {
+                            userPosts.push({ id: doc.id, ...doc.data() });
+                        });
+                        
+                        // Ordenar en cliente
+                        userPosts.sort((a, b) => {
+                            const aTime = a.timestamp?.toDate?.() || new Date(0);
+                            const bTime = b.timestamp?.toDate?.() || new Date(0);
+                            return bTime - aTime;
+                        });
+                        
+                        console.log("Publicaciones del usuario desde consulta global:", userPosts.length);
+                        
+                    } catch (globalError) {
+                        console.log("Error en consulta global, cargando todas las publicaciones:", globalError.message);
+                        
+                        // Opción 3: Último recurso - cargar todas y filtrar
+                        const allPostsRef = collection(db, 'posts');
+                        const allSnapshot = await getDocs(allPostsRef);
+                        
+                        allSnapshot.forEach((doc) => {
+                            const post = doc.data();
+                            if (post.authorId === uid) {
+                                userPosts.push({ id: doc.id, ...post });
+                            }
+                        });
+                        
+                        // Ordenar en cliente
+                        userPosts.sort((a, b) => {
+                            const aTime = a.timestamp?.toDate?.() || new Date(0);
+                            const bTime = b.timestamp?.toDate?.() || new Date(0);
+                            return bTime - aTime;
+                        });
+                        
+                        console.log("Publicaciones filtradas del total:", userPosts.length);
+                    }
+                }
+
+                console.log("Publicaciones del usuario encontradas:", userPosts.length);
+                
+                // Guardar en caché
+                profileCache.set(cacheKey, userPosts);
+                
+                // Renderizar publicaciones
+                renderizarPublicaciones(userPosts, postsContainer);
 
             } catch (error) {
-                console.error("Error al cargar las publicaciones: ", error);
-                postsContainer.innerHTML = '<p class="no-posts-message">Error al cargar las publicaciones.</p>';
+                console.error("Error al cargar publicaciones:", error);
+                
+                // Verificar si es un error de permisos y intentar renovar token
+                if (error.code === 'permission-denied') {
+                    console.log("Error de permisos, intentando renovar token...");
+                    try {
+                        const user = auth.currentUser;
+                        if (user) {
+                            await user.getIdToken(true); // Forzar renovación
+                            console.log("Token renovado, reintentando carga de publicaciones...");
+                            setTimeout(() => cargarPublicacionesUsuario(uid, true), 1000);
+                            return;
+                        }
+                    } catch (tokenError) {
+                        console.error("Error al renovar token:", tokenError);
+                    }
+                }
+                
+                // Mostrar mensaje de error con opciones
+                postsContainer.innerHTML = `
+                    <div class="no-posts-message">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 2em; color: #ff6b6b; margin-bottom: 1rem;"></i>
+                        <h3>Error al cargar publicaciones</h3>
+                        <p style="margin-bottom: 1rem;">${error.message}</p>
+                        <div style="display: flex; gap: 1rem; justify-content: center;">
+                            <button onclick="cargarPublicacionesUsuario('${uid}', true)" class="retry-btn">
+                                <i class="fas fa-redo"></i> Reintentar
+                            </button>
+                            <button onclick="location.reload()" class="retry-btn" style="background: #666;">
+                                <i class="fas fa-refresh"></i> Recargar página
+                            </button>
+                        </div>
+                    </div>
+                `;
+            } finally {
+                profileCache.setLoading(cacheKey, false);
             }
+        }
+
+        // Función separada para renderizar publicaciones
+        function renderizarPublicaciones(userPosts, container) {
+            if (userPosts.length === 0) {
+                container.innerHTML = '<p class="no-posts-message">Aún no has creado ninguna publicación.</p>';
+                return;
+            }
+
+            let postsHTML = '';
+            userPosts.forEach((post) => {
+                const postDate = post.timestamp ? new Date(post.timestamp.seconds * 1000).toLocaleString() : 'Fecha no disponible';
+                
+                postsHTML += `
+                    <div class="post-card">
+                        ${post.imageUrl ? `<img src="${post.imageUrl}" alt="Imagen de la publicación" style="max-width: 100%; border-radius: 10px; margin-bottom: 10px;">` : ''}
+                        <p style="margin-bottom: 10px;">${post.text || 'Sin contenido de texto'}</p>
+                        <span class="post-date" style="color: #999; font-size: 0.9em;">${postDate}</span>
+                        ${post.keywords && post.keywords.length > 0 ? `
+                            <div class="post-tags" style="margin-top: 10px;">
+                                ${post.keywords.map(tag => `<span class="tag" style="background: var(--light-purple); padding: 2px 8px; border-radius: 12px; font-size: 0.8em; margin-right: 5px;">#${tag}</span>`).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            });
+            container.innerHTML = postsHTML;
         }
 
         function cargarDatosEnModalEdicion(userData) {
@@ -2855,79 +3297,9 @@
         let backgroundFile = null;
         let myPhotosFiles = [];
 
-        // Guardar los cambios del perfil (ACTUALIZADO)
-        document.getElementById('saveProfileSettingsButton').onclick = async () => {
-            const btn = document.getElementById('saveProfileSettingsButton');
-            btn.disabled = true;
+        // --- MANEJADORES DE EVENTOS OPTIMIZADOS ---
 
-            const user = auth.currentUser;
-            if (!user) {
-                showConfirmationModal('Debes iniciar sesión para guardar los cambios.');
-                btn.disabled = false;
-                return;
-            }
-
-            try {
-                let newAvatarUrl = user.photoURL;
-                let newBackgroundUrl = null;
-                let newMyPhotosUrls = [];
-                const docSnap = await getDoc(doc(db, 'users', user.uid));
-                if (docSnap.exists()) {
-                    newBackgroundUrl = docSnap.data().backgroundUrl || null;
-                    newMyPhotosUrls = docSnap.data().myPhotos || [];
-                }
-
-                if (avatarFile) {
-                    const avatarRef = ref(storage, `avatars/${user.uid}/${avatarFile.name}`);
-                    await uploadBytes(avatarRef, avatarFile);
-                    newAvatarUrl = await getDownloadURL(avatarRef);
-                }
-
-                if (backgroundFile) {
-                    const backgroundRef = ref(storage, `backgrounds/${user.uid}/${backgroundFile.name}`);
-                    await uploadBytes(backgroundRef, backgroundFile);
-                    newBackgroundUrl = await getDownloadURL(backgroundRef);
-                }
-                
-                if (myPhotosFiles.length > 0) {
-                    newMyPhotosUrls = [];
-                    for (const file of myPhotosFiles) {
-                        const photoRef = ref(storage, `my-photos/${user.uid}/${Date.now()}-${file.name}`);
-                        await uploadBytes(photoRef, file);
-                        const url = await getDownloadURL(photoRef);
-                        newMyPhotosUrls.push(url);
-                    }
-                }
-
-                const profileData = {
-                    username: document.getElementById('profileUsernameInput').value,
-                    // ... el resto de tus campos ...
-                };
-
-                if (newAvatarUrl) profileData.avatarUrl = newAvatarUrl;
-                if (newBackgroundUrl) profileData.backgroundUrl = newBackgroundUrl;
-                profileData.myPhotos = newMyPhotosUrls;
-
-                await updateProfile(user, {
-                    displayName: profileData.username,
-                    photoURL: profileData.avatarUrl
-                });
-
-                const userDocRef = doc(db, 'users', user.uid);
-                await updateDoc(userDocRef, profileData);
-
-                showConfirmationModal('Perfil actualizado con éxito!');
-                document.getElementById('profileEditModal').classList.add('hidden');
-                cargarYMostrarDatosPerfil(user.uid);
-            } catch (error) {
-                console.error('Error al guardar el perfil:', error);
-                showConfirmationModal('Error al guardar los cambios: ' + error.message);
-            } finally {
-                btn.disabled = false;
-            }
-        };
-
-        // Event listener para el botón de guardar perfil
+        // Event listener optimizado para el botón de guardar perfil
         saveProfileSettingsButton.addEventListener('click', async () => {
             const user = auth.currentUser;
             if (!user) {
@@ -2937,6 +3309,7 @@
 
             const btn = saveProfileSettingsButton;
             btn.disabled = true;
+            btn.textContent = 'Guardando...';
 
             try {
                 // Obtener valores de todos los campos
@@ -2985,17 +3358,23 @@
                 const userRef = doc(db, 'users', user.uid);
                 await setDoc(userRef, profileData, { merge: true });
                 
+                // Invalidar caché para forzar recarga
+                profileCache.invalidate(`profile_${user.uid}`);
+                profileCache.invalidate(`posts_${user.uid}`);
+                
                 showConfirmationModal('Perfil actualizado con éxito!');
                 document.getElementById('profileEditModal').classList.add('hidden');
                 
-                // Recargar el perfil para mostrar los cambios
-                await cargarYMostrarDatosPerfil(user.uid);
+                // Recargar el perfil con datos frescos
+                await cargarYMostrarDatosPerfil(user.uid, true);
+                await cargarPublicacionesUsuario(user.uid, true);
                 
             } catch (error) {
                 console.error('Error al guardar el perfil:', error);
                 showConfirmationModal('Error al guardar los cambios: ' + error.message);
             } finally {
                 btn.disabled = false;
+                btn.textContent = 'Guardar Cambios';
             }
         });
 
