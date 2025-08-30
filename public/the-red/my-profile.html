@@ -3457,6 +3457,37 @@
                 });
             });
         }
+
+
+         // Funciones para abrir/cerrar menús laterales
+        if (navMenuButton) {
+            navMenuButton.addEventListener('click', () => {
+                sideMenu.classList.add('open');
+            });
+        }
+        if (closeSideMenuBtn) {
+            closeSideMenuBtn.addEventListener('click', () => {
+                sideMenu.classList.remove('open');
+                // Restaurar el menú principal si se estaba viendo otra cosa
+                sideMenuNavContent.classList.remove('hidden');
+                sideMenuMainTitle.textContent = 'Menú Principal';
+                if (document.getElementById('sideMenuBackButton')) {
+                    document.getElementById('sideMenuBackButton').remove();
+                }
+                infoModalBodyContent.innerHTML = ''; // Limpiar contenido del modal de info
+            });
+        }
+        if (navRewardsButton) {
+            navRewardsButton.addEventListener('click', () => {
+                rewardsSideMenu.classList.add('open');
+            });
+        }
+        if (closeRewardsSideMenuBtn) {
+            closeRewardsSideMenuBtn.addEventListener('click', () => {
+                rewardsSideMenu.classList.remove('open');
+            });
+        }
+
     </script>
 </body>
 </html>

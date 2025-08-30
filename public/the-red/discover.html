@@ -961,6 +961,31 @@ l<!DOCTYPE html>
             }
         });
 
+
+           if (sideMenuLogout) {
+    sideMenuLogout.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        
+        showConfirmationModal("Cerrando sesión...");
+
+        // Cerrar sesión en Firebases
+        auth.signOut()
+            .then(() => {
+                // Limpiar datos locales
+                localStorage.removeItem("usuario");
+                sessionStorage.clear();
+
+                
+                window.location.href = "/login.html";
+            })
+            .catch((error) => {
+                console.error("Error al cerrar sesión:", error);
+                showConfirmationModal("Error al cerrar sesión. Intenta nuevamente.");
+            });
+    });
+}
+
         // =================================================================================
         // SECCIÓN 3: FUNCIONES PRINCIPALES DE LA PÁGINA
         // =================================================================================
@@ -1241,6 +1266,37 @@ l<!DOCTYPE html>
                 showConfirmationModal('Herramientas de desarrollador deshabilitadas');
             }
         });
+
+
+         // Funciones para abrir/cerrar menús laterales
+        if (navMenuButton) {
+            navMenuButton.addEventListener('click', () => {
+                sideMenu.classList.add('open');
+            });
+        }
+        if (closeSideMenuBtn) {
+            closeSideMenuBtn.addEventListener('click', () => {
+                sideMenu.classList.remove('open');
+                // Restaurar el menú principal si se estaba viendo otra cosa
+                sideMenuNavContent.classList.remove('hidden');
+                sideMenuMainTitle.textContent = 'Menú Principal';
+                if (document.getElementById('sideMenuBackButton')) {
+                    document.getElementById('sideMenuBackButton').remove();
+                }
+                infoModalBodyContent.innerHTML = ''; // Limpiar contenido del modal de info
+            });
+        }
+        if (navRewardsButton) {
+            navRewardsButton.addEventListener('click', () => {
+                rewardsSideMenu.classList.add('open');
+            });
+        }
+        if (closeRewardsSideMenuBtn) {
+            closeRewardsSideMenuBtn.addEventListener('click', () => {
+                rewardsSideMenu.classList.remove('open');
+            });
+        }
+
 
     </script>
     

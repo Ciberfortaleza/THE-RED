@@ -2347,6 +2347,31 @@
             });
         }
 
+
+           if (sideMenuLogout) {
+    sideMenuLogout.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        
+        showConfirmationModal("Cerrando sesión...");
+
+        // Cerrar sesión en Firebases
+        auth.signOut()
+            .then(() => {
+                // Limpiar datos locales
+                localStorage.removeItem("usuario");
+                sessionStorage.clear();
+
+                
+                window.location.href = "/login.html";
+            })
+            .catch((error) => {
+                console.error("Error al cerrar sesión:", error);
+                showConfirmationModal("Error al cerrar sesión. Intenta nuevamente.");
+            });
+    });
+}
+
         // Función para actualizar el estado activo del footer
         function updateFooterNavActiveState() {
             const path = window.location.pathname;
