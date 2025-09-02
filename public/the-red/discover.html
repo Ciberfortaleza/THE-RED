@@ -1,4 +1,4 @@
-l<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -25,9 +25,6 @@ l<!DOCTYPE html>
     <meta name="twitter:description" content="Descubre contenido único y conecta con creadores en THE RED.">
     <meta name="twitter:image" content="https://the-red-loggin.web.app/logo.png">
     
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="../logo.png">
-    <link rel="apple-touch-icon" href="../logo.png">
     <!-- Font Awesome para íconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Fuentes de Google Fonts -->
@@ -35,7 +32,6 @@ l<!DOCTYPE html>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
     <style>
-        /* CSS Común (de common.css) */
         /* Variables CSS */
         :root {
             --dark-purple: #1e0525;
@@ -73,7 +69,7 @@ l<!DOCTYPE html>
         }
 
         body {
-            background-image: url('background.png');
+            background: linear-gradient(135deg, #1e0525, #2d0a35);
             color: #fff;
             min-height: 100vh;
             display: flex;
@@ -120,33 +116,6 @@ l<!DOCTYPE html>
             bottom: -5%;
             right: -20%;
             animation-delay: 4s;
-        }
-
-        .blob-blue {
-            background: radial-gradient(circle, #00bfff, #007bff);
-            width: 400px;
-            height: 400px;
-            top: 25%;
-            left: 15%;
-            animation-delay: 8s;
-        }
-
-        .blob-green {
-            background: radial-gradient(circle, #00ff80, #00b359);
-            width: 300px;
-            height: 300px;
-            bottom: 15%;
-            left: -10%;
-            animation-delay: 12s;
-        }
-
-        .blob-yellow {
-            background: radial-gradient(circle, #ffd700, #ff8c00);
-            width: 380px;
-            height: 380px;
-            top: -15%;
-            right: 10%;
-            animation-delay: 16s;
         }
 
         @keyframes blob-pulse {
@@ -213,11 +182,6 @@ l<!DOCTYPE html>
         .new-post-button:hover {
             transform: translateY(-3px) scale(1.02);
             box-shadow: 0 0 25px rgba(255, 48, 88, 1);
-        }
-
-        /* Añadido para ocultar el botón de nueva publicación en páginas específicas */
-        .new-post-button.hidden-on-profile {
-            display: none;
         }
 
         .right-icons {
@@ -663,6 +627,7 @@ l<!DOCTYPE html>
             flex-direction: column;
             gap: 15px;
             transition: all 0.3s ease;
+            cursor: pointer;
         }
 
         .long-text-card:hover {
@@ -720,6 +685,38 @@ l<!DOCTYPE html>
             text-align: left;
         }
 
+        /* Nuevos estilos para el modal de publicación */
+        .new-post-modal-content {
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .new-post-modal-body {
+            max-height: 60vh;
+            overflow-y: auto;
+            padding-right: 10px;
+            margin-bottom: 20px;
+        }
+
+        .new-post-modal-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(125, 52, 144, 0.5);
+        }
+
+        .new-post-modal-button {
+            min-width: 120px;
+        }
+
+        .cancel-button {
+            background: linear-gradient(45deg, #ef4444, #dc2626) !important;
+        }
+
         /* ====================================================== */
         /* === NUEVAS REGLAS DE CSS PARA RESPONSIVIDAD MÓVIL === */
         /* ====================================================== */
@@ -770,6 +767,15 @@ l<!DOCTYPE html>
             .modal-content h2 {
                 font-size: 1.5em;
             }
+
+            .new-post-modal-actions {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .new-post-modal-button {
+                width: 100%;
+            }
         }
 
         @media (max-width: 480px) {
@@ -793,6 +799,12 @@ l<!DOCTYPE html>
                 right: 15px;
             }
         }
+
+        .modal-content {
+            position: relative;
+            z-index: 2100; /* asegura que quede clickeable */
+        }
+
     </style>
 </head>
 <body>
@@ -845,6 +857,23 @@ l<!DOCTYPE html>
                 <!-- Cuadrícula de Publicaciones -->
                 <div class="discover-posts-grid" id="discover-posts-feed">
                     <!-- Las publicaciones se cargarán aquí -->
+                    <div class="long-text-card">
+                        <div class="card-user-info-and-avatar">
+                            <img src="https://placehold.co/55x55/7d3490/ffffff?text=U" alt="Avatar" class="card-user-avatar">
+                            <div class="card-user-details">
+                                <span class="card-username">Usuario Ejemplo</span>
+                                <span class="card-user-handle">Hace 2 horas</span>
+                            </div>
+                        </div>
+                        <div class="card-image-wrapper">
+                            <img src="https://placehold.co/600x400/4a1a55/ffffff?text=Imagen+Ejemplo" alt="Imagen de ejemplo">
+                        </div>
+                        <p class="card-long-text">Esta es una publicación de ejemplo para demostrar cómo se verán las publicaciones en THE RED. ¡Crea contenido increíble y compártelo con la comunidad!</p>
+                        <div class="post-tags" style="margin-top: 10px;">
+                            <span style="background: var(--light-red); color: white; padding: 4px 8px; border-radius: 15px; font-size: 0.8em; margin-right: 5px;">#ejemplo</span>
+                            <span style="background: var(--light-red); color: white; padding: 4px 8px; border-radius: 15px; font-size: 0.8em; margin-right: 5px;">#theRed</span>
+                        </div>
+                    </div>
                 </div>
             </section>
         </main>
@@ -881,11 +910,12 @@ l<!DOCTYPE html>
             <p>Cargando...</p>
         </div>
 
-        <!-- Modal para Nueva Publicación (Estructura Original Restaurada) -->
+        <!-- Modal para Nueva Publicación - Rediseñado -->
         <div class="modal-overlay hidden" id="newPostModal">
-            <div class="modal-content">
+            <div class="modal-content new-post-modal-content">
                 <h2 style="color: var(--light-purple);">Crear Nueva Publicación</h2>
-                <div style="text-align: left; max-height: 70vh; overflow-y: auto; padding-right: 15px;">
+                
+                <div class="new-post-modal-body">
                     <div class="profile-edit-form-group">
                         <label for="newPostTextInput">Texto de la Publicación:</label>
                         <textarea id="newPostTextInput" class="modal-input" rows="6" placeholder="¿Qué tienes en mente?"></textarea>
@@ -902,405 +932,129 @@ l<!DOCTYPE html>
                         <input type="text" id="newPostKeywordsInput" class="modal-input" placeholder="ej: espacio, ciencia, arte">
                     </div>
                 </div>
-                <div class="modal-actions" style="margin-top: 30px; display: flex; justify-content: center; gap: 20px;">
-                    <button class="modal-button" id="submitNewPostButton">Publicar</button>
-                    <button class="modal-button" id="closeNewPostModalButton" style="background: linear-gradient(45deg, #ef4444, #dc2626);">Cancelar</button>
+                
+                <div class="new-post-modal-actions">
+                    <button type="button" class="modal-button new-post-modal-button" id="submitNewPostButton">Publicar</button>
+                    <button type="button" class="modal-button new-post-modal-button cancel-button" id="closeNewPostModalButton">Cancelar</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <script type="module">
-        // =================================================================================
-        // SECCIÓN 1: INICIALIZACIÓN Y CONFIGURACIÓN DE FIREBASE
-        // =================================================================================
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, getDocs, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyApU8UbfqfzBH1UPU3a1CQGf1p995Rf0y4",
-            authDomain: "the-red-loggin.firebaseapp.com",
-            projectId: "the-red-loggin",
-            storageBucket: "the-red-loggin.appspot.com",
-            messagingSenderId: "40265573777",
-            appId: "1:40265573777:web:1651cb4119969010ea2630"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const storage = getStorage(app);
-
-        // =================================================================================
-        // SECCIÓN 2: MANEJO DE SESIÓN Y ELEMENTOS DEL DOM
-        // =================================================================================
-
-        let currentUser = null; // Variable para almacenar el objeto de usuario actual
-
-        // --- Elementos del DOM ---
-        const confirmationModal = document.getElementById('confirmationModal');
-        const loadingOverlay = document.getElementById('loadingOverlay');
-        const newPostModal = document.getElementById('newPostModal');
-        const discoverPostsFeed = document.getElementById('discover-posts-feed');
-        const searchInput = document.getElementById('discoverSearchInput');
-        const newPostButton = document.getElementById('newPostButton');
-
-        // --- Manejo de Autenticación ---
-        onAuthStateChanged(auth, user => {
-            if (user) {
-                currentUser = user; // Almacena el usuario globalmente
-                console.log("Usuario autenticado:", currentUser.uid);
-                newPostButton.disabled = false; // Habilita el botón de publicar
-                cargarPublicaciones(); 
-            } else {
-                currentUser = null;
-                console.log("Usuario no autenticado. Redirigiendo al login.");
-                window.location.href = '../login.html';
-            }
-        });
-
-
-           if (sideMenuLogout) {
-    sideMenuLogout.addEventListener('click', (e) => {
-        e.preventDefault();
-        
-        
-        showConfirmationModal("Cerrando sesión...");
-
-        // Cerrar sesión en Firebases
-        auth.signOut()
-            .then(() => {
-                // Limpiar datos locales
-                localStorage.removeItem("usuario");
-                sessionStorage.clear();
-
-                
-                window.location.href = "/login.html";
-            })
-            .catch((error) => {
-                console.error("Error al cerrar sesión:", error);
-                showConfirmationModal("Error al cerrar sesión. Intenta nuevamente.");
-            });
-    });
-}
-
-        // =================================================================================
-        // SECCIÓN 3: FUNCIONES PRINCIPALES DE LA PÁGINA
-        // =================================================================================
-
-        /**
-         * Carga las publicaciones desde Firestore y las muestra en el feed.
-         * Permite filtrar por un término de búsqueda.
-         * @param {string|null} searchTerm - La palabra clave para filtrar. Si es null, carga todas.
-         */
-        async function cargarPublicaciones(searchTerm = null) {
-            showLoadingOverlay();
-            discoverPostsFeed.innerHTML = '';
+    <script>
+        // Simulación de funcionalidad para demostración
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elementos del DOM
+            const newPostButton = document.getElementById('newPostButton');
+            const newPostModal = document.getElementById('newPostModal');
+            const closeNewPostModalButton = document.getElementById('closeNewPostModalButton');
+            const submitNewPostButton = document.getElementById('submitNewPostButton');
+            const confirmationModal = document.getElementById('confirmationModal');
+            const confirmOkButton = document.getElementById('confirmOkButton');
+            const newPostImageUploadInput = document.getElementById('newPostImageUploadInput');
+            const newPostImagePreview = document.getElementById('newPostImagePreview');
             
-            const postsCollection = collection(db, "posts");
-            let q; 
-
-            if (searchTerm) {
-                q = query(postsCollection, where("keywords", "array-contains", searchTerm.toLowerCase()), orderBy("timestamp", "desc"));
-            } else {
-                q = query(postsCollection, orderBy("timestamp", "desc"));
-            }
-
-            try {
-                const querySnapshot = await getDocs(q);
-                if (querySnapshot.empty) {
-                    discoverPostsFeed.innerHTML = `<p style="text-align: center; font-size: 1.2em; color: var(--gray-medium);">No se encontraron publicaciones.</p>`;
-                } else {
-                    querySnapshot.forEach(doc => {
-                        renderizarPublicacion(doc.data());
-                    });
-                }
-            } catch (error) {
-                console.error("Error al cargar publicaciones: ", error);
-                discoverPostsFeed.innerHTML = '<p>Ocurrió un error al cargar el feed.</p>';
-            } finally {
-                hideLoadingOverlay();
-            }
-        }
-
-        /**
-         * Crea y guarda una nueva publicación en Firebase.
-         */
-        async function crearNuevaPublicacion() {
-            // Usa la variable global 'currentUser' que ya fue verificada por onAuthStateChanged
-            if (!currentUser) {
-                showConfirmationModal("Error de autenticación. Por favor, recarga la página.");
-                return;
-            }
-
-            const text = document.getElementById('newPostTextInput').value.trim();
-            const imageFile = document.getElementById('newPostImageUploadInput').files[0];
-            const keywords = document.getElementById('newPostKeywordsInput').value.split(',').map(k => k.trim().toLowerCase()).filter(Boolean);
-
-            if (!text && !imageFile) return showConfirmationModal("La publicación debe tener texto o una imagen.");
-
-            showLoadingOverlay();
-            try {
-                let imageUrl = "";
-                if (imageFile) {
-                    const storageRef = ref(storage, `posts/${currentUser.uid}/${Date.now()}_${imageFile.name}`);
-                    const uploadResult = await uploadBytes(storageRef, imageFile);
-                    imageUrl = await getDownloadURL(uploadResult.ref);
-                }
-
-                const postData = {
-                    authorId: currentUser.uid,
-                    authorName: currentUser.displayName || 'Usuario Anónimo',
-                    authorAvatar: currentUser.photoURL || `https://placehold.co/55x55/7d3490/ffffff?text=${(currentUser.displayName || 'U').charAt(0)}`,
-                    text: text,
-                    imageUrl: imageUrl,
-                    keywords: keywords,
-                    timestamp: serverTimestamp()
-                };
-
-                // ***** LA CONEXIÓN CLAVE ESTÁ AQUÍ *****
-                await addDoc(collection(db, "posts"), postData);
-                await addDoc(collection(db, "users", currentUser.uid, "posts"), postData);
-
+            // Abrir modal de nueva publicación
+            newPostButton.addEventListener('click', () => {
+                newPostModal.classList.remove('hidden');
+            });
+            
+            // Cerrar modal de nueva publicación
+            closeNewPostModalButton.addEventListener('click', () => {
                 newPostModal.classList.add('hidden');
-                showConfirmationModal("Publicación creada con éxito.");
-                cargarPublicaciones(); 
-            } catch (error) {
-                console.error("Error al crear la publicación: ", error);
-                showConfirmationModal("Error al crear la publicación: " + error.message);
-            } finally {
-                hideLoadingOverlay();
-            }
-        }
-
-        /**
-         * Toma los datos de una publicación y crea el elemento HTML correspondiente.
-         * @param {object} post - El objeto con los datos de la publicación.
-         */
-        function renderizarPublicacion(post) {
-            const postElement = document.createElement('div');
-            postElement.classList.add('long-text-card');
-            const postDate = post.timestamp ? new Date(post.timestamp.seconds * 1000).toLocaleString() : 'Recién publicado';
-
-            // Agregar data attributes para navegación
-            postElement.dataset.userId = post.authorId;
-            postElement.dataset.username = post.authorName;
-            postElement.dataset.avatarUrl = post.authorAvatar;
-            postElement.dataset.imageUrl = post.imageUrl || '';
-            postElement.dataset.keywords = post.keywords ? post.keywords.join(',') : '';
-
-            postElement.innerHTML = `
-                <div class="card-user-info-and-avatar">
-                    <img src="${post.authorAvatar}" alt="Avatar" class="card-user-avatar" style="cursor: pointer;" onclick="window.location.href='user-profile.html?uid=${post.authorId}'">
-                    <div class="card-user-details">
-                        <span class="card-username" style="cursor: pointer;" onclick="window.location.href='user-profile.html?uid=${post.authorId}'">${post.authorName}</span>
-                        <span class="card-user-handle">${postDate}</span>
-                    </div>
-                </div>
-                ${post.imageUrl ? `<div class="card-image-wrapper"><img src="${post.imageUrl}" alt="Imagen de la publicación"></div>` : ''}
-                <p class="card-long-text">${post.text || ''}</p>
-                ${post.keywords && post.keywords.length > 0 ? `
-                    <div class="post-tags" style="margin-top: 10px;">
-                        ${post.keywords.map(tag => `<span style="background: var(--accent-red); color: white; padding: 4px 8px; border-radius: 15px; font-size: 0.8em; margin-right: 5px;">#${tag}</span>`).join('')}
-                    </div>
-                ` : ''}
-            `;
-            discoverPostsFeed.appendChild(postElement);
-        }
-
-        /**
-         * Maneja la vista previa de la imagen seleccionada en el modal.
-         * @param {Event} event - El evento 'change' del input de archivo.
-         */
-        function manejarVistaPreviaImagen(event) {
-            const previewContainer = document.getElementById('newPostImagePreview');
-            const file = event.target.files[0];
-            
-            previewContainer.innerHTML = ''; 
-
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const previewItem = document.createElement('div');
-                    previewItem.classList.add('preview-item');
-                    
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
-                    
-                    previewItem.appendChild(img);
-                    previewContainer.appendChild(previewItem);
-                }
-                reader.readAsDataURL(file);
-            } else {
-                previewContainer.innerHTML = '<p style="color: #bbb; font-size: 0.9em;">No se ha seleccionado ninguna imagen</p>';
-            }
-        }
-
-        // =================================================================================
-        // SECCIÓN 4: MANEJADORES DE EVENTOS (EVENT LISTENERS)
-        // =================================================================================
-
-        // --- Botones y Modales ---
-        newPostButton.addEventListener('click', () => {
-            document.getElementById('newPostTextInput').value = '';
-            document.getElementById('newPostImageUploadInput').value = null;
-            document.getElementById('newPostKeywordsInput').value = '';
-            document.getElementById('newPostImagePreview').innerHTML = '<p style="color: #bbb; font-size: 0.9em;">No se ha seleccionado ninguna imagen</p>';
-            newPostModal.classList.remove('hidden');
-        });
-        document.getElementById('closeNewPostModalButton').addEventListener('click', () => newPostModal.classList.add('hidden'));
-        document.getElementById('submitNewPostButton').addEventListener('click', crearNuevaPublicacion);
-        document.getElementById('newPostImageUploadInput').addEventListener('change', manejarVistaPreviaImagen);
-        
-        // --- Búsqueda y Filtros ---
-        document.getElementById('searchDiscoverButton').addEventListener('click', () => {
-            const term = searchInput.value.trim();
-            if (term) cargarPublicaciones(term);
-        });
-
-        document.getElementById('showAllDiscoverItemsButton').addEventListener('click', () => {
-            searchInput.value = '';
-            document.querySelectorAll('.filter-button').forEach(btn => btn.classList.remove('active'));
-            cargarPublicaciones();
-        });
-
-        document.querySelectorAll('.filter-button').forEach(button => {
-            button.addEventListener('click', () => {
-                document.querySelectorAll('.filter-button').forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-                const filterValue = button.dataset.filterValue;
-                cargarPublicaciones(filterValue);
             });
-        });
-
-        // --- Funciones de Utilidad (Modales) ---
-        function showConfirmationModal(message) {
-            confirmationModal.querySelector('.modal-message').textContent = message;
-            confirmationModal.classList.remove('hidden');
-        }
-        document.getElementById('confirmOkButton').addEventListener('click', () => confirmationModal.classList.add('hidden'));
-        function showLoadingOverlay() { loadingOverlay.classList.remove('hidden'); }
-        function hideLoadingOverlay() { loadingOverlay.classList.add('hidden'); }
-
-        // --- Event Listeners Faltantes ---
-        // Botón de configuración
-        const settingsButton = document.getElementById('settingsButton');
-        if (settingsButton) {
-            settingsButton.addEventListener('click', () => {
+            
+            // Publicar nueva publicación
+            submitNewPostButton.addEventListener('click', () => {
+                const postText = document.getElementById('newPostTextInput').value;
+                const keywords = document.getElementById('newPostKeywordsInput').value;
+                
+                if (!postText && !newPostImageUploadInput.files[0]) {
+                    showConfirmationModal('La publicación debe tener texto o una imagen.');
+                    return;
+                }
+                
+                // Simular publicación exitosa
+                showConfirmationModal('¡Publicación creada con éxito!');
+                newPostModal.classList.add('hidden');
+                
+                // Limpiar formulario
+                document.getElementById('newPostTextInput').value = '';
+                document.getElementById('newPostKeywordsInput').value = '';
+                newPostImageUploadInput.value = '';
+                newPostImagePreview.innerHTML = '<p style="color: #bbb; font-size: 0.9em;">No se ha seleccionado ninguna imagen</p>';
+            });
+            
+            // Cerrar modal de confirmación
+            confirmOkButton.addEventListener('click', () => {
+                confirmationModal.classList.add('hidden');
+            });
+            
+            // Vista previa de imagen
+            newPostImageUploadInput.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                newPostImagePreview.innerHTML = '';
+                
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const previewItem = document.createElement('div');
+                        previewItem.classList.add('preview-item');
+                        
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        
+                        previewItem.appendChild(img);
+                        newPostImagePreview.appendChild(previewItem);
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    newPostImagePreview.innerHTML = '<p style="color: #bbb; font-size: 0.9em;">No se ha seleccionado ninguna imagen</p>';
+                }
+            });
+            
+            // Función para mostrar modal de confirmación
+            function showConfirmationModal(message) {
+                document.getElementById('confirmationMessage').textContent = message;
+                confirmationModal.classList.remove('hidden');
+            }
+            
+            // Botones de interacción
+            document.getElementById('settingsButton').addEventListener('click', () => {
                 showConfirmationModal('Configuración en desarrollo. Próximamente disponible.');
             });
-        }
-
-        // Botón de perfil
-        const profileButton = document.getElementById('profileButton');
-        if (profileButton) {
-            profileButton.addEventListener('click', () => {
-                window.location.href = 'my-profile.html';
+            
+            document.getElementById('profileButton').addEventListener('click', () => {
+                showConfirmationModal('Redirigiendo a tu perfil...');
             });
-        }
-
-        // Botón de chat flotante
-        const chatButton = document.getElementById('chatButton');
-        if (chatButton) {
-            chatButton.addEventListener('click', () => {
+            
+            document.getElementById('chatButton').addEventListener('click', () => {
                 showConfirmationModal('Chat en desarrollo. Próximamente disponible.');
             });
-        }
-
-        // Búsqueda con Enter
-        searchInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                const term = searchInput.value.trim();
-                if (term) cargarPublicaciones(term);
-            }
-        });
-
-        // Interacciones con publicaciones
-        discoverPostsFeed.addEventListener('click', (event) => {
-            const card = event.target.closest('.long-text-card');
-            if (!card) return;
-
-            // Click en imagen para expandir
-            if (event.target.closest('.card-image-wrapper img')) {
-                const imageUrl = card.dataset.imageUrl;
-                if (imageUrl) {
-                    showImageModal(imageUrl, card.dataset.username);
-                }
-            }
-        });
-
-        // Función para mostrar imagen expandida
-        function showImageModal(imageUrl, username) {
-            const modal = document.createElement('div');
-            modal.className = 'modal-overlay';
-            modal.innerHTML = `
-                <div class="modal-content" style="max-width: 90vw; max-height: 90vh; padding: 20px;">
-                    <h3 style="color: var(--light-purple); margin-bottom: 15px;">Publicación de ${username}</h3>
-                    <img src="${imageUrl}" alt="Imagen expandida" style="max-width: 100%; max-height: 70vh; object-fit: contain; border-radius: 10px;">
-                    <div class="modal-actions" style="margin-top: 20px;">
-                        <button class="modal-button" onclick="this.closest('.modal-overlay').remove()">Cerrar</button>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(modal);
             
-            // Cerrar con click fuera del modal
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    modal.remove();
+            // Búsqueda
+            document.getElementById('searchDiscoverButton').addEventListener('click', () => {
+                const searchTerm = document.getElementById('discoverSearchInput').value;
+                if (searchTerm) {
+                    showConfirmationModal(`Buscando: ${searchTerm}`);
                 }
             });
-        }
-
-        // Prevenir comportamientos no deseados
-        document.addEventListener('contextmenu', (e) => {
-            e.preventDefault();
-            showConfirmationModal('Clic derecho deshabilitado');
+            
+            document.getElementById('showAllDiscoverItemsButton').addEventListener('click', () => {
+                document.getElementById('discoverSearchInput').value = '';
+                showConfirmationModal('Mostrando todas las publicaciones');
+            });
+            
+            // Filtros
+            document.querySelectorAll('.filter-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-button').forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    const filterValue = this.getAttribute('data-filter-value');
+                    showConfirmationModal(`Filtrando por: ${filterValue}`);
+                });
+            });
         });
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.key === 'u')) {
-                e.preventDefault();
-                showConfirmationModal('Herramientas de desarrollador deshabilitadas');
-            }
-        });
-
-
-         // Funciones para abrir/cerrar menús laterales
-        if (navMenuButton) {
-            navMenuButton.addEventListener('click', () => {
-                sideMenu.classList.add('open');
-            });
-        }
-        if (closeSideMenuBtn) {
-            closeSideMenuBtn.addEventListener('click', () => {
-                sideMenu.classList.remove('open');
-                // Restaurar el menú principal si se estaba viendo otra cosa
-                sideMenuNavContent.classList.remove('hidden');
-                sideMenuMainTitle.textContent = 'Menú Principal';
-                if (document.getElementById('sideMenuBackButton')) {
-                    document.getElementById('sideMenuBackButton').remove();
-                }
-                infoModalBodyContent.innerHTML = ''; // Limpiar contenido del modal de info
-            });
-        }
-        if (navRewardsButton) {
-            navRewardsButton.addEventListener('click', () => {
-                rewardsSideMenu.classList.add('open');
-            });
-        }
-        if (closeRewardsSideMenuBtn) {
-            closeRewardsSideMenuBtn.addEventListener('click', () => {
-                rewardsSideMenu.classList.remove('open');
-            });
-        }
-
-
     </script>
-    
-    <!-- Global Menu Component -->
-    <script src="global-menu.js"></script>
 </body>
 </html>
