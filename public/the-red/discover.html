@@ -25,6 +25,10 @@
     <meta name="twitter:description" content="Descubre contenido único y conecta con creadores en THE RED.">
     <meta name="twitter:image" content="https://the-red-loggin.web.app/logo.png">
     
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="apple-touch-icon" href="../logo.png">
+
     <!-- Font Awesome para íconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Fuentes de Google Fonts -->
@@ -146,6 +150,29 @@
             position: sticky;
             top: 0;
             z-index: 1000;
+        }
+
+        .left-header-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-button {
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .logo-button img {
+            height: 40px; /* Ajusta el tamaño del logo */
+            width: auto;
+        }
+        
+        .logo-button:hover {
+            transform: scale(1.1);
         }
 
         .new-post-button {
@@ -627,7 +654,6 @@
             flex-direction: column;
             gap: 15px;
             transition: all 0.3s ease;
-            cursor: pointer;
         }
 
         .long-text-card:hover {
@@ -685,6 +711,37 @@
             text-align: left;
         }
 
+        .post-actions {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-top: 15px;
+            border-top: 1px solid rgba(125, 52, 144, 0.6);
+            padding-top: 15px;
+        }
+
+        .action-button {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.2em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 15px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .action-button:hover {
+            background-color: rgba(74, 26, 85, 0.6);
+            color: var(--light-red);
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px rgba(255, 48, 88, 0.5);
+        }
+
         /* Nuevos estilos para el modal de publicación */
         .new-post-modal-content {
             max-width: 600px;
@@ -716,11 +773,8 @@
         .cancel-button {
             background: linear-gradient(45deg, #ef4444, #dc2626) !important;
         }
-
-        /* ====================================================== */
-        /* === NUEVAS REGLAS DE CSS PARA RESPONSIVIDAD MÓVIL === */
-        /* ====================================================== */
-
+        
+        /* Media Queries para Responsividad */
         @media (max-width: 768px) {
             .main-content {
                 padding: 10px;
@@ -731,15 +785,21 @@
                 padding: 10px;
                 gap: 10px;
             }
+            .left-header-section {
+                order: 1;
+                width: 100%;
+                justify-content: space-between;
+            }
             .new-post-button {
                 order: 2;
                 width: 100%;
                 text-align: center;
             }
             .right-icons {
-                order: 1;
+                order: 3;
                 width: 100%;
                 justify-content: space-around;
+                margin-top: 10px;
             }
 
             .discover-posts-grid {
@@ -798,11 +858,14 @@
                 bottom: 80px;
                 right: 15px;
             }
+            .main-header .left-header-section {
+                justify-content: flex-start;
+            }
         }
 
         .modal-content {
             position: relative;
-            z-index: 2100; /* asegura que quede clickeable */
+            z-index: 2100;
         }
 
     </style>
@@ -817,7 +880,12 @@
 
         <!-- Cabecera -->
         <header class="main-header">
-            <button class="new-post-button" id="newPostButton">+ Nueva Publicación</button>
+            <div class="left-header-section">
+                <button class="logo-button" id="homeLogoButton">
+                    <img src="logo.png" alt="THE RED Logo">
+                </button>
+                <button class="new-post-button" id="newPostButton">+ Nueva Publicación</button>
+            </div>
             <div class="right-icons">
                 <button class="icon-button" id="settingsButton" title="Configuración">
                     <i class="fas fa-cog"></i>
@@ -857,23 +925,6 @@
                 <!-- Cuadrícula de Publicaciones -->
                 <div class="discover-posts-grid" id="discover-posts-feed">
                     <!-- Las publicaciones se cargarán aquí -->
-                    <div class="long-text-card">
-                        <div class="card-user-info-and-avatar">
-                            <img src="https://placehold.co/55x55/7d3490/ffffff?text=U" alt="Avatar" class="card-user-avatar">
-                            <div class="card-user-details">
-                                <span class="card-username">Usuario Ejemplo</span>
-                                <span class="card-user-handle">Hace 2 horas</span>
-                            </div>
-                        </div>
-                        <div class="card-image-wrapper">
-                            <img src="https://placehold.co/600x400/4a1a55/ffffff?text=Imagen+Ejemplo" alt="Imagen de ejemplo">
-                        </div>
-                        <p class="card-long-text">Esta es una publicación de ejemplo para demostrar cómo se verán las publicaciones en THE RED. ¡Crea contenido increíble y compártelo con la comunidad!</p>
-                        <div class="post-tags" style="margin-top: 10px;">
-                            <span style="background: var(--light-red); color: white; padding: 4px 8px; border-radius: 15px; font-size: 0.8em; margin-right: 5px;">#ejemplo</span>
-                            <span style="background: var(--light-red); color: white; padding: 4px 8px; border-radius: 15px; font-size: 0.8em; margin-right: 5px;">#theRed</span>
-                        </div>
-                    </div>
                 </div>
             </section>
         </main>
@@ -939,122 +990,395 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal de Vista Previa de Publicación -->
+        <div class="modal-overlay hidden" id="postPreviewModal">
+            <div class="modal-content">
+                <button class="close-button" id="closePostPreviewModalBtn">×</button>
+                <h2 id="postPreviewTitle" style="color: var(--light-purple);">Vista Previa de Publicación</h2>
+                <img id="postPreviewImage" src="" alt="Post Image" style="width: 100%; border-radius: 10px; margin-bottom: 20px;"/>
+                <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                    <img id="postPreviewAuthorAvatar" src="" alt="Author Avatar" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;"/>
+                    <div>
+                        <span style="font-weight: bold; color: var(--light-red);" id="postPreviewAuthorUsername"></span>
+                        <br>
+                        <span style="font-size: 0.9em; color: #aaa;" id="postPreviewTimestamp"></span>
+                    </div>
+                </div>
+                <p id="postPreviewText" style="text-align: left; margin-bottom: 20px;"></p>
+                <div id="postPreviewTags" style="display: flex; flex-wrap: wrap; gap: 8px;"></div>
+                <div class="modal-actions">
+                    <button class="modal-button" id="viewAuthorProfileBtn">Ver Perfil del Autor</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <script>
-        // Simulación de funcionalidad para demostración
-        document.addEventListener('DOMContentLoaded', function() {
-            // Elementos del DOM
-            const newPostButton = document.getElementById('newPostButton');
-            const newPostModal = document.getElementById('newPostModal');
-            const closeNewPostModalButton = document.getElementById('closeNewPostModalButton');
-            const submitNewPostButton = document.getElementById('submitNewPostButton');
-            const confirmationModal = document.getElementById('confirmationModal');
-            const confirmOkButton = document.getElementById('confirmOkButton');
-            const newPostImageUploadInput = document.getElementById('newPostImageUploadInput');
-            const newPostImagePreview = document.getElementById('newPostImagePreview');
+    <script type="module">
+        // Importaciones de Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
+
+        // Configuración de Firebase
+        const firebaseConfig = {
+          apiKey: "AIzaSyApU8UbfqfzBH1UPU3a1CQGf1p995Rf0y4",
+          authDomain: "the-red-loggin.firebaseapp.com",
+          projectId: "the-red-loggin",
+          storageBucket: "the-red-loggin.appspot.com",
+          messagingSenderId: "40265573777",
+          appId: "1:40265573777:web:1651cb4119969010ea2630"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+        
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        let userId;
+
+        // Elementos del DOM
+        const newPostButton = document.getElementById('newPostButton');
+        const newPostModal = document.getElementById('newPostModal');
+        const closeNewPostModalButton = document.getElementById('closeNewPostModalButton');
+        const submitNewPostButton = document.getElementById('submitNewPostButton');
+        const newPostTextInput = document.getElementById('newPostTextInput');
+        const newPostImageUploadInput = document.getElementById('newPostImageUploadInput');
+        const newPostImagePreview = document.getElementById('newPostImagePreview');
+        const newPostKeywordsInput = document.getElementById('newPostKeywordsInput');
+        const postsFeed = document.getElementById('discover-posts-feed');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const confirmationModal = document.getElementById('confirmationModal');
+        const confirmationMessage = document.getElementById('confirmationMessage');
+        const confirmOkButton = document.getElementById('confirmOkButton');
+        const postPreviewModal = document.getElementById('postPreviewModal');
+        const closePostPreviewModalBtn = document.getElementById('closePostPreviewModalBtn');
+        const postPreviewTitle = document.getElementById('postPreviewTitle');
+        const postPreviewImage = document.getElementById('postPreviewImage');
+        const postPreviewAuthorAvatar = document.getElementById('postPreviewAuthorAvatar');
+        const postPreviewAuthorUsername = document.getElementById('postPreviewAuthorUsername');
+        const postPreviewTimestamp = document.getElementById('postPreviewTimestamp');
+        const postPreviewText = document.getElementById('postPreviewText');
+        const postPreviewTags = document.getElementById('postPreviewTags');
+        const viewAuthorProfileBtn = document.getElementById('viewAuthorProfileBtn');
+        const homeLogoButton = document.getElementById('homeLogoButton');
+        const navItems = document.querySelectorAll('.footer-nav .nav-item');
+
+        // --- Autenticación y Carga de Datos ---
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                userId = user.uid;
+                fetchAndRenderPosts();
+            } else {
+                try {
+                    await signInAnonymously(auth);
+                } catch (error) {
+                    console.error("Error signing in anonymously:", error);
+                    showConfirmationModal("Error al iniciar sesión anónimamente.");
+                }
+            }
+        });
+        
+        // Cargar y mostrar publicaciones en tiempo real
+        function fetchAndRenderPosts() {
+            if (!db) return;
+            const postsCollectionRef = collection(db, `artifacts/${appId}/public/posts`);
+            const q = query(postsCollectionRef, orderBy('timestamp', 'desc'));
+
+            onSnapshot(q, (snapshot) => {
+                postsFeed.innerHTML = '';
+                snapshot.forEach((doc) => {
+                    const post = doc.data();
+                    const postId = doc.id;
+                    const postElement = createPostCard(post, postId);
+                    postsFeed.appendChild(postElement);
+                });
+            });
+        }
+
+        // Crear una tarjeta de publicación HTML
+        function createPostCard(post, postId) {
+            const card = document.createElement('div');
+            card.classList.add('long-text-card');
+            card.dataset.postId = postId;
+            card.dataset.userId = post.userId;
+            card.dataset.username = post.username;
+            card.dataset.avatarUrl = post.avatarUrl;
+            card.dataset.imageUrl = post.imageUrl || '';
+            card.dataset.keywords = post.keywords ? post.keywords.join(',') : '';
+
+            const timestamp = post.timestamp ? new Date(post.timestamp.toDate()).toLocaleString() : 'Fecha desconocida';
             
-            // Abrir modal de nueva publicación
+            card.innerHTML = `
+                <div class="card-user-info-and-avatar">
+                    <img src="${post.avatarUrl || 'https://placehold.co/55x55/7d3490/ffffff?text=U'}" alt="Avatar" class="card-user-avatar">
+                    <div class="card-user-details">
+                        <span class="card-username">${post.username || 'Anónimo'}</span>
+                        <span class="card-user-handle">${timestamp}</span>
+                    </div>
+                </div>
+                ${post.imageUrl ? `<div class="card-image-wrapper"><img src="${post.imageUrl}" alt="Imagen de la publicación"></div>` : ''}
+                <p class="card-long-text">${post.text || ''}</p>
+                <div class="post-tags" style="margin-top: 10px;">
+                    ${post.keywords ? post.keywords.map(tag => `<span style="background: var(--light-red); color: white; padding: 4px 8px; border-radius: 15px; font-size: 0.8em; margin-right: 5px;">#${tag}</span>`).join('') : ''}
+                </div>
+                <div class="post-actions">
+                    <button class="action-button save-to-network-btn"><i class="fas fa-users"></i> Mi Red</button>
+                    <button class="action-button view-profile-btn"><i class="fas fa-user-circle"></i> Ver Perfil</button>
+                    <button class="action-button"><i class="fas fa-share"></i> Compartir</button>
+                </div>
+            `;
+
+            return card;
+        }
+
+        // --- Lógica de la funcionalidad de publicaciones ---
+        if (postsFeed) {
+            postsFeed.addEventListener('click', async (event) => {
+                const targetButton = event.target.closest('.action-button');
+                if (targetButton) {
+                    const card = targetButton.closest('.long-text-card');
+                    if (!card) return;
+
+                    const postId = card.dataset.postId;
+                    const postData = {
+                        postId: postId,
+                        userId: card.dataset.userId,
+                        username: card.dataset.username,
+                        avatarUrl: card.dataset.avatarUrl,
+                        imageUrl: card.dataset.imageUrl,
+                        text: card.querySelector('.card-long-text').textContent.replace(/Ver más|Ver menos/g, '').trim(),
+                        keywords: card.dataset.keywords ? card.dataset.keywords.split(',').map(k => k.trim()) : [],
+                        timestamp: new Date().toISOString()
+                    };
+                    
+                    if (targetButton.classList.contains('save-to-network-btn')) {
+                        await savePostToMyNetwork(postData);
+                    } else if (targetButton.classList.contains('view-profile-btn')) {
+                        window.location.href = `my-profile.html?uid=${postData.userId}`;
+                    } else if (targetButton.textContent.includes('Compartir')) {
+                        showConfirmationModal("Compartiendo publicación... (Función en desarrollo)");
+                    }
+                } else if (event.target.closest('.card-image-wrapper img')) {
+                    const card = event.target.closest('.long-text-card');
+                    if (card) {
+                        const postData = {
+                            title: 'Publicación de ' + card.dataset.username,
+                            imageUrl: card.dataset.imageUrl,
+                            avatarUrl: card.dataset.avatarUrl,
+                            username: card.dataset.username,
+                            timestamp: new Date(card.dataset.timestamp).toLocaleString(),
+                            text: card.querySelector('.card-long-text').textContent.replace(/Ver más|Ver menos/g, '').trim(),
+                            keywords: card.dataset.keywords ? card.dataset.keywords.split(',').map(k => k.trim()) : []
+                        };
+                        openPostPreviewModal(postData);
+                    }
+                }
+            });
+        }
+        
+        async function savePostToMyNetwork(postData) {
+            if (!db || !userId) {
+                showConfirmationModal("Error: Debes iniciar sesión para añadir publicaciones a tu red.");
+                return;
+            }
+            showLoadingOverlay();
+            try {
+                const networkCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/network`);
+                await setDoc(doc(networkCollectionRef, postData.postId), postData, { merge: true });
+                showConfirmationModal(`¡Publicación de "${postData.username}" añadida a tu red!`);
+            } catch (error) {
+                console.error("Error al añadir a Mi Red:", error);
+                showConfirmationModal(`Error al añadir a Mi Red: ${error.message}`);
+            } finally {
+                hideLoadingOverlay();
+            }
+        }
+
+        // --- Lógica del modal de crear publicación ---
+        if (newPostButton) {
             newPostButton.addEventListener('click', () => {
                 newPostModal.classList.remove('hidden');
+                newPostTextInput.value = '';
+                newPostImageUploadInput.value = '';
+                newPostImagePreview.innerHTML = '<p style="color: #bbb; font-size: 0.9em;">No se ha seleccionado ninguna imagen</p>';
+                newPostKeywordsInput.value = '';
             });
-            
-            // Cerrar modal de nueva publicación
+        }
+
+        if (closeNewPostModalButton) {
             closeNewPostModalButton.addEventListener('click', () => {
                 newPostModal.classList.add('hidden');
             });
-            
-            // Publicar nueva publicación
-            submitNewPostButton.addEventListener('click', () => {
-                const postText = document.getElementById('newPostTextInput').value;
-                const keywords = document.getElementById('newPostKeywordsInput').value;
-                
-                if (!postText && !newPostImageUploadInput.files[0]) {
-                    showConfirmationModal('La publicación debe tener texto o una imagen.');
+        }
+
+        if (newPostImageUploadInput) {
+            newPostImageUploadInput.addEventListener('change', (event) => {
+                handleImageUploadPreview(event, newPostImagePreview, 1);
+            });
+        }
+
+        if (submitNewPostButton) {
+            submitNewPostButton.addEventListener('click', async () => {
+                const postText = newPostTextInput.value.trim();
+                const postImageFile = newPostImageUploadInput.files[0];
+                const postKeywords = newPostKeywordsInput.value.split(',').map(k => k.trim()).filter(k => k !== '');
+                const currentUser = auth.currentUser;
+
+                if (!postText && !postImageFile) {
+                    showConfirmationModal("Por favor, escribe algo o sube una imagen para tu publicación.");
                     return;
                 }
-                
-                // Simular publicación exitosa
-                showConfirmationModal('¡Publicación creada con éxito!');
-                newPostModal.classList.add('hidden');
-                
-                // Limpiar formulario
-                document.getElementById('newPostTextInput').value = '';
-                document.getElementById('newPostKeywordsInput').value = '';
-                newPostImageUploadInput.value = '';
-                newPostImagePreview.innerHTML = '<p style="color: #bbb; font-size: 0.9em;">No se ha seleccionado ninguna imagen</p>';
-            });
-            
-            // Cerrar modal de confirmación
-            confirmOkButton.addEventListener('click', () => {
-                confirmationModal.classList.add('hidden');
-            });
-            
-            // Vista previa de imagen
-            newPostImageUploadInput.addEventListener('change', function(event) {
-                const file = event.target.files[0];
-                newPostImagePreview.innerHTML = '';
-                
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const previewItem = document.createElement('div');
-                        previewItem.classList.add('preview-item');
-                        
-                        const img = document.createElement('img');
-                        img.src = e.target.result;
-                        
-                        previewItem.appendChild(img);
-                        newPostImagePreview.appendChild(previewItem);
+
+                if (!currentUser) {
+                    showConfirmationModal("Debes iniciar sesión para publicar.");
+                    return;
+                }
+
+                showLoadingOverlay();
+
+                try {
+                    let imageUrl = '';
+                    if (postImageFile) {
+                        const storageRef = ref(storage, `posts/${currentUser.uid}/${Date.now()}-${postImageFile.name}`);
+                        await uploadBytes(storageRef, postImageFile);
+                        imageUrl = await getDownloadURL(storageRef);
                     }
-                    reader.readAsDataURL(file);
-                } else {
-                    newPostImagePreview.innerHTML = '<p style="color: #bbb; font-size: 0.9em;">No se ha seleccionado ninguna imagen</p>';
+
+                    const newPost = {
+                        userId: currentUser.uid,
+                        username: currentUser.displayName || "Anónimo",
+                        avatarUrl: currentUser.photoURL || "https://placehold.co/40x40/FF3058/ffffff?text=U",
+                        text: postText,
+                        imageUrl: imageUrl,
+                        keywords: postKeywords,
+                        timestamp: serverTimestamp(),
+                    };
+
+                    const postsCollectionRef = collection(db, `artifacts/${appId}/public/posts`);
+                    await addDoc(postsCollectionRef, newPost);
+                    
+                    showConfirmationModal("¡Publicación creada exitosamente!");
+                    newPostModal.classList.add('hidden');
+                } catch (error) {
+                    console.error("Error al crear la publicación:", error);
+                    showConfirmationModal(`Error al crear la publicación: ${error.message}`);
+                } finally {
+                    hideLoadingOverlay();
                 }
             });
-            
-            // Función para mostrar modal de confirmación
-            function showConfirmationModal(message) {
-                document.getElementById('confirmationMessage').textContent = message;
-                confirmationModal.classList.remove('hidden');
-            }
-            
-            // Botones de interacción
-            document.getElementById('settingsButton').addEventListener('click', () => {
-                showConfirmationModal('Configuración en desarrollo. Próximamente disponible.');
-            });
-            
-            document.getElementById('profileButton').addEventListener('click', () => {
-                showConfirmationModal('Redirigiendo a tu perfil...');
-            });
-            
-            document.getElementById('chatButton').addEventListener('click', () => {
-                showConfirmationModal('Chat en desarrollo. Próximamente disponible.');
-            });
-            
-            // Búsqueda
-            document.getElementById('searchDiscoverButton').addEventListener('click', () => {
-                const searchTerm = document.getElementById('discoverSearchInput').value;
-                if (searchTerm) {
-                    showConfirmationModal(`Buscando: ${searchTerm}`);
-                }
-            });
-            
-            document.getElementById('showAllDiscoverItemsButton').addEventListener('click', () => {
-                document.getElementById('discoverSearchInput').value = '';
-                showConfirmationModal('Mostrando todas las publicaciones');
-            });
-            
-            // Filtros
-            document.querySelectorAll('.filter-button').forEach(button => {
-                button.addEventListener('click', function() {
-                    document.querySelectorAll('.filter-button').forEach(btn => btn.classList.remove('active'));
-                    this.classList.add('active');
-                    const filterValue = this.getAttribute('data-filter-value');
-                    showConfirmationModal(`Filtrando por: ${filterValue}`);
+        }
+
+        // --- Lógica del modal de vista previa ---
+        function openPostPreviewModal(postData) {
+            postPreviewTitle.textContent = postData.title;
+            postPreviewImage.src = postData.imageUrl;
+            postPreviewAuthorAvatar.src = postData.avatarUrl;
+            postPreviewAuthorUsername.textContent = postData.username;
+            postPreviewTimestamp.textContent = postData.timestamp;
+            postPreviewText.textContent = postData.text;
+            postPreviewTags.innerHTML = '';
+            if (postData.keywords && postData.keywords.length > 0) {
+                postData.keywords.forEach(tag => {
+                    const tagSpan = document.createElement('span');
+                    tagSpan.classList.add('post-tag');
+                    tagSpan.textContent = `#${tag}`;
+                    postPreviewTags.appendChild(tagSpan);
                 });
+            }
+            postPreviewModal.classList.remove('hidden');
+        }
+
+        if (closePostPreviewModalBtn) {
+            closePostPreviewModalBtn.addEventListener('click', () => {
+                postPreviewModal.classList.add('hidden');
+            });
+        }
+
+        if (viewAuthorProfileBtn) {
+            viewAuthorProfileBtn.addEventListener('click', () => {
+                const card = document.querySelector('.long-text-card[data-post-id="' + document.getElementById('postPreviewModal').dataset.postId + '"]');
+                if (card) {
+                    window.location.href = `my-profile.html?uid=${card.dataset.userId}`;
+                }
+                postPreviewModal.classList.add('hidden');
+            });
+        }
+
+        // --- Funciones de utilidad ---
+        function showLoadingOverlay() {
+            loadingOverlay.classList.remove('hidden');
+        }
+
+        function hideLoadingOverlay() {
+            loadingOverlay.classList.add('hidden');
+        }
+
+        function showConfirmationModal(message) {
+            confirmationMessage.textContent = message;
+            confirmationModal.classList.remove('hidden');
+        }
+
+        function handleImageUploadPreview(event, previewContainer, maxFiles = 1) {
+            previewContainer.innerHTML = '';
+            const files = Array.from(event.target.files).slice(0, maxFiles);
+            if (files.length === 0) {
+                previewContainer.innerHTML = '<p style="color: #bbb; font-size: 0.9em;">No se ha seleccionado ninguna imagen</p>';
+                return;
+            }
+            const file = files[0];
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const imgUrl = e.target.result;
+                const img = document.createElement('img');
+                img.src = imgUrl;
+                img.alt = 'Preview';
+                previewContainer.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Eventos del footer y la cabecera
+        if (homeLogoButton) {
+            homeLogoButton.addEventListener('click', () => window.location.href = 'home.html');
+        }
+        
+        document.getElementById('settingsButton').addEventListener('click', () => showConfirmationModal('Configuración en desarrollo. Próximamente disponible.'));
+        document.getElementById('profileButton').addEventListener('click', () => window.location.href = 'my-profile.html');
+        document.getElementById('chatButton').addEventListener('click', () => showConfirmationModal('Chat en desarrollo. Próximamente disponible.'));
+        document.getElementById('searchDiscoverButton').addEventListener('click', () => {
+            const searchTerm = document.getElementById('discoverSearchInput').value;
+            if (searchTerm) {
+                showConfirmationModal(`Buscando: ${searchTerm}`);
+            }
+        });
+        document.getElementById('showAllDiscoverItemsButton').addEventListener('click', () => {
+            document.getElementById('discoverSearchInput').value = '';
+            showConfirmationModal('Mostrando todas las publicaciones');
+        });
+        document.querySelectorAll('.filter-button').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.filter-button').forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                const filterValue = this.getAttribute('data-filter-value');
+                showConfirmationModal(`Filtrando por: ${filterValue}`);
             });
         });
+        confirmOkButton.addEventListener('click', () => confirmationModal.classList.add('hidden'));
+
+        // Controladores para los íconos del footer
+        navItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                if (item.id === 'navMenu' || item.id === 'navRewards') {
+                    e.preventDefault();
+                    // Lógica para abrir menús laterales si existen
+                    showConfirmationModal('Menú lateral en desarrollo.');
+                }
+            });
+        });
+
     </script>
 </body>
 </html>

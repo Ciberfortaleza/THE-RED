@@ -179,45 +179,21 @@
             z-index: 1000;
         }
 
-        .new-post-button {
-            background: var(--gradient-red-light);
-            color: #fff;
+        .logo-button {
+            background: none;
             border: none;
-            padding: 12px 25px;
-            border-radius: 30px;
-            font-size: 1.1em;
-            font-weight: 700;
+            padding: 0;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: var(--glow-red);
-            position: relative;
-            overflow: hidden;
+            transition: transform 0.3s ease;
         }
 
-        .new-post-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.2);
-            transition: left 0.4s ease-in-out;
-            transform: skewX(-20deg);
+        .logo-button img {
+            height: 40px; /* Ajusta el tamaño del logo */
+            width: auto;
         }
-
-        .new-post-button:hover::before {
-            left: 100%;
-        }
-
-        .new-post-button:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 0 25px rgba(255, 48, 88, 1);
-        }
-
-        /* Añadido para ocultar el botón de nueva publicación en páginas específicas */
-        .new-post-button.hidden-on-profile {
-            display: none;
+        
+        .logo-button:hover {
+            transform: scale(1.1);
         }
 
         .right-icons {
@@ -1584,17 +1560,19 @@
                 gap: 12px;
             }
 
-            .new-post-button {
-                order: 3;
-                width: 100%;
-                margin-top: 12px;
-                font-size: 0.95em;
-                padding: 10px 20px;
+            .logo-button {
+                order: 1; 
+                height: 35px;
+                flex-grow: 0;
+            }
+
+            .logo-button img {
+                height: 100%;
             }
 
             .right-icons {
                 flex-grow: 1;
-                justify-content: center;
+                justify-content: flex-end;
                 gap: 15px;
                 order: 2;
             }
@@ -1630,6 +1608,26 @@
             .profile-edit-form-group .color-inputs-grid {
                 grid-template-columns: 1fr; /* Apilar entradas de color en pantallas pequeñas */
             }
+            
+            .main-logo-container {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                margin-left: 0;
+                padding: 15px;
+                gap: 20px;
+            }
+            .logo-img {
+                width: 100%;
+                max-width: 250px;
+                margin-bottom: 0;
+            }
+            .mission-vision-text {
+                max-width: 100%;
+            }
+            .discover-carousel-container {
+                padding: 15px 10px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -1637,9 +1635,12 @@
                 padding: 10px;
             }
 
-            .new-post-button {
-                font-size: 0.85em;
-                padding: 8px 15px;
+            .logo-button {
+                height: 30px;
+            }
+            
+            .logo-button img {
+                height: 100%;
             }
 
             .icon-button {
@@ -1931,51 +1932,121 @@
 
         /* Media Queries para Responsividad */
         @media (max-width: 768px) {
-            .main-logo-container {
-                flex-direction: column; /* Apila logo y texto verticalmente */
-                align-items: center; /* Centra el contenido */
-                margin-left: 0;
-                padding: 20px;
+            .main-header {
+                flex-wrap: wrap;
+                padding: 12px 18px;
+                gap: 12px;
             }
 
-            .logo-img {
-                width: 80%; /* Más pequeño en móvil */
-                margin-bottom: 20px;
+            .logo-button {
+                order: 1; 
+                height: 35px;
+                flex-grow: 0;
             }
 
-            .mission-vision-text {
-                text-align: center;
-                padding: 0 10px;
+            .logo-button img {
+                height: 100%;
             }
 
-            .mission-vision-text h2 {
-                font-size: 1.6em;
+            .right-icons {
+                flex-grow: 1;
+                justify-content: flex-end;
+                gap: 15px;
+                order: 2;
             }
 
-            .mission-vision-text p {
+            .icon-button {
+                font-size: 1.3em;
+                padding: 6px;
+            }
+
+            .icon-button svg {
+                width: 22px;
+                height: 22px;
+            }
+
+            .modal-content, .info-modal-content, .post-preview-modal-content {
+                padding: 25px;
+            }
+
+            .modal-button {
+                padding: 10px 20px;
                 font-size: 1em;
             }
 
-            .discover-section-header .section-title {
-                font-size: 1.8em;
+            .side-menu-header {
+                padding: 0 18px 18px 18px;
             }
 
-            .discover-carousel-arrow {
-                width: 40px;
-                height: 40px;
-                font-size: 1.3em;
+            .side-menu-item {
+                padding: 12px 18px;
+                font-size: 1.05em;
+            }
+
+            .profile-edit-form-group .color-inputs-grid {
+                grid-template-columns: 1fr; /* Apilar entradas de color en pantallas pequeñas */
+            }
+            
+            .main-logo-container {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                margin-left: 0;
+                padding: 15px;
+                gap: 20px;
+            }
+            .logo-img {
+                width: 100%;
+                max-width: 250px;
+                margin-bottom: 0;
+            }
+            .mission-vision-text {
+                max-width: 100%;
+            }
+            .discover-carousel-container {
+                padding: 15px 10px;
             }
         }
 
         @media (max-width: 480px) {
-            .discover-section-header .section-title {
-                font-size: 1.6em;
+            .main-header {
+                padding: 10px;
             }
 
-            .discover-carousel-arrow {
-                width: 40px;
-                height: 40px;
-                font-size: 1.3em;
+            .logo-button {
+                height: 30px;
+            }
+            
+            .logo-button img {
+                height: 100%;
+            }
+
+            .icon-button {
+                font-size: 1.1em;
+                padding: 5px;
+            }
+
+            .icon-button svg {
+                width: 22px;
+                height: 22px;
+            }
+
+            .modal-content, .info-modal-content, .post-preview-modal-content {
+                padding: 25px;
+            }
+
+            .modal-button {
+                padding: 10px 20px;
+                font-size: 1em;
+            }
+
+            .side-menu-header {
+                padding: 0 18px 18px 18px;
+            }
+
+            .side-menu-item {
+                padding: 12px 18px;
+                font-size: 1.05em;
             }
         }
     </style>
@@ -1993,10 +2064,11 @@
 
         <!-- Cabecera -->
         <header class="main-header">
-            <button class="new-post-button" id="newPostButton">
-                + Nueva Publicación
+            <!-- Logo que redirige a la página de inicio -->
+            <button class="logo-button" id="homeLogoButton">
+                <img src="logo.png" alt="THE RED Logo">
             </button>
-
+            
             <div class="right-icons">
                 <button class="icon-button" id="settingsButton" title="Cambiar idioma, país, moneda">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-globe">
@@ -2161,7 +2233,7 @@ Su Telegram: @lamezcladetodo Mastodon: @lamezcladetodo@mastodon social</p>
                         <div class="profile-card" data-keywords="poesia,estrellas,cosmos,literatura,inspiracion,versos"
                              data-username="@NuveBeachwear" data-avatar-url="nubeper.jpg">
                             <img src="nubeper.jpg" alt="Avatar" class="profile-avatar">
-                            <h4 class="profile-username">@Nuve_Beachwear</h4>
+                            <h4 class="profile-username">@NuveBeachwear</h4>
                             <span class="timestamp">NUVE</span>
                             <div class="profile-image-carousel">
                                 <div class="profile-image-carousel-container">
@@ -2173,7 +2245,7 @@ Su Telegram: @lamezcladetodo Mastodon: @lamezcladetodo@mastodon social</p>
                                 </div>
                             </div>
                             <div class="profile-tags-container"></div>
-                            <p class="profile-bio">Nube Beachwear is a family-crafted celebration of ethical fashion; Each piece is handcrafted with joy, supporting the slow fashion movement and sustainability. We don't mass produce; we create with intention, honoring crochet traditions and the environment. Our family's hobby has blossomed into ethical artistry and we believe in fair compensation for artisans and transparent pricing that reflects the true value of labor and love in every stitch. With Nube Beachwear, you're choosing a bikini that cherishes the planet and its people.</p>
+                            <p class="profile-bio">Nube Beachwear is a family-crafted celebration of ethical fashion; Each piece is handcrafted with joy, supporting the slow fashion movement and sustainability. We don't mass produce; we create with intention, honoring crochet traditions and the environment. We believe in fair compensation for artisans and transparent pricing that reflects the true value of labor and love in every stitch. With Nube Beachwear, you're choosing a bikini that cherishes the planet and its people.</p>
                             <div class="profile-stats">
                                 <span><i class="fas fa-users"></i> 500K</span>
                                 <span><i class="fas fa-feather-alt"></i> 200</span>
@@ -2434,116 +2506,8 @@ Su Telegram: @lamezcladetodo Mastodon: @lamezcladetodo@mastodon social</p>
         </div>
     </div>
 
-    <!-- Modal para Nueva Publicación -->
-    <div class="modal-overlay hidden" id="newPostModal">
-        <div class="modal-content">
-            <h2 style="color: var(--light-purple);">Crear Nueva Publicación</h2>
-            <div style="text-align: left; max-height: 70vh; overflow-y: auto; padding-right: 15px;">
-                <div class="profile-edit-form-group">
-                    <label for="newPostTextInput">Texto de la Publicación:</label>
-                    <textarea id="newPostTextInput" class="modal-input" rows="6" placeholder="¿Qué tienes en mente?"></textarea>
-                </div>
-                <!-- CAMBIO: Campo de subida de imagen en lugar de URL -->
-                <div class="profile-edit-form-group">
-                    <label for="newPostImageUploadInput">Subir Imagen (opcional):</label>
-                    <input type="file" id="newPostImageUploadInput" class="modal-input" accept="image/*">
-                    <div id="newPostImagePreview" class="image-upload-preview" style="min-height: 100px; margin-top: 10px;">
-                        <!-- La vista previa de la imagen se cargará aquí -->
-                        <p style="color: #bbb; font-size: 0.9em;">No se ha seleccionado ninguna imagen</p>
-                    </div>
-                </div>
-                <div class="profile-edit-form-group">
-                    <label for="newPostKeywordsInput">Palabras Clave (separadas por comas):</label>
-                    <input type="text" id="newPostKeywordsInput" class="modal-input" placeholder="ej: espacio, ciencia, arte">
-                </div>
-            </div>
-            <div class="modal-actions" style="margin-top: 30px; display: flex; justify-content: center; gap: 20px;">
-                <button class="modal-button" id="submitNewPostButton">Publicar</button>
-                <button class="modal-button" id="closeNewPostModalButton" style="background: linear-gradient(45deg, #ef4444, #dc2626);">Cancelar</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Nuevo Modal Genérico para Información (Misión, Quiénes Somos) -->
-    <div class="modal-overlay hidden" id="infoModal">
-        <div class="info-modal-content">
-            <button class="close-button" id="closeInfoModalBtn">×</button>
-            <h2 id="infoModalTitle"></h2>
-            <p class="modal-intro-text" id="infoModalIntroText"></p>
-            <div class="modal-body-content" id="infoModalBodyContent">
-                <!-- El contenido dinámico se cargará aquí -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Nuevo Modal para Configuración de Idioma -->
-    <div class="modal-overlay hidden" id="languageSettingsModal">
-        <div class="modal-content">
-            <h2 style="color: var(--light-purple);">Configuración de Idioma</h2>
-            <div style="text-align: left; padding: 0 15px; max-height: 60vh; overflow-y: auto;">
-                <p class="modal-message" style="text-align: center; font-size: 0.95em; margin-bottom: 20px;">
-                    Selecciona tu idioma preferido para la interfaz de la aplicación.
-                </p>
-                <div class="language-options-group">
-                    <div class="language-option">
-                        <input type="radio" id="lang-es" name="language" value="es" checked>
-                        <label for="lang-es">Español</label>
-                    </div>
-                    <div class="language-option">
-                        <input type="radio" id="lang-en" name="language" value="en">
-                        <label for="lang-en">English</label>
-                    </div>
-                    <!-- Puedes añadir más idiomas aquí -->
-                </div>
-            </div>
-            <div class="modal-actions" style="margin-top: 30px;">
-                <button class="modal-button" id="saveLanguageSettingsButton">Guardar Idioma</button>
-                <button class="modal-button" id="closeLanguageSettingsModalButton" style="background: linear-gradient(45deg, #ef4444, #dc2626);">Cerrar</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Nuevo Modal para Pago de Suscripción -->
-    <div class="modal-overlay hidden" id="paymentModal">
-        <div class="modal-content">
-            <h2 id="paymentModalTitle" style="color: var(--light-purple);">Comprar Suscripción</h2>
-            <div style="text-align: left; max-height: 70vh; overflow-y: auto; padding-right: 15px;">
-                <p class="modal-message" style="text-align: center; font-size: 0.95em; margin-bottom: 20px;">
-                    Por favor, introduce tus datos de pago para completar la suscripción.
-                </p>
-                <div class="payment-form-section">
-                    <div class="payment-form-group">
-                        <label for="cardNumberInput">Número de Tarjeta:</label>
-                        <input type="text" id="cardNumberInput" class="modal-input" placeholder="XXXX XXXX XXXX XXXX" maxlength="19">
-                    </div>
-                    <div class="payment-form-grid">
-                        <div class="payment-form-group">
-                            <label for="expiryDateInput">Fecha de Vencimiento (MM/AA):</label>
-                            <input type="text" id="expiryDateInput" class="modal-input" placeholder="MM/AA" maxlength="5">
-                        </div>
-                        <div class="payment-form-group">
-                            <label for="cvcInput">CVC:</label>
-                            <input type="text" id="cvcInput" class="modal-input" placeholder="XXX" maxlength="4">
-                        </div>
-                    </div>
-                    <div class="payment-form-group">
-                        <label for="cardNameInput">Nombre en la Tarjeta:</label>
-                        <input type="text" id="cardNameInput" class="modal-input" placeholder="Nombre Completo">
-                    </div>
-                    <div class="payment-form-group">
-                        <label for="billingAddressInput">Dirección de Facturación:</label>
-                        <input type="text" id="billingAddressInput" class="modal-input" placeholder="Calle, Ciudad, Código Postal">
-                    </div>
-                </div>
-            </div>
-            <div class="modal-actions" style="margin-top: 30px; display: flex; justify-content: center; gap: 20px;">
-                <button class="modal-button" id="processPaymentButton">Pagar</button>
-                <button class="modal-button" id="closePaymentModalButton" style="background: linear-gradient(45deg, #ef4444, #dc2626);">Cancelar</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Nuevo Modal para Vista Previa de Publicación -->
+    <!-- Modal para Nueva Publicación ELIMINADO -->
+    <!-- Modal para Vista Previa de Publicación -->
     <div class="modal-overlay hidden" id="postPreviewModal">
         <div class="post-preview-modal-content">
             <button class="close-button" id="closePostPreviewModalBtn">×</button>
@@ -2804,16 +2768,6 @@ Su Telegram: @lamezcladetodo Mastodon: @lamezcladetodo@mastodon social</p>
         const processPaymentButton = document.getElementById('processPaymentButton');
         const closePaymentModalButton = document.getElementById('closePaymentModalButton');
 
-        // Modal de nueva publicación
-        const newPostModal = document.getElementById('newPostModal');
-        const newPostButton = document.getElementById('newPostButton');
-        const closeNewPostModalButton = document.getElementById('closeNewPostModalButton');
-        const submitNewPostButton = document.getElementById('submitNewPostButton');
-        const newPostTextInput = document.getElementById('newPostTextInput');
-        const newPostImageUploadInput = document.getElementById('newPostImageUploadInput');
-        const newPostImagePreview = document.getElementById('newPostImagePreview');
-        const newPostKeywordsInput = document.getElementById('newPostKeywordsInput');
-
         // Modal de vista previa de publicación
         const postPreviewModal = document.getElementById('postPreviewModal');
         const closePostPreviewModalBtn = document.getElementById('closePostPreviewModalBtn');
@@ -2907,83 +2861,6 @@ Su Telegram: @lamezcladetodo Mastodon: @lamezcladetodo@mastodon social</p>
         // Llamar al actualizar el estado activo al cargar la página
         document.addEventListener('DOMContentLoaded', updateFooterNavActiveState);
 
-
-        // --- Lógica para el botón "Nueva Publicación" (New Post Modal) ---
-        if (newPostButton) {
-            newPostButton.addEventListener('click', () => {
-                newPostModal.classList.remove('hidden');
-                // Limpiar campos al abrir
-                newPostTextInput.value = '';
-                newPostImageUploadInput.value = '';
-                newPostImagePreview.innerHTML = '<p style="color: #bbb; font-size: 0.9em;">No se ha seleccionado ninguna imagen</p>';
-                newPostKeywordsInput.value = '';
-            });
-        }
-
-        if (closeNewPostModalButton) {
-            closeNewPostModalButton.addEventListener('click', () => {
-                newPostModal.classList.add('hidden');
-            });
-        }
-
-        if (newPostImageUploadInput) {
-            newPostImageUploadInput.addEventListener('change', (event) => {
-                handleImageUploadPreview(event, newPostImagePreview, 1); // Solo una imagen para publicación
-            });
-        }
-
-        if (submitNewPostButton) {
-            submitNewPostButton.addEventListener('click', async () => {
-                const postText = newPostTextInput.value.trim();
-                const postImageFile = newPostImageUploadInput.files[0];
-                const postKeywords = newPostKeywordsInput.value.split(',').map(k => k.trim()).filter(k => k !== '');
-
-                if (!postText && !postImageFile) {
-                    showConfirmationModal("Por favor, escribe algo o sube una imagen para tu publicación.");
-                    return;
-                }
-
-                showLoadingOverlay();
-
-                let imageUrl = '';
-                if (postImageFile) {
-                    imageUrl = await convertFileToBase64(postImageFile);
-                }
-
-                const newPost = {
-                    text: postText,
-                    imageUrl: imageUrl,
-                    keywords: postKeywords,
-                    timestamp: new Date().toISOString(),
-                    username: '@CurrentUser', // Esto debería ser dinámico del usuario autenticado
-                    avatarUrl: 'https://placehold.co/40x40/FF3058/ffffff?text=ME', // Esto debería ser dinámico
-                    likes: 0,
-                    comments: 0,
-                    shares: 0
-                };
-
-                try {
-                    if (db && userId) {
-                        // Guardar la publicación en Firestore
-                        const postsCollectionRef = collection(db, "posts");
-                        await setDoc(doc(postsCollectionRef), newPost); // Usar doc() sin ID para que Firestore genere uno
-
-                        showConfirmationModal("¡Publicación creada exitosamente!");
-                        newPostModal.classList.add('hidden');
-
-                        // Recargar publicaciones en la página actual si es necesario (depende de la página)
-                        // Esto se manejará en los JS específicos de cada página que muestren publicaciones
-                    } else {
-                        showConfirmationModal("Error: No se pudo conectar a la base de datos o no hay usuario autenticado.");
-                    }
-                } catch (error) {
-                    console.error("Error al guardar la publicación:", error);
-                    showConfirmationModal(`Error al crear la publicación: ${error.message}`);
-                } finally {
-                    hideLoadingOverlay();
-                }
-            });
-        }
 
         // --- Lógica para el Modal de Edición de Perfil ---
         if (openProfileEditModalButton) {
@@ -3727,7 +3604,7 @@ Su Telegram: @lamezcladetodo Mastodon: @lamezcladetodo@mastodon social</p>
                     const readMoreToggle = textElement.querySelector('.read-more-toggle');
                     readMoreToggle.addEventListener('click', () => {
                         if (textElement.classList.contains('expanded')) {
-                            textElement.innerHTML = truncatedText + '<span class="read-more-toggle" style="color: var(--light-red); cursor: pointer; font-weight: bold;">Ver más</span>';
+                            textElement.innerHTML = fullText + ' <span class="read-more-toggle" style="color: var(--light-red); cursor: pointer; font-weight: bold;">Ver menos</span>';
                             textElement.classList.remove('expanded');
                         } else {
                             textElement.innerHTML = fullText + ' <span class="read-more-toggle" style="color: var(--light-red); cursor: pointer; font-weight: bold;">Ver menos</span>';
@@ -3985,6 +3862,14 @@ Su Telegram: @lamezcladetodo Mastodon: @lamezcladetodo@mastodon social</p>
                     if (confirmationModal) {
                         confirmationModal.classList.add('hidden');
                     }
+                });
+            }
+
+            // Lógica para el botón del logo en la cabecera
+            const homeLogoButton = document.getElementById('homeLogoButton');
+            if (homeLogoButton) {
+                homeLogoButton.addEventListener('click', () => {
+                    window.location.href = 'home.html';
                 });
             }
         });
