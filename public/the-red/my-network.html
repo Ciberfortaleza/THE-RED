@@ -179,45 +179,16 @@
             z-index: 1000;
         }
 
-        .new-post-button {
-            background: var(--gradient-red-light);
-            color: #fff;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 30px;
-            font-size: 1.1em;
-            font-weight: 700;
+        .header-logo {
+            height: 40px;
+            width: auto;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: var(--glow-red);
-            position: relative;
-            overflow: hidden;
+            transition: transform 0.3s ease, filter 0.3s ease;
         }
 
-        .new-post-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.2);
-            transition: left 0.4s ease-in-out;
-            transform: skewX(-20deg);
-        }
-
-        .new-post-button:hover::before {
-            left: 100%;
-        }
-
-        .new-post-button:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 0 25px rgba(255, 48, 88, 1);
-        }
-
-        /* Añadido para ocultar el botón de nueva publicación en páginas específicas */
-        .new-post-button.hidden-on-profile {
-            display: none;
+        .header-logo:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 0 10px var(--light-red));
         }
 
         .right-icons {
@@ -1755,9 +1726,9 @@
 
         <!-- Cabecera -->
         <header class="main-header">
-            <button class="new-post-button" id="newPostButton">
-                + Nueva Publicación
-            </button>
+            <a href="home.html" id="homeLogoLink">
+                <img src="logo.png" alt="THE RED Logo" class="header-logo">
+            </a>
 
             <div class="right-icons">
                 <button class="icon-button" id="settingsButton" title="Cambiar idioma, país, moneda">
@@ -2531,57 +2502,6 @@
         }
 
         /**
-         * Maneja la vista previa de la carga de imágenes.
-         * @param {Event} event - El evento de cambio del input de archivo.
-         * @param {HTMLElement} previewContainer - El contenedor donde se mostrarán las vistas previas.
-         * @param {number} maxFiles - El número máximo de archivos permitidos.
-         * @param {boolean} isCircular - Si la vista previa debe ser circular (para avatares).
-         */
-        async function handleImageUploadPreview(event, previewContainer, maxFiles = 1, isCircular = false) {
-            previewContainer.innerHTML = ''; // Limpiar previas
-            const files = Array.from(event.target.files).slice(0, maxFiles); // Limitar a maxFiles
-
-            if (files.length === 0) {
-                if (maxFiles === 1) {
-                    previewContainer.innerHTML = '<p style="color: #bbb; font-size: 0.9em;">No se ha seleccionado ninguna imagen</p>';
-                }
-                return;
-            }
-
-            for (const file of files) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const imgUrl = e.target.result;
-                    const previewItem = document.createElement('div');
-                    previewItem.classList.add('preview-item');
-                    if (isCircular) {
-                        previewItem.style.borderRadius = '50%';
-                    }
-
-                    const img = document.createElement('img');
-                    img.src = imgUrl;
-                    img.alt = 'Preview';
-                    previewItem.appendChild(img);
-
-                    const removeBtn = document.createElement('button');
-                    removeBtn.classList.add('remove-btn');
-                    removeBtn.textContent = '×';
-                    removeBtn.onclick = () => {
-                        previewItem.remove();
-                        // Opcional: limpiar el archivo del input si es una sola imagen
-                        if (maxFiles === 1) {
-                            event.target.value = ''; // Limpiar el input de archivo
-                            previewContainer.innerHTML = '<p style="color: #bbb; font-size: 0.9em;">No se ha seleccionado ninguna imagen</p>';
-                        }
-                    };
-                    previewItem.appendChild(removeBtn);
-                    previewContainer.appendChild(previewItem);
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        /**
          * Convierte un archivo a una cadena Base64.
          * @param {File} file - El archivo a convertir.
          * @returns {Promise<string>} La cadena Base64 del archivo.
@@ -3209,7 +3129,7 @@
                     const readMoreToggle = textElement.querySelector('.read-more-toggle');
                     readMoreToggle.addEventListener('click', () => {
                         if (textElement.classList.contains('expanded')) {
-                            textElement.innerHTML = truncatedText + '<span class="read-more-toggle" style="color: var(--light-red); cursor: pointer; font-weight: bold;">Ver más</span>';
+                            textElement.innerHTML = fullText + ' <span class="read-more-toggle" style="color: var(--light-red); cursor: pointer; font-weight: bold;">Ver menos</span>';
                             textElement.classList.remove('expanded');
                         } else {
                             textElement.innerHTML = fullText + ' <span class="read-more-toggle" style="color: var(--light-red); cursor: pointer; font-weight: bold;">Ver menos</span>';
@@ -3417,7 +3337,7 @@
                             const readMoreToggle = textElement.querySelector('.read-more-toggle');
                             readMoreToggle.addEventListener('click', function() {
                                 if (textElement.classList.contains('expanded')) {
-                                    textElement.innerHTML = truncatedText + '<span class="read-more-toggle" style="color: var(--light-red); cursor: pointer; font-weight: bold;">Ver más</span>';
+                                    textElement.innerHTML = fullText + ' <span class="read-more-toggle" style="color: var(--light-red); cursor: pointer; font-weight: bold;">Ver menos</span>';
                                     textElement.classList.remove('expanded');
                                 } else {
                                     textElement.innerHTML = fullText + ' <span class="read-more-toggle" style="color: var(--light-red); cursor: pointer; font-weight: bold;">Ver menos</span>';
