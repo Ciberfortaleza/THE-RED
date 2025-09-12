@@ -75,33 +75,45 @@
         body {
             background-image: url('background.png');
             color: #fff;
-            min-height: 100vh;
+            height: 100vh;
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
-            overflow-y: auto;
+            overflow-y: hidden;
             position: relative;
         }
 
         .app-container {
             display: flex;
             flex-direction: column;
-            min-height: 10vh;
+            flex: 1;
             width: 100%;
             max-width: 1200px;
             margin: 0 auto;
             position: relative;
             z-index: 1;
-            padding-bottom: 70px; /* Espacio para el footer fijo */
+            padding-bottom: 70px;
+            overflow-y: auto;
         }
 
         /* Estilos para los "blobs" de fondo */
+        .background-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
         .blob {
             position: absolute;
             border-radius: 50%;
             filter: blur(120px);
             opacity: 0.6;
             animation: blob-move 20s infinite alternate ease-in-out, blob-pulse 12s infinite alternate;
+            pointer-events: none;
         }
 
         .blob-purple {
@@ -288,26 +300,24 @@
         }
 
         .search-input-group input[type="text"]:focus {
-            outline: none;
-            border-color: var(--light-red);
-            box-shadow: 0 0 8px rgba(255, 48, 88, 0.6), inset 0 0 8px rgba(255, 48, 88, 0.4);
-        }
 
-        .search-input-group button {
-            background: var(--gradient-red-light);
-            color: #fff;
-            border: none;
-            border-radius: 25px;
-            padding: 12px 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-            white-space: nowrap;
-        }
+            .search-input-group button {
+                background: var(--gradient-red-light);
+                color: #fff;
+                border: none;
+                border-radius: 25px;
+                padding: 12px 20px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+                white-space: nowrap;
+            }
 
-        .search-input-group button:hover {
-            background-color: var(--medium-red);
-            transform: translateY(-2px);
+            .search-input-group button:hover {
+                background-color: var(--medium-red);
+                transform: translateY(-2px);
+                box-shadow: 0 0 15px rgba(255, 48, 88, 0.9);
+            }
             box-shadow: 0 0 15px rgba(255, 48, 88, 0.9);
         }
 
@@ -480,6 +490,26 @@
             background-color: var(--medium-red);
             transform: translateY(-3px);
             box-shadow: 0 0 15px rgba(255, 48, 88, 0.8);
+        }
+
+        .follow-btn {
+            background-color: #3b0764;
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+            width: 100%;
+            max-width: 120px;
+        }
+
+        .follow-btn:hover {
+            background-color: #581c87;
+            transform: translateY(-1px);
         }
 
         /* Animaciones */
@@ -734,25 +764,64 @@
 
         /* Estilos para las tarjetas de perfil (profile-card) */
         .profile-card {
-            background-color: rgba(74, 26, 85, 0.4);
+            background-color: rgba(74, 26, 85, 0.9);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(125, 52, 144, 0.6);
-            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5), 0 0 20px rgba(125, 52, 144, 0.5);
-
-            min-width: 320px;
-            max-width: 350px;
+            border: 2px solid rgba(125, 52, 144, 0.6);
+            border-radius: 32px;
+            padding: 50px;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+            max-width: 1000px;
             width: 100%;
-            flex-shrink: 0;
-            border-radius: 20px;
-            padding: 25px;
+            margin: 0 auto;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
-            gap: 15px;
-            filter: brightness(0.95);
-            transition: all 0.3s ease;
+            min-height: 700px;
+        }
+
+        #featuredProfilesCarousel {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            border-radius: 25px;
+            padding: 40px;
+            margin: 50px 0;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            min-height: 550px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        #featuredProfilesCarousel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(255, 48, 88, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(138, 43, 226, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 60%, rgba(30, 144, 255, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @media (min-width: 768px) {
+            .profile-card {
+                flex-direction: row;
+                text-align: left;
+                align-items: flex-start;
+            }
         }
 
         .profile-card:hover {
@@ -763,42 +832,121 @@
             filter: brightness(1.2);
         }
 
+        .profile-left-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        @media (min-width: 768px) {
+            .profile-left-section {
+                width: auto;
+                margin-right: 2.5rem;
+                margin-bottom: 0;
+            }
+        }
+
         .profile-card .profile-avatar {
-            width: 110px;
-            height: 110px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
             object-fit: cover;
-            border: 4px solid var(--light-red);
-            box-shadow: 0 0 15px rgba(255, 48, 88, 0.8);
-            margin-bottom: 15px;
+            border: 4px solid white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1rem;
+        }
+
+        .profile-right-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .profile-right-section {
+                width: auto;
+            }
+        }
+
+        .name-container {
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .name-container {
+                text-align: left;
+            }
         }
 
         .profile-card .profile-username {
-            font-size: 1.4em;
-            font-weight: 800;
-            color: var(--light-red);
-            text-shadow: 0 0 8px rgba(255, 48, 88, 0.6);
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #e5d5e5;
+            margin: 0;
+        }
+
+        .profile-card .timestamp {
+            font-size: 1rem;
+            color: #d8c0d8;
+            margin: 0;
         }
 
         .profile-card .profile-bio {
-            font-size: 1em;
-            color: #e8e8e8;
-            line-height: 1.5;
-            margin-bottom: 15px;
-            text-align: left;
-            width: 100%;
+            font-size: 1rem;
+            color: #e5d5e5;
+            line-height: 1.6;
+            margin-top: 1rem;
+            position: relative;
+            z-index: 3;
+        }
+
+        @media (min-width: 768px) {
+            .profile-card .profile-bio {
+                text-align: left;
+                margin-top: 0;
+            }
         }
 
         /* Estilos para el carrusel de imágenes del perfil */
         .profile-image-carousel {
             position: relative;
             width: 100%;
-            height: 150px;
+            height: 200px;
             overflow: hidden;
-            border-radius: 10px;
+            border-radius: 15px;
             margin-bottom: 15px;
             background-color: rgba(0, 0, 0, 0.2);
             border: 1px solid rgba(125, 52, 144, 0.6);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .profile-tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        @media (min-width: 768px) {
+            .profile-tags-container {
+                justify-content: flex-start;
+            }
+        }
+
+        .tag {
+            background-color: #3b0764;
+            color: #d8c0d8;
+            border-radius: 9999px;
+            padding: 0.25rem 1rem;
+            font-size: 0.875rem;
         }
 
         .profile-image-carousel-container {
@@ -812,6 +960,12 @@
             height: 100%;
             object-fit: cover;
             display: block;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .profile-carousel-image:hover {
+            transform: scale(1.05);
         }
 
         .profile-carousel-navigation {
@@ -822,23 +976,25 @@
             justify-content: space-between;
             transform: translateY(-50%);
             padding: 0 5px;
-            z-index: 10;
+            z-index: 5;
         }
 
         .profile-carousel-arrow {
-            background-color: rgba(255, 48, 88, 0.7);
+            background-color: rgba(255, 48, 88, 0.8);
             color: #fff;
             border: none;
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            font-size: 1em;
+            width: 35px;
+            height: 35px;
+            font-size: 1.1em;
             cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: center;
             transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            z-index: 15;
+            pointer-events: auto;
         }
 
         .profile-carousel-arrow:hover {
@@ -1804,9 +1960,8 @@
 
         /* Estilos para los carruseles de Discover (ahora en Home también) */
         .discover-items-carousel {
-            position: relative;
             width: 100%;
-            overflow: hidden;
+            overflow: visible;
             padding: 25px 0;
             background-color: rgba(30, 5, 37, 0.8);
             backdrop-filter: blur(10px);
@@ -1814,15 +1969,242 @@
             border-radius: 20px;
             box-shadow: var(--shadow);
             border: 1px solid rgba(125, 52, 144, 0.7);
+            margin-bottom: 80px;
+            position: relative;
+            z-index: 2;
         }
 
         .discover-carousel-container {
-            display: flex;
-            overflow-x: scroll;
+            display: block;
+            overflow: visible;
             scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
-            padding: 15px 25px;
-            gap: 25px;
+            position: relative;
+            width: 100%;
+            padding: 20px 40px;
+            min-height: 500px;
+        }
+
+        .discover-carousel-navigation {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 25;
+            pointer-events: none;
+        }
+
+        .discover-carousel-arrow {
+            background: linear-gradient(135deg, 
+                rgba(255, 48, 88, 0.9) 0%, 
+                rgba(255, 107, 136, 0.9) 100%);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 1.4em;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                0 8px 25px rgba(255, 48, 88, 0.4),
+                0 4px 10px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            z-index: 30;
+            pointer-events: auto;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .discover-carousel-arrow::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.3), 
+                transparent);
+            transition: left 0.6s ease;
+        }
+
+        .discover-carousel-arrow:hover {
+            background: linear-gradient(135deg, 
+                rgba(255, 48, 88, 1) 0%, 
+                rgba(255, 107, 136, 1) 100%);
+            transform: scale(1.15) translateY(-2px);
+            box-shadow: 
+                0 12px 35px rgba(255, 48, 88, 0.6),
+                0 6px 15px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .discover-carousel-arrow:hover::before {
+            left: 100%;
+        }
+
+        .discover-carousel-arrow:active {
+            transform: scale(1.05) translateY(0);
+            box-shadow: 
+                0 6px 20px rgba(255, 48, 88, 0.5),
+                0 3px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Animaciones adicionales para las cartas */
+        @keyframes cardSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .discover-carousel-container .profile-card.active {
+            animation: cardSlideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        /* Efecto de brillo en hover para las cartas */
+        .discover-carousel-container .profile-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.6),
+                0 15px 25px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(255, 48, 88, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        /* Estilos para el botón "Ver más" en las cartas de perfil */
+        .see-more-btn {
+            background: linear-gradient(135deg, #ff3058, #ff6b88);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            box-shadow: 0 6px 20px rgba(255, 48, 88, 0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            align-self: flex-start;
+            z-index: 15;
+            position: relative;
+            outline: none;
+        }
+
+        .see-more-btn:hover {
+            background: linear-gradient(135deg, #ff6b88, #ff3058);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 48, 88, 0.4);
+        }
+
+        .see-more-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 3px 10px rgba(255, 48, 88, 0.3);
+        }
+
+        .see-more-btn:focus {
+            box-shadow: 0 0 0 3px rgba(255, 48, 88, 0.2);
+        }
+
+        .discover-carousel-container .profile-card {
+            min-width: 100%;
+            width: 100%;
+            flex-shrink: 0;
+            position: static;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            visibility: hidden;
+            z-index: 2;
+            display: none;
+            background: 
+                linear-gradient(135deg, 
+                    rgba(42, 42, 62, 0.95) 0%, 
+                    rgba(30, 30, 46, 0.95) 50%, 
+                    rgba(25, 25, 40, 0.95) 100%);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 
+                0 15px 35px rgba(0, 0, 0, 0.4),
+                0 5px 15px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            min-height: 520px;
+            backdrop-filter: blur(20px);
+            transform: translateY(10px) scale(0.98);
+        }
+
+        .discover-carousel-container .profile-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 48, 88, 0.05) 0%, 
+                transparent 30%, 
+                rgba(138, 43, 226, 0.05) 100%);
+            border-radius: 20px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .discover-carousel-container .profile-card.active {
+            opacity: 1;
+            visibility: visible;
+            display: flex;
+            transform: translateY(0) scale(1);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.5),
+                0 10px 20px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(255, 48, 88, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .discover-carousel-container .profile-card:first-child {
+            display: flex;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .ver-mas-btn {
+            background: transparent;
+            color: #d8c0d8;
+            border: 1px solid #d8c0d8;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .ver-mas-btn:hover {
+            background: #d8c0d8;
+            color: #3b0764;
+        }
+
+        .profile-bio-collapsed {
+            display: block;
+        }
+
+        .profile-bio-full {
+            display: none;
         }
 
         /* Ocultar barra de desplazamiento */
@@ -1837,17 +2219,19 @@
         .discover-carousel-navigation {
             position: absolute;
             top: 50%;
+            left: -1px;
             width: 100%;
             display: flex;
             justify-content: space-between;
+            align-items: center;
             transform: translateY(-50%);
-            padding: 0 20px;
             pointer-events: none;
-            z-index: 1;
+            z-index: 20;
+            height: 50px;
         }
 
         .discover-carousel-arrow {
-            background-color: rgba(255, 48, 88, 0.8);
+            background-color: rgba(255, 48, 88, 0.9);
             color: #fff;
             border: none;
             border-radius: 50%;
@@ -1856,17 +2240,113 @@
             font-size: 1.5em;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: var(--shadow);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
             pointer-events: auto;
             display: flex;
             justify-content: center;
             align-items: center;
+            z-index: 40;
+            position: relative;
+            flex-shrink: 0;
         }
 
         .discover-carousel-arrow:hover {
             background-color: var(--red-primary);
             transform: scale(1.15);
             box-shadow: 0 0 20px rgba(255, 48, 88, 1);
+        }
+
+        /* Estilos para el modal de imágenes */
+        .image-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image-modal-backdrop {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+        }
+
+        .image-modal-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 20px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            animation: modalFadeIn 0.3s ease-out;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .image-modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 48, 88, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.2em;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            z-index: 10001;
+        }
+
+        .image-modal-close:hover {
+            background: rgba(255, 48, 88, 1);
+            transform: scale(1.1);
+        }
+
+        .modal-image {
+            width: 100%;
+            height: auto;
+            max-height: 70vh;
+            object-fit: contain;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .image-modal-info {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .image-modal-info h3 {
+            color: white;
+            font-size: 1.2em;
+            margin: 0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         /* Estilos para las nuevas secciones de carrusel en Discover (ahora en Home) */
@@ -2142,139 +2622,189 @@
                     <h3 class="section-title">Negocios Locales</h3>
                 </div>
                 <div class="discover-items-carousel" id="featuredProfilesCarousel">
+                    <div class="discover-carousel-navigation">
+                        <button class="discover-carousel-arrow" data-direction="left">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="discover-carousel-arrow" data-direction="right">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
                     <div class="discover-carousel-container">
                         <!-- Nuevas profile-card -->
-                        <div class="profile-card" data-keywords="artista,plastico,multidisciplinario,linograbado,cultura,mexica,nahua,mexico,fotografia,expedicion,universo"
-                             data-username="@RubiLuna" data-avatar-url="rubiperf.jpg">
-                            <img src="rubiperf.jpg" alt="Avatar" class="profile-avatar">
-                            <h4 class="profile-username">@RubiLuna</h4>
-                            <span class="timestamp">Rubi Luna</span>
-
-                            <div class="profile-image-carousel">
-                                <div class="profile-image-carousel-container">
-                                    <img src="rubi1.jpg" alt="Profile Image 1" class="profile-carousel-image">
-                                    <img src="rubi2.jpg" alt="Profile Image 2" class="profile-carousel-image">
-                                    <img src="rubi3.jpg" alt="Profile Image 3" class="profile-carousel-image">
-                                    <img src="rubi4.jpg" alt="Profile Image 3" class="profile-carousel-image">
-
-                                </div>
-                                <div class="profile-carousel-navigation">
-                                    <button class="profile-carousel-arrow" data-direction="left"><i class="fas fa-chevron-left"></i></button>
-                                    <button class="profile-carousel-arrow" data-direction="right"><i class="fas fa-chevron-right"></i></button>
-                                </div>
+                        <div class="profile-card active" data-keywords="artista,plastico,multidisciplinario,linograbado,cultura,mexica,nahua,mexico,fotografia,expedicion,universo"
+                             data-username="@RubiLuna" data-avatar-url="rubiperf.jpg" style="display: flex;">
+                            <div class="profile-left-section">
+                                <img src="rubiperf.jpg" alt="Avatar" class="profile-avatar" onclick="showImageModal('rubiperf.jpg', '@RubiLuna')">
+                                <button class="profile-action-button">Seguir</button>
                             </div>
+                            <div class="profile-right-section">
+                                <h4 class="profile-username">@RubiLuna</h4>
+                                <span class="timestamp">Rubi Luna</span>
+                                
+                                <div class="profile-image-carousel">
+                                    <div class="profile-image-carousel-container">
+                                        <img src="rubi1.jpg" alt="Profile Image 1" class="profile-carousel-image" onclick="showImageModal('rubi1.jpg', '@RubiLuna')">
+                                        <img src="rubi2.jpg" alt="Profile Image 2" class="profile-carousel-image" onclick="showImageModal('rubi2.jpg', '@RubiLuna')">
+                                        <img src="rubi3.jpg" alt="Profile Image 3" class="profile-carousel-image" onclick="showImageModal('rubi3.jpg', '@RubiLuna')">
+                                        <img src="rubi4.jpg" alt="Profile Image 4" class="profile-carousel-image" onclick="showImageModal('rubi4.jpg', '@RubiLuna')">
+                                    </div>
+                                    <div class="profile-carousel-navigation">
+                                        <button class="profile-carousel-arrow" data-direction="left"><i class="fas fa-chevron-left"></i></button>
+                                        <button class="profile-carousel-arrow" data-direction="right"><i class="fas fa-chevron-right"></i></button>
+                                    </div>
+                                </div>
 
-                            <div class="profile-tags-container">
-                                <!-- Las tags se insertarán aquí por JavaScript -->
-                            </div>
+                                <div class="profile-tags-container">
+                                    <!-- Las tags se insertarán aquí por JavaScript -->
+                                </div>
 
-                            <p class="profile-bio">
-                                Contenido de entretenimiento creando peformans, historias, shows y llevarte a un mundo donde todos podemos volar a través de la danza. Realizando un espectaculo circense en danza aérea, en áreas públicas ○ eventos privados. Todo el mundo tiene derecho a disfrutar de esta hermosa arte y las maravillas de volar, no importa de que parte del mundo seas, todos merecemos ser parte de la danza aérea, ya sea participando dentro de un numero de danza aérea, apoyando a los artistas, dando a conocer esta hermosa arte y con lo mas hermoso los apluasos de nuestro público. Haciendo que este mismo siempre regrese feliz a su hogar y comparta esta experiencia de una manera grata y feliz. La danza aérea es más que solo subir a la tela, es el talento de poder volar más haya de los límites humanos, en ella encuentras ese sentido de poder maravillar, no solo a ti, también a un gran sector del público, haciendo un momento inolvidable y mágico.
+                                <p class="profile-bio profile-bio-collapsed">
+                                    Contenido de entretenimiento creando peformans, historias, shows y llevarte a un mundo donde todos podemos volar a través de la danza...
+                                </p>
+                                <p class="profile-bio-full" style="display: none;">
+                                    Contenido de entretenimiento creando peformans, historias, shows y llevarte a un mundo donde todos podemos volar a través de la danza. Realizando un espectaculo circense en danza aérea, en áreas públicas ○ eventos privados. Todo el mundo tiene derecho a disfrutar de esta hermosa arte y las maravillas de volar, no importa de que parte del mundo seas, todos merecemos ser parte de la danza aérea, ya sea participando dentro de un numero de danza aérea, apoyando a los artistas, dando a conocer esta hermosa arte y con lo mas hermoso los apluasos de nuestro público. Haciendo que este mismo siempre regrese feliz a su hogar y comparta esta experiencia de una manera grata y feliz. La danza aérea es más que solo subir a la tela, es el talento de poder volar más haya de los límites humanos, en ella encuentras ese sentido de poder maravillar, no solo a ti, también a un gran sector del público, haciendo un momento inolvidable y mágico.
 Contacto: Rubí Luna Tel. 55 70 87 02 32 Gmail.rubiolvera21@gmail.com Insta.rubii_luna00
-                                <span class="read-more-toggle"></span>
-                            </p>
-
-                            <div class="profile-stats">
-                                <span><i class="fas fa-users"></i> 1.2M</span>
-                                <span><i class="fas fa-image"></i> 345</span>
+                                </p>
+                                <button class="see-more-btn" onclick="toggleBio(this)">Ver más</button>
                             </div>
-                            <button class="profile-action-button">Seguir</button>
                         </div>
                         <div class="profile-card" data-keywords="chef,cosmico,culinario,universo,recetas,innovacion"
                              data-username="@Raza" data-avatar-url="razaper.jpg">
-                            <img src="razaper.jpg" alt="Avatar" class="profile-avatar">
-                            <h4 class="profile-username">@Raza</h4>
-                            <span class="timestamp">Ruben Adrian Zamora Alva</span>
-                            <div class="profile-image-carousel">
-                                <div class="profile-image-carousel-container">
-                                    <img src="raza1.jpg" alt="Profile Image 1" class="profile-carousel-image">
-                                    <img src="raza2.jpg" alt="Profile Image 2" class="profile-carousel-image">
-                                    <img src="raza3.jpg" alt="Profile Image 2" class="profile-carousel-image">
-                                </div>
-                                <div class="profile-carousel-navigation">
-                                    <button class="profile-carousel-arrow" data-direction="left"><i class="fas fa-chevron-left"></i></button>
-                                    <button class="profile-carousel-arrow" data-direction="right"><i class="fas fa-chevron-right"></i></button>
-                                </div>
+                            <div class="profile-left-section">
+                                <img src="razaper.jpg" alt="Avatar" class="profile-avatar" onclick="showImageModal('razaper.jpg', '@RAZA')">
+                                <button class="profile-action-button">Seguir</button>
                             </div>
-                            <div class="profile-tags-container"></div>
-                            <p class="profile-bio">Rubén Adrián Zamora Alva es conocido como RAZA en el mundo del collage. Sus obras están hechas a mano con recortes encontrados al azar en distintas partes del mundo. RAZA juega muy seriamente con ideas surrealistas y tiene la convicción de que obedecer el lenguaje de los sueños nos despierta a un mundo mejor. Para RAZA la palabra "Arte" Ileva mayúscula y no la usa muy a menudo, por lo mismo no se preocupa de si lamarse artista o no. Por lo mientras, toma la herramienta de corte como una caña de pescar y avienta la carnada hacia las profundidades del inconsiente colectivo, esperando traer a la superficie algo de magia suficientemente potente para compartirla y hackear mentes
+                            <div class="profile-right-section">
+                                <h4 class="profile-username">@Raza</h4>
+                                <span class="timestamp">Ruben Adrian Zamora Alva</span>
+                                <div class="profile-image-carousel">
+                                    <div class="profile-image-carousel-container">
+                                        <img src="raza1.jpg" alt="Profile Image 1" class="profile-carousel-image" onclick="showImageModal('raza1.jpg', '@RAZA')">
+                                        <img src="raza2.jpg" alt="Profile Image 2" class="profile-carousel-image" onclick="showImageModal('raza2.jpg', '@RAZA')">
+                                        <img src="raza3.jpg" alt="Profile Image 3" class="profile-carousel-image" onclick="showImageModal('raza3.jpg', '@RAZA')">
+                                    </div>
+                                    <div class="profile-carousel-navigation">
+                                        <button class="profile-carousel-arrow" data-direction="left"><i class="fas fa-chevron-left"></i></button>
+                                        <button class="profile-carousel-arrow" data-direction="right"><i class="fas fa-chevron-right"></i></button>
+                                    </div>
+                                </div>
+                                <div class="profile-tags-container"></div>
+                                <p class="profile-bio profile-bio-collapsed">
+                                    Rubén Adrián Zamora Alva es conocido como RAZA en el mundo del collage. Sus obras están hechas a mano con recortes encontrados al azar...
+                                </p>
+                                <p class="profile-bio-full" style="display: none;">
+                                    Rubén Adrián Zamora Alva es conocido como RAZA en el mundo del collage. Sus obras están hechas a mano con recortes encontrados al azar en distintas partes del mundo. RAZA juega muy seriamente con ideas surrealistas y tiene la convicción de que obedecer el lenguaje de los sueños nos despierta a un mundo mejor. Para RAZA la palabra "Arte" Ileva mayúscula y no la usa muy a menudo, por lo mismo no se preocupa de si lamarse artista o no. Por lo mientras, toma la herramienta de corte como una caña de pescar y avienta la carnada hacia las profundidades del inconsiente colectivo, esperando traer a la superficie algo de magia suficientemente potente para compartirla y hackear mentes
 Su instagram es @chalecholechile Su correo electrónico, razacollage@gmail .com
-Su Telegram: @lamezcladetodo Mastodon: @lamezcladetodo@mastodon social</p>
-                            <div class="profile-stats">
-                                <span><i class="fas fa-users"></i> 850K</span>
-                                <span><i class="fas fa-utensils"></i> 120</span>
+Su Telegram: @lamezcladetodo Mastodon: @lamezcladetodo@mastodon social
+                                </p>
+                                <button class="see-more-btn" onclick="toggleBio(this)" style="position: relative; z-index: 4;">Ver más</button>
                             </div>
-                            <button class="profile-action-button">Seguir</button>
                         </div>
                         <div class="profile-card" data-keywords="tecnologia,espacial,robotica,innovacion,futuro,programacion"
                              data-username="@Tyrese" data-avatar-url="tyreper.jpg">
-                            <img src="tyreper.jpg" alt="Avatar" class="profile-avatar">
-                            <h4 class="profile-username">@Tyrese</h4>
-                            <span class="timestamp">photographer</span>
-                            <div class="profile-image-carousel">
-                                <div class="profile-image-carousel-container">
-                                    <img src="tyre1.jpg" alt="Profile Image 1" class="profile-carousel-image">
-                                    <img src="tyre2.jpg" alt="Profile Image 2" class="profile-carousel-image">
-                                    <img src="tyre3.jpg" alt="Profile Image 3" class="profile-carousel-image">
-                                </div>
-                                <div class="profile-carousel-navigation">
-                                    <button class="profile-carousel-arrow" data-direction="left"><i class="fas fa-chevron-left"></i></button>
-                                    <button class="profile-carousel-arrow" data-direction="right"><i class="fas fa-chevron-right"></i></button>
-                                </div>
+                            <div class="profile-left-section">
+                                <img src="tyreper.jpg" alt="Avatar" class="profile-avatar" onclick="showImageModal('tyreper.jpg', '@Tyrese')">
+                                <button class="profile-action-button">Seguir</button>
                             </div>
-                            <div class="profile-tags-container"></div>
-                            <p class="profile-bio">My name is Tyrese Abdul-Shakoor,I'm a photographer from New Haven, Connecticut and creating stories is what I do. The style of narrative photography spoke to me after taking so many portraits and losing that inspiration, after my first photo series in 2020 titled "The Place to Be" telling stories became my passion and there's no better way to tell a story than with photography, a picture is worth a thousand words but a good photo can be worth a million and I aim to tell my stories to the whole world some day in hopes that linspire more people to tell their own narratives.</p>
-                            <div class="profile-stats">
-                                <span><i class="fas fa-users"></i> 2.1M</span>
-                                <span><i class="fas fa-microchip"></i> 88</span>
+                            <div class="profile-right-section">
+                                <h4 class="profile-username">@Tyrese</h4>
+                                <span class="timestamp">Tyrese Gibson</span>
+                                
+                                <div class="profile-image-carousel">
+                                    <div class="profile-image-carousel-container">
+                                        <img src="tyre1.jpg" alt="Imagen 1" class="profile-carousel-image" onclick="showImageModal('tyre1.jpg', '@Tyrese')">
+                                        <img src="tyre2.jpg" alt="Imagen 2" class="profile-carousel-image" onclick="showImageModal('tyre2.jpg', '@Tyrese')">
+                                        <img src="tyre3.jpg" alt="Imagen 3" class="profile-carousel-image" onclick="showImageModal('tyre3.jpg', '@Tyrese')">
+                                    </div>
+                                    <div class="profile-carousel-navigation">
+                                        <button class="profile-carousel-arrow" data-direction="left"><i class="fas fa-chevron-left"></i></button>
+                                        <button class="profile-carousel-arrow" data-direction="right"><i class="fas fa-chevron-right"></i></button>
+                                    </div>
+                                </div>
+
+                                <div class="profile-tags-container">
+                                    <!-- Las tags se insertarán aquí por JavaScript -->
+                                </div>
+
+                                <p class="profile-bio profile-bio-collapsed">
+                                    Innovador en tecnología espacial y robótica, dedicado a crear soluciones que impulsen la humanidad hacia el futuro...
+                                </p>
+                                <p class="profile-bio-full" style="display: none;">
+                                    Innovador en tecnología espacial y robótica, dedicado a crear soluciones que impulsen la humanidad hacia el futuro. Especializado en programación avanzada y desarrollo de sistemas autónomos para exploración espacial. Mi pasión es desarrollar tecnologías que nos permitan expandir los límites de lo posible y llevar a la humanidad a las estrellas.
+                                </p>
+                                <button class="see-more-btn" onclick="toggleBio(this)">Ver más</button>
                             </div>
-                            <button class="profile-action-button">Seguir</button>
                         </div>
-                        <div class="profile-card" data-keywords="poesia,estrellas,cosmos,literatura,inspiracion,versos"
-                             data-username="@NuveBeachwear" data-avatar-url="nubeper.jpg">
-                            <img src="nubeper.jpg" alt="Avatar" class="profile-avatar">
-                            <h4 class="profile-username">@NuveBeachwear</h4>
-                            <span class="timestamp">NUVE</span>
-                            <div class="profile-image-carousel">
-                                <div class="profile-image-carousel-container">
-                                    <img src="nube1.jpg" alt="Profile Image 1" class="profile-carousel-image">
-                                </div>
-                                <div class="profile-carousel-navigation">
-                                    <button class="profile-carousel-arrow" data-direction="left"><i class="fas fa-chevron-left"></i></button>
-                                    <button class="profile-carousel-arrow" data-direction="right"><i class="fas fa-chevron-right"></i></button>
-                                </div>
+                        <div class="profile-card" data-keywords="moda,playa,beachwear,swimwear,verano,bikinis,trajes,bano"
+                             data-username="@NubeBeachwear" data-avatar-url="nubeper.jpg">
+                            <div class="profile-left-section">
+                                <img src="nubeper.jpg" alt="Avatar" class="profile-avatar" onclick="showImageModal('nubeper.jpg', '@NubeBeachwear')">
+                                <button class="profile-action-button">Seguir</button>
                             </div>
-                            <div class="profile-tags-container"></div>
-                            <p class="profile-bio">Nube Beachwear is a family-crafted celebration of ethical fashion; Each piece is handcrafted with joy, supporting the slow fashion movement and sustainability. We don't mass produce; we create with intention, honoring crochet traditions and the environment. We believe in fair compensation for artisans and transparent pricing that reflects the true value of labor and love in every stitch. With Nube Beachwear, you're choosing a bikini that cherishes the planet and its people.</p>
-                            <div class="profile-stats">
-                                <span><i class="fas fa-users"></i> 500K</span>
-                                <span><i class="fas fa-feather-alt"></i> 200</span>
+                            <div class="profile-right-section">
+                                <h4 class="profile-username">@NubeBeachwear</h4>
+                                <span class="timestamp">Nube Beachwear</span>
+                                
+                                <div class="profile-image-carousel">
+                                    <div class="profile-image-carousel-container">
+                                        <img src="nube1.jpg" alt="Imagen 1" class="profile-carousel-image" onclick="showImageModal('nube1.jpg', '@NubeBeachwear')">
+                                        <img src="nube2.jpg" alt="Imagen 2" class="profile-carousel-image" onclick="showImageModal('nube2.jpg', '@NubeBeachwear')">
+                                        <img src="nube3.jpg" alt="Imagen 3" class="profile-carousel-image" onclick="showImageModal('nube3.jpg', '@NubeBeachwear')">
+                                    </div>
+                                    <div class="profile-carousel-navigation">
+                                        <button class="profile-carousel-arrow" data-direction="left"><i class="fas fa-chevron-left"></i></button>
+                                        <button class="profile-carousel-arrow" data-direction="right"><i class="fas fa-chevron-right"></i></button>
+                                    </div>
+                                </div>
+
+                                <div class="profile-tags-container">
+                                    <!-- Las tags se insertarán aquí por JavaScript -->
+                                </div>
+
+                                <p class="profile-bio profile-bio-collapsed">
+                                    Marca de moda playera que diseña trajes de baño únicos y elegantes para mujeres que aman el mar y el sol...
+                                </p>
+                                <p class="profile-bio-full" style="display: none;">
+                                    Marca de moda playera que diseña trajes de baño únicos y elegantes para mujeres que aman el mar y el sol. Nuestras piezas combinan comodidad, estilo y calidad premium. Cada diseño está inspirado en la libertad del océano y la belleza natural de las playas mexicanas. Creamos bikinis, trajes de baño completos y ropa de playa que realzan la confianza y belleza de cada mujer.
+                                </p>
+                                <button class="see-more-btn" onclick="toggleBio(this)">Ver más</button>
                             </div>
-                            <button class="profile-action-button">Seguir</button>
                         </div>
-                        <div class="profile-card" data-keywords="musica,composicion,sinfonias,espacial,melodias,sonidos"
-                             data-username="@Macario" data-avatar-url="macaper.jpg">
-                            <img src="macaper.jpg" alt="Avatar" class="profile-avatar">
-                            <h4 class="profile-username">@Macario</h4>
-                            <span class="timestamp">Artista</span>
-                            <div class="profile-image-carousel">
-                                <div class="profile-image-carousel-container">
-                                    <img src="maca1.jpg" alt="Profile Image 1" class="profile-carousel-image">
-                                    <img src="maca2.jpg" alt="Profile Image 2" class="profile-carousel-image">
-                                    <img src="maca3.jpg" alt="Profile Image 2" class="profile-carousel-image">
-                                </div>
-                                <div class="profile-carousel-navigation">
-                                    <button class="profile-carousel-arrow" data-direction="left"><i class="fas fa-chevron-left"></i></button>
-                                    <button class="profile-carousel-arrow" data-direction="right"><i class="fas fa-chevron-right"></i></button>
-                                </div>
+                        <div class="profile-card" data-keywords="musico,compositor,tradicional,mexicana,mariachi,folklore,cultura"
+                             data-username="@MacarioHernández" data-avatar-url="macaper.jpg">
+                            <div class="profile-left-section">
+                                <img src="macaper.jpg" alt="Avatar" class="profile-avatar" onclick="showImageModal('macaper.jpg', '@MacarioHernández')">
+                                <button class="profile-action-button">Seguir</button>
                             </div>
-                            <div class="profile-tags-container"></div>
-                            <p class="profile-bio">Compositor de sinfonías espaciales. La música del universo en tus oídos. Mis creaciones buscan capturar la majestuosidad y el misterio de los astros.</p>
-                            <div class="profile-stats">
-                                <span><i class="fas fa-users"></i> 1.5M</span>
-                                <span><i class="fas fa-music"></i> 50</span>
+                            <div class="profile-right-section">
+                                <h4 class="profile-username">@MacarioHernández</h4>
+                                <span class="timestamp">Macario Hernández</span>
+                                
+                                <div class="profile-image-carousel">
+                                    <div class="profile-image-carousel-container">
+                                        <img src="maca1.jpg" alt="Imagen 1" class="profile-carousel-image" onclick="showImageModal('maca1.jpg', '@MacarioHernández')">
+                                        <img src="maca2.jpg" alt="Imagen 2" class="profile-carousel-image" onclick="showImageModal('maca2.jpg', '@MacarioHernández')">
+                                        <img src="maca3.jpg" alt="Imagen 3" class="profile-carousel-image" onclick="showImageModal('maca3.jpg', '@MacarioHernández')">
+                                    </div>
+                                    <div class="profile-carousel-navigation">
+                                        <button class="profile-carousel-arrow" data-direction="left"><i class="fas fa-chevron-left"></i></button>
+                                        <button class="profile-carousel-arrow" data-direction="right"><i class="fas fa-chevron-right"></i></button>
+                                    </div>
+                                </div>
+
+                                <div class="profile-tags-container">
+                                    <!-- Las tags se insertarán aquí por JavaScript -->
+                                </div>
+
+                                <p class="profile-bio profile-bio-collapsed">
+                                    Músico y compositor especializado en música tradicional mexicana, preservando y renovando el folklore de nuestro país...
+                                </p>
+                                <p class="profile-bio-full" style="display: none;">
+                                    Músico y compositor especializado en música tradicional mexicana, preservando y renovando el folklore de nuestro país. Con más de 20 años de experiencia, he dedicado mi vida a mantener vivas las tradiciones musicales de México, desde el mariachi hasta los sones regionales. Mi misión es transmitir a las nuevas generaciones la riqueza cultural de nuestra música ancestral, fusionándola con elementos contemporáneos sin perder su esencia.
+                                </p>
+                                <button class="see-more-btn" onclick="toggleBio(this)">Ver más</button>
                             </div>
-                            <button class="profile-action-button">Seguir</button>
                         </div>
                     </div>
                     <div class="discover-carousel-navigation">
@@ -2283,8 +2813,22 @@ Su Telegram: @lamezcladetodo Mastodon: @lamezcladetodo@mastodon social</p>
                     </div>
                 </div>
 
+                <!-- Modal para mostrar imágenes en primer plano -->
+                <div id="imageModal" class="image-modal" style="display: none;">
+                    <div class="image-modal-backdrop" onclick="closeImageModal()"></div>
+                    <div class="image-modal-content">
+                        <button class="image-modal-close" onclick="closeImageModal()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                        <img id="modalImage" src="" alt="" class="modal-image">
+                        <div class="image-modal-info">
+                            <h3 id="modalUsername"></h3>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Sección de "Feeds" o publicaciones (Aquí ya no se alojarán las nuevas publicaciones) -->
-                <section class="feeds-section" id="postsFeed">
+                <section class="feeds-section" id="postsFeed" style="margin-top: 100px; clear: both; position: relative; z-index: 3;">
                     <!-- Las publicaciones se cargarán dinámicamente aquí (ahora solo contenido estático o publicaciones antiguas) -->
                     <!-- Publicación con texto largo y botón "Ver más" y hashtags (ejemplo estático, se mezclará con dinámicos) -->
                     <div class="long-text-card" data-keywords="exploracion,gamma-7,biodiversidad,rocas,flora,bioluminiscente,viaje,intergalactico,fotografia,expedicion,universo"
@@ -3751,25 +4295,77 @@ Su Telegram: @lamezcladetodo Mastodon: @lamezcladetodo@mastodon social</p>
             // --- Lógica de Carrusel de Perfiles Destacados (ahora en Home) ---
             const featuredProfilesCarousel = document.getElementById('featuredProfilesCarousel');
             const featuredCarouselContainer = featuredProfilesCarousel ? featuredProfilesCarousel.querySelector('.discover-carousel-container') : null;
-            const featuredLeftArrow = featuredProfilesCarousel ? featuredProfilesCarousel.querySelector('.discover-carousel-arrow[data-direction="left"]') : null;
-            const featuredRightArrow = featuredProfilesCarousel ? featuredProfilesCarousel.querySelector('.discover-carousel-arrow[data-direction="right"]') : null;
 
             if (featuredCarouselContainer) {
-                // Función para desplazar el carrusel
-                const scrollCarousel = (direction) => {
-                    const scrollAmount = featuredCarouselContainer.clientWidth * 0.8; // Desplazar un 80% del ancho visible
-                    if (direction === 'left') {
-                        featuredCarouselContainer.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-                    } else {
-                        featuredCarouselContainer.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-                    }
-                };
+                const featuredCards = featuredCarouselContainer.querySelectorAll('.profile-card');
+                let featuredCurrentIndex = 0;
 
-                if (featuredLeftArrow) {
-                    featuredLeftArrow.addEventListener('click', () => scrollCarousel('left'));
+                function showCard(index) {
+                    console.log('Mostrando carta:', index);
+                    featuredCards.forEach((card, i) => {
+                        if (i === index) {
+                            card.classList.add('active');
+                            card.style.display = 'flex';
+                            card.style.opacity = '1';
+                            card.style.visibility = 'visible';
+                        } else {
+                            card.classList.remove('active');
+                            card.style.display = 'none';
+                            card.style.opacity = '0';
+                            card.style.visibility = 'hidden';
+                        }
+                    });
                 }
-                if (featuredRightArrow) {
-                    featuredRightArrow.addEventListener('click', () => scrollCarousel('right'));
+
+                function navigateCarousel(direction) {
+                    console.log('Navegando:', direction);
+                    if (direction === 'left') {
+                        featuredCurrentIndex = (featuredCurrentIndex - 1 + featuredCards.length) % featuredCards.length;
+                    } else {
+                        featuredCurrentIndex = (featuredCurrentIndex + 1) % featuredCards.length;
+                    }
+                    console.log('Nuevo índice:', featuredCurrentIndex);
+                    showCard(featuredCurrentIndex);
+                }
+
+                // Inicializar mostrando la primera carta
+                showCard(0);
+
+                // Agregar event listeners directamente al documento para capturar clicks
+                document.addEventListener('click', function(e) {
+                    if (e.target.closest('.discover-carousel-arrow[data-direction="left"]')) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('Click izquierdo detectado');
+                        navigateCarousel('left');
+                    }
+                    
+                    if (e.target.closest('.discover-carousel-arrow[data-direction="right"]')) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('Click derecho detectado');
+                        navigateCarousel('right');
+                    }
+                });
+
+                // Debug: Verificar que los botones están funcionando
+                console.log('Carrusel inicializado con', featuredCards.length, 'cartas');
+            }
+
+            // Función para alternar biografía completa/resumida
+            window.toggleBio = function(button) {
+                const card = button.closest('.profile-card');
+                const bioCollapsed = card.querySelector('.profile-bio-collapsed');
+                const bioFull = card.querySelector('.profile-bio-full');
+                
+                if (bioCollapsed.style.display !== 'none') {
+                    bioCollapsed.style.display = 'none';
+                    bioFull.style.display = 'block';
+                    button.textContent = 'Ver menos';
+                } else {
+                    bioCollapsed.style.display = 'block';
+                    bioFull.style.display = 'none';
+                    button.textContent = 'Ver más';
                 }
             }
 
@@ -3865,12 +4461,47 @@ Su Telegram: @lamezcladetodo Mastodon: @lamezcladetodo@mastodon social</p>
                 });
             }
 
-            // Lógica para el botón del logo en la cabecera
             const homeLogoButton = document.getElementById('homeLogoButton');
             if (homeLogoButton) {
                 homeLogoButton.addEventListener('click', () => {
                     window.location.href = 'home.html';
                 });
+            }
+
+        });
+
+        // Funciones para el modal de imágenes - Definidas globalmente
+        window.showImageModal = function(imageSrc, username) {
+            console.log('Abriendo modal para:', imageSrc, username);
+            const modal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            const modalUsername = document.getElementById('modalUsername');
+            
+            if (modal && modalImage && modalUsername) {
+                modalImage.src = imageSrc;
+                modalImage.alt = `Imagen de ${username}`;
+                modalUsername.textContent = username;
+                
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden'; // Prevenir scroll del body
+                console.log('Modal abierto correctamente');
+            } else {
+                console.error('Elementos del modal no encontrados:', {modal, modalImage, modalUsername});
+            }
+        }
+
+        window.closeImageModal = function() {
+            const modal = document.getElementById('imageModal');
+            if (modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto'; // Restaurar scroll del body
+            }
+        }
+
+        // Cerrar modal con tecla Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeImageModal();
             }
         });
     </script>

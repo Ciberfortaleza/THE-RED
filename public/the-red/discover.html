@@ -868,6 +868,303 @@
             z-index: 2100;
         }
 
+        /* --- Estilos para Menús Laterales --- */
+        .side-menu-left, .side-menu-right {
+            position: fixed;
+            top: 0;
+            width: var(--side-menu-width);
+            height: 100vh;
+            background-color: rgba(30, 5, 37, 0.95);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(125, 52, 144, 0.7);
+            box-shadow: var(--shadow);
+            z-index: 1500;
+            transform: translateX(-100%);
+            transition: transform 0.4s ease-in-out;
+            overflow-y: auto;
+            padding: 0;
+        }
+
+        .side-menu-left {
+            left: 0;
+            border-right: 1px solid rgba(125, 52, 144, 0.7);
+        }
+
+        .side-menu-right {
+            right: 0;
+            transform: translateX(100%);
+            border-left: 1px solid rgba(125, 52, 144, 0.7);
+        }
+
+        .side-menu-left.open {
+            transform: translateX(0);
+        }
+
+        .side-menu-right.open {
+            transform: translateX(0);
+        }
+
+        .side-menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px 20px 20px;
+            border-bottom: 1px solid rgba(125, 52, 144, 0.6);
+            background: linear-gradient(135deg, rgba(74, 26, 85, 0.8), rgba(30, 5, 37, 0.8));
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .side-menu-title {
+            font-size: 1.4em;
+            font-weight: 800;
+            color: var(--light-red);
+            text-shadow: 0 0 10px rgba(255, 48, 88, 0.7);
+        }
+
+        .side-menu-close-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 5px 10px;
+            border-radius: 8px;
+        }
+
+        .side-menu-close-btn:hover {
+            color: var(--medium-red);
+            background-color: rgba(255, 48, 88, 0.2);
+            transform: scale(1.1) rotate(90deg);
+        }
+
+        .side-menu-nav {
+            padding: 20px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .side-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            color: #e0e0e0;
+            text-decoration: none;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .side-menu-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255, 48, 88, 0.2), rgba(125, 52, 144, 0.2));
+            transition: width 0.3s ease;
+            z-index: -1;
+        }
+
+        .side-menu-item:hover::before {
+            width: 100%;
+        }
+
+        .side-menu-item:hover {
+            color: #fff;
+            border-left-color: var(--light-red);
+            background-color: rgba(255, 48, 88, 0.1);
+            transform: translateX(8px);
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+        }
+
+        .side-menu-item i {
+            font-size: 1.2em;
+            color: var(--light-red);
+            transition: all 0.3s ease;
+        }
+
+        .side-menu-item:hover i {
+            color: #fff;
+            transform: scale(1.1);
+        }
+
+        /* Estilos para el Modal de Información */
+        .info-modal-content {
+            background-color: rgba(30, 5, 37, 0.95);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            max-width: 800px;
+            width: 90%;
+            border: 1px solid rgba(125, 52, 144, 0.8);
+            position: relative;
+            animation: fadeInScale 0.4s ease-out forwards;
+            display: flex;
+            flex-direction: column;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .info-modal-content .close-button {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .info-modal-content .close-button:hover {
+            color: var(--medium-red);
+            transform: scale(1.1) rotate(90deg);
+        }
+
+        .info-modal-content h2 {
+            color: var(--light-red);
+            margin-bottom: 20px;
+            font-size: 2.2em;
+            text-shadow: 0 0 10px rgba(255, 48, 88, 0.7);
+            text-align: center;
+        }
+
+        .info-modal-content .modal-intro-text {
+            font-size: 1.2em;
+            color: #d0d0d0;
+            margin-bottom: 25px;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .info-modal-content .modal-body-content {
+            color: #e0e0e0;
+            line-height: 1.7;
+            font-size: 1.05em;
+        }
+
+        .info-modal-content .modal-body-content h3 {
+            font-size: 1.4em;
+            color: var(--light-red);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 5px rgba(255, 48, 88, 0.4);
+        }
+
+        .info-modal-content .modal-body-content h4 {
+            font-size: 1.2em;
+            color: var(--light-purple);
+            margin-top: 15px;
+            margin-bottom: 8px;
+        }
+
+        .info-modal-content .modal-body-content p,
+        .info-modal-content .modal-body-content ul,
+        .info-modal-content .modal-body-content ol {
+            margin-bottom: 15px;
+        }
+
+        .info-modal-content .modal-body-content ul,
+        .info-modal-content .modal-body-content ol {
+            padding-left: 25px;
+        }
+        .info-modal-content .modal-body-content li {
+            margin-bottom: 8px;
+        }
+
+        /* Estilos para la Sección de Precios */
+        .price-plan-card {
+            background-color: rgba(74, 26, 85, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid var(--light-purple);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .price-plan-card:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6), var(--glow-purple);
+            border-color: var(--light-red);
+        }
+
+        .price-plan-card h3 {
+            color: var(--light-red);
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(255, 48, 88, 0.6);
+        }
+
+        .price-plan-card .price {
+            font-size: 2.5em;
+            font-weight: 800;
+            color: var(--light-purple);
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(125, 52, 144, 0.6);
+        }
+
+        .price-plan-card .price small {
+            font-size: 0.5em;
+            font-weight: 400;
+            color: #ccc;
+        }
+
+        .price-plan-card ul {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 20px;
+            text-align: left;
+            color: #e0e0e0;
+        }
+
+        .price-plan-card ul li {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .price-plan-card ul li i {
+            color: var(--light-red);
+            margin-top: 4px;
+        }
+
+        .price-plan-card .subscribe-button {
+            background: var(--gradient-red-light);
+            color: #fff;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .price-plan-card .subscribe-button:hover {
+            background-color: var(--medium-red);
+            transform: translateY(-3px);
+            box-shadow: 0 0 20px rgba(255, 48, 88, 0.8);
+        }
+
     </style>
 </head>
 <body>
@@ -1009,6 +1306,49 @@
                 <div id="postPreviewTags" style="display: flex; flex-wrap: wrap; gap: 8px;"></div>
                 <div class="modal-actions">
                     <button class="modal-button" id="viewAuthorProfileBtn">Ver Perfil del Autor</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Menú Lateral Izquierdo (para el botón "Menú") -->
+        <div class="side-menu-left" id="sideMenu">
+            <div class="side-menu-header">
+                <span class="side-menu-title" id="sideMenuMainTitle">Menú Principal</span>
+                <button class="side-menu-close-btn" id="closeSideMenuBtn">×</button>
+            </div>
+            <!-- Contenedor para la navegación principal del menú lateral -->
+            <nav class="side-menu-nav" id="sideMenuNavContent">
+                <a href="#" class="side-menu-item" id="sideMenuMission"><i class="fas fa-bullseye"></i> Misión</a>
+                <a href="#" class="side-menu-item" id="sideMenuWhoAreWe"><i class="fas fa-users"></i> Quiénes Somos</a>
+                <a href="#" class="side-menu-item" id="sideMenuPrices"><i class="fas fa-tag"></i> Precios</a>
+                <a href="#" class="side-menu-item" id="sideMenuSupport"><i class="fas fa-question-circle"></i> Soporte y Ayuda</a>
+                <a href="#" class="side-menu-item" id="sideMenuDevelopers"><i class="fas fa-code"></i> Desarrolladores</a>
+                <a href="#" class="side-menu-item" id="sideMenuLogout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+            </nav>
+        </div>
+
+        <!-- Menú Lateral Derecho (para el botón "Recompensas") -->
+        <div class="side-menu-right" id="rewardsSideMenu">
+            <div class="side-menu-header">
+                <span class="side-menu-title">Recompensas</span>
+                <button class="side-menu-close-btn" id="closeRewardsSideMenuBtn">×</button>
+            </div>
+            <nav class="side-menu-nav">
+                <a href="#" class="side-menu-item" data-message="Mostrando tus puntos."><i class="fas fa-star"></i> Mis Puntos</a>
+                <a href="#" class="side-menu-item" data-message="Abriendo la tienda de recompensas."><i class="fas fa-gift"></i> Canjear Recompensas</a>
+                <a href="#" class="side-menu-item" data-message="Mostrando tus logros."><i class="fas fa-trophy"></i> Logros</a>
+                <a href="#" class="side-menu-item" data-message="Consultando tu historial de recompensas."><i class="fas fa-chart-line"></i> Historial</a>
+            </nav>
+        </div>
+
+        <!-- Modal de Información -->
+        <div class="modal-overlay hidden" id="infoModal">
+            <div class="info-modal-content">
+                <button class="close-button" id="closeInfoModalBtn">×</button>
+                <h2 id="infoModalTitle">Título del Modal</h2>
+                <p class="modal-intro-text" id="infoModalIntroText">Texto introductorio del modal.</p>
+                <div class="modal-body-content" id="infoModalBodyContent">
+                    <!-- El contenido se insertará dinámicamente aquí -->
                 </div>
             </div>
         </div>
@@ -1368,13 +1708,231 @@
         });
         confirmOkButton.addEventListener('click', () => confirmationModal.classList.add('hidden'));
 
+        // --- Lógica de Menús Laterales y Navegación de Footer ---
+        const navMenuButton = document.getElementById('navMenu');
+        const sideMenu = document.getElementById('sideMenu');
+        const closeSideMenuBtn = document.getElementById('closeSideMenuBtn');
+        const navRewardsButton = document.getElementById('navRewards');
+        const rewardsSideMenu = document.getElementById('rewardsSideMenu');
+        const closeRewardsSideMenuBtn = document.getElementById('closeRewardsSideMenuBtn');
+        const sideMenuNavContent = document.getElementById('sideMenuNavContent');
+        const sideMenuMainTitle = document.getElementById('sideMenuMainTitle');
+
+        // Modales de información
+        const infoModal = document.getElementById('infoModal');
+        const infoModalTitle = document.getElementById('infoModalTitle');
+        const infoModalIntroText = document.getElementById('infoModalIntroText');
+        const infoModalBodyContent = document.getElementById('infoModalBodyContent');
+        const closeInfoModalBtn = document.getElementById('closeInfoModalBtn');
+
+        // Funciones para abrir/cerrar menús laterales
+        if (navMenuButton) {
+            navMenuButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                sideMenu.classList.add('open');
+            });
+        }
+        if (closeSideMenuBtn) {
+            closeSideMenuBtn.addEventListener('click', () => {
+                sideMenu.classList.remove('open');
+                // Restaurar el menú principal si se estaba viendo otra cosa
+                sideMenuNavContent.classList.remove('hidden');
+                sideMenuMainTitle.textContent = 'Menú Principal';
+                if (document.getElementById('sideMenuBackButton')) {
+                    document.getElementById('sideMenuBackButton').remove();
+                }
+                infoModalBodyContent.innerHTML = ''; // Limpiar contenido del modal de info
+            });
+        }
+        if (navRewardsButton) {
+            navRewardsButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                rewardsSideMenu.classList.add('open');
+            });
+        }
+        if (closeRewardsSideMenuBtn) {
+            closeRewardsSideMenuBtn.addEventListener('click', () => {
+                rewardsSideMenu.classList.remove('open');
+            });
+        }
+
+        // Función para mostrar modal de información
+        function showInfoModal(title, introText, bodyContent) {
+            infoModalTitle.textContent = title;
+            infoModalIntroText.textContent = introText;
+            infoModalBodyContent.innerHTML = bodyContent;
+            infoModal.classList.remove('hidden');
+        }
+
+        if (closeInfoModalBtn) {
+            closeInfoModalBtn.addEventListener('click', () => {
+                infoModal.classList.add('hidden');
+            });
+        }
+
+        // --- Lógica para los elementos del menú lateral ---
+        const sideMenuMission = document.getElementById('sideMenuMission');
+        const sideMenuWhoAreWe = document.getElementById('sideMenuWhoAreWe');
+        const sideMenuPrices = document.getElementById('sideMenuPrices');
+        const sideMenuSupport = document.getElementById('sideMenuSupport');
+        const sideMenuDevelopers = document.getElementById('sideMenuDevelopers');
+        const sideMenuLogout = document.getElementById('sideMenuLogout');
+
+        if (sideMenuMission) {
+            sideMenuMission.addEventListener('click', (e) => {
+                e.preventDefault();
+                showInfoModal(
+                    "Nuestra Misión",
+                    "En THE RED, creemos en el poder de la creatividad y la conexión humana.",
+                    `
+                    <h3>Nuestra Visión</h3>
+                    <p>Ser la plataforma líder que conecte a creadores de contenido con audiencias globales, fomentando un ecosistema donde la creatividad florezca sin límites.</p>
+                    
+                    <h3>Nuestros Valores</h3>
+                    <ul>
+                        <li><strong>Creatividad:</strong> Valoramos y promovemos la expresión artística en todas sus formas.</li>
+                        <li><strong>Comunidad:</strong> Construimos espacios seguros donde las personas pueden conectar auténticamente.</li>
+                        <li><strong>Innovación:</strong> Utilizamos tecnología de vanguardia para mejorar la experiencia del usuario.</li>
+                        <li><strong>Inclusión:</strong> Celebramos la diversidad y damos la bienvenida a todas las voces.</li>
+                    </ul>
+                    
+                    <p>Estamos aquí para empoderar a los creadores, conectar a las personas y construir un futuro digital más brillante.</p>
+                    `
+                );
+                sideMenu.classList.remove('open');
+            });
+        }
+
+        if (sideMenuWhoAreWe) {
+            sideMenuWhoAreWe.addEventListener('click', (e) => {
+                e.preventDefault();
+                showInfoModal(
+                    "Quiénes Somos",
+                    "THE RED es más que una plataforma; somos una comunidad apasionada de creadores, innovadores y soñadores.",
+                    `
+                    <h3>Nuestro Equipo</h3>
+                    <p>Somos un equipo diverso de desarrolladores, diseñadores, creadores de contenido y visionarios tecnológicos unidos por una pasión común: crear la mejor plataforma para la expresión creativa.</p>
+                    
+                    <h3>Nuestra Historia</h3>
+                    <p>Comenzamos como un pequeño proyecto con grandes sueños, y gracias al apoyo de nuestra creciente comunidad, hemos evolucionado hasta convertirnos en lo que somos hoy. Cada paso que damos está impulsado por el deseo de ofrecer la mejor experiencia posible a nuestros usuarios.</p>
+                    `
+                );
+                sideMenu.classList.remove('open');
+            });
+        }
+
+        if (sideMenuPrices) {
+            sideMenuPrices.addEventListener('click', (e) => {
+                e.preventDefault();
+                showInfoModal(
+                    "Planes de Suscripción",
+                    "Elige el plan que mejor se adapte a tus necesidades creativas.",
+                    `
+                    <div class="price-plan-card">
+                        <h3>Plan Básico</h3>
+                        <div class="price">Gratis</div>
+                        <ul>
+                            <li><i class="fas fa-check"></i> Hasta 5 publicaciones por mes</li>
+                            <li><i class="fas fa-check"></i> Acceso a la comunidad</li>
+                            <li><i class="fas fa-check"></i> Soporte básico</li>
+                        </ul>
+                        <button class="subscribe-button" data-plan="basic">Comenzar Gratis</button>
+                    </div>
+                    
+                    <div class="price-plan-card">
+                        <h3>Plan Pro</h3>
+                        <div class="price">$9.99 <small>/mes</small></div>
+                        <ul>
+                            <li><i class="fas fa-check"></i> Publicaciones ilimitadas</li>
+                            <li><i class="fas fa-check"></i> Análisis avanzados</li>
+                            <li><i class="fas fa-check"></i> Soporte prioritario</li>
+                            <li><i class="fas fa-check"></i> Herramientas de edición premium</li>
+                        </ul>
+                        <button class="subscribe-button" data-plan="pro">Suscribirse</button>
+                    </div>
+                    `
+                );
+                sideMenu.classList.remove('open');
+
+                // Añadir listeners a los botones de suscripción
+                document.querySelectorAll('.subscribe-button').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const plan = this.getAttribute('data-plan');
+                        showConfirmationModal(`Suscripción al plan ${plan} en desarrollo.`);
+                    });
+                });
+            });
+        }
+
+        if (sideMenuSupport) {
+            sideMenuSupport.addEventListener('click', (e) => {
+                e.preventDefault();
+                showInfoModal(
+                    "Soporte y Ayuda",
+                    "Estamos aquí para ayudarte. Encuentra respuestas a tus preguntas o contacta con nuestro equipo de soporte.",
+                    `
+                    <h3>Preguntas Frecuentes</h3>
+                    <h4>¿Cómo puedo crear una cuenta?</h4>
+                    <p>Simplemente haz clic en "Registrarse" y sigue las instrucciones.</p>
+                    
+                    <h4>¿Puedo cambiar mi plan en cualquier momento?</h4>
+                    <p>Sí, puedes actualizar o degradar tu plan desde la configuración de tu cuenta.</p>
+                    
+                    <h3>Contacto</h3>
+                    <p>Si necesitas ayuda adicional, puedes contactarnos en: <strong>soporte@thered.com</strong></p>
+                    <p>Nos esforzamos por responder a todas las consultas en un plazo de 24 horas.</p>
+                    `
+                );
+                sideMenu.classList.remove('open');
+            });
+        }
+
+        if (sideMenuDevelopers) {
+            sideMenuDevelopers.addEventListener('click', (e) => {
+                e.preventDefault();
+                showInfoModal(
+                    "Para Desarrolladores",
+                    "Únete a nuestra comunidad de desarrolladores y ayuda a construir el futuro de THE RED.",
+                    `
+                    <h3>API de THE RED</h3>
+                    <p>Accede a nuestra API RESTful para integrar THE RED en tus aplicaciones.</p>
+                    
+                    <h3>SDK y Herramientas</h3>
+                    <p>Descarga nuestros SDKs para JavaScript, Python, y más.</p>
+                    
+                    <h3>Documentación</h3>
+                    <p>Encuentra guías completas, ejemplos de código y referencias de API en nuestro portal de desarrolladores.</p>
+                    
+                    <p>¡Esperamos ver las increíbles creaciones que construirás con The Red!</p>
+                    `
+                );
+                sideMenu.classList.remove('open');
+            });
+        }
+
+        if (sideMenuLogout) {
+            sideMenuLogout.addEventListener('click', async (e) => {
+                e.preventDefault();
+                try {
+                    showConfirmationModal("Cerrando sesión...");
+                    // Aquí iría la lógica de cerrar sesión con Firebase
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1500);
+                } catch (error) {
+                    console.error("Error al cerrar sesión:", error);
+                    showConfirmationModal("Error al cerrar sesión.");
+                }
+                sideMenu.classList.remove('open');
+            });
+        }
+
         // Controladores para los íconos del footer
         navItems.forEach(item => {
             item.addEventListener('click', (e) => {
-                if (item.id === 'navMenu' || item.id === 'navRewards') {
+                if (item.id === 'navRewards') {
                     e.preventDefault();
-                    // Lógica para abrir menús laterales si existen
-                    showConfirmationModal('Menú lateral en desarrollo.');
+                    rewardsSideMenu.classList.add('open');
                 }
             });
         });
