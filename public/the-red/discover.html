@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>THE RED - Descubrir | Explora Contenido Único</title>
     
-    <!-- SEO Meta Tags -->
+    <!-- Meta Tags SEO -->
     <meta name="description" content="Descubre contenido único en THE RED. Explora publicaciones, encuentra nuevos creadores y conecta con la comunidad más innovadora de la red social.">
     <meta name="keywords" content="THE RED, descubrir, explorar, contenido, publicaciones, creadores, comunidad, red social">
     <meta name="author" content="THE RED Team">
     <meta name="robots" content="index, follow">
     
-    <!-- Open Graph Meta Tags -->
+    <!-- Meta Tags Open Graph -->
     <meta property="og:title" content="THE RED - Descubrir | Explora Contenido Único">
     <meta property="og:description" content="Descubre contenido único y conecta con creadores en THE RED. La página de exploración de la red social más innovadora.">
     <meta property="og:type" content="website">
@@ -19,7 +19,7 @@
     <meta property="og:image" content="https://the-red-loggin.web.app/logo.png">
     <meta property="og:site_name" content="THE RED">
     
-    <!-- Twitter Card Meta Tags -->
+    <!-- Meta Tags Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="THE RED - Descubrir">
     <meta name="twitter:description" content="Descubre contenido único y conecta con creadores en THE RED.">
@@ -142,10 +142,10 @@
             justify-content: space-between;
             align-items: center;
             padding: 15px 20px;
-            background: rgba(30, 5, 37, 0.7); /* Efecto de cristal líquido */
-            backdrop-filter: blur(10px); /* Efecto de cristal líquido */
-            -webkit-backdrop-filter: blur(10px); /* Efecto de cristal líquido */
-            border-bottom: 1px solid rgba(125, 52, 144, 0.7); /* Efecto de cristal líquido */
+            background: rgba(30, 5, 37, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(125, 52, 144, 0.7);
             box-shadow: var(--shadow);
             position: sticky;
             top: 0;
@@ -167,7 +167,7 @@
         }
 
         .logo-button img {
-            height: 40px; /* Ajusta el tamaño del logo */
+            height: 40px;
             width: auto;
         }
         
@@ -372,7 +372,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 2000; /* Z-index para modales */
+            z-index: 2000;
             backdrop-filter: blur(10px);
             transition: background-color 0.3s ease;
         }
@@ -803,7 +803,7 @@
             }
 
             .discover-posts-grid {
-                grid-template-columns: 1fr; /* Una sola columna en móviles */
+                grid-template-columns: 1fr;
                 gap: 15px;
             }
 
@@ -816,7 +816,7 @@
             }
 
             .footer-nav .nav-item span {
-                font-size: 0.75em; /* Texto más pequeño en el footer */
+                font-size: 0.75em;
             }
 
             .modal-content {
@@ -1179,7 +1179,7 @@
         <header class="main-header">
             <div class="left-header-section">
                 <button class="logo-button" id="homeLogoButton">
-                    <img src="logo.png" alt="THE RED Logo">
+                    <img src="../logo.png" alt="THE RED Logo">
                 </button>
                 <button class="new-post-button" id="newPostButton">+ Nueva Publicación</button>
             </div>
@@ -1193,7 +1193,7 @@
             </div>
         </header>
 
-        <!-- Contenido principal -->
+        <!-- Contenido Principal -->
         <main class="main-content">
             <section id="discover-page-content" class="page-section">
                 <h1 class="discover-section-header" style="text-align: center; font-size: 2.5em; color: var(--light-red); text-shadow: var(--glow-red);">Descubrir</h1>
@@ -1226,7 +1226,7 @@
             </section>
         </main>
 
-        <!-- Pie de página (Footer) -->
+        <!-- Pie de página -->
         <footer class="main-footer">
             <nav class="footer-nav">
                 <a href="#" class="nav-item" id="navMenu"><i class="fas fa-bars"></i><span>Menú</span></a>
@@ -1238,7 +1238,7 @@
             </nav>
         </footer>
         
-        <!-- Botón flotante para la ventana de chat -->
+        <!-- Botón de Chat Flotante -->
         <button class="floating-chat-button" id="chatButton">
             <i class="fas fa-comments"></i>
         </button>
@@ -1258,7 +1258,7 @@
             <p>Cargando...</p>
         </div>
 
-        <!-- Modal para Nueva Publicación - Rediseñado -->
+        <!-- Modal para Nueva Publicación -->
         <div class="modal-overlay hidden" id="newPostModal">
             <div class="modal-content new-post-modal-content">
                 <h2 style="color: var(--light-purple);">Crear Nueva Publicación</h2>
@@ -1272,7 +1272,7 @@
                         <label for="newPostImageUploadInput">Subir Imagen (opcional):</label>
                         <input type="file" id="newPostImageUploadInput" class="modal-input" accept="image/*">
                         <div id="newPostImagePreview" class="image-upload-preview" style="min-height: 100px; margin-top: 10px;">
-                            <p style="color: #bbb; font-size: 0.9em;">No se ha seleccionado ninguna imagen</p>
+                            <p style="color: #bbb; font-size: 0.9em;">Ninguna imagen seleccionada</p>
                         </div>
                     </div>
                     <div class="profile-edit-form-group">
@@ -1293,9 +1293,9 @@
             <div class="modal-content">
                 <button class="close-button" id="closePostPreviewModalBtn">×</button>
                 <h2 id="postPreviewTitle" style="color: var(--light-purple);">Vista Previa de Publicación</h2>
-                <img id="postPreviewImage" src="" alt="Post Image" style="width: 100%; border-radius: 10px; margin-bottom: 20px;"/>
+                <img id="postPreviewImage" src="" alt="Imagen de la publicación" style="width: 100%; border-radius: 10px; margin-bottom: 20px;"/>
                 <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
-                    <img id="postPreviewAuthorAvatar" src="" alt="Author Avatar" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;"/>
+                    <img id="postPreviewAuthorAvatar" src="" alt="Avatar del autor" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;"/>
                     <div>
                         <span style="font-weight: bold; color: var(--light-red);" id="postPreviewAuthorUsername"></span>
                         <br>
@@ -1310,13 +1310,12 @@
             </div>
         </div>
 
-        <!-- Menú Lateral Izquierdo (para el botón "Menú") -->
+        <!-- Menú Lateral Izquierdo -->
         <div class="side-menu-left" id="sideMenu">
             <div class="side-menu-header">
                 <span class="side-menu-title" id="sideMenuMainTitle">Menú Principal</span>
                 <button class="side-menu-close-btn" id="closeSideMenuBtn">×</button>
             </div>
-            <!-- Contenedor para la navegación principal del menú lateral -->
             <nav class="side-menu-nav" id="sideMenuNavContent">
                 <a href="#" class="side-menu-item" id="sideMenuMission"><i class="fas fa-bullseye"></i> Misión</a>
                 <a href="#" class="side-menu-item" id="sideMenuWhoAreWe"><i class="fas fa-users"></i> Quiénes Somos</a>
@@ -1327,7 +1326,7 @@
             </nav>
         </div>
 
-        <!-- Menú Lateral Derecho (para el botón "Recompensas") -->
+        <!-- Menú Lateral Derecho -->
         <div class="side-menu-right" id="rewardsSideMenu">
             <div class="side-menu-header">
                 <span class="side-menu-title">Recompensas</span>
@@ -1358,7 +1357,7 @@
         // Importaciones de Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, serverTimestamp, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
 
         // Configuración de Firebase
@@ -1371,11 +1370,13 @@
           appId: "1:40265573777:web:1651cb4119969010ea2630"
         };
         
+        // Inicialización de los servicios de Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
         const storage = getStorage(app);
         
+        // Variables globales
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
         let userId;
 
@@ -1415,7 +1416,7 @@
                 try {
                     await signInAnonymously(auth);
                 } catch (error) {
-                    console.error("Error signing in anonymously:", error);
+                    console.error("Error al iniciar sesión anónimamente:", error);
                     showConfirmationModal("Error al iniciar sesión anónimamente.");
                 }
             }
@@ -1424,17 +1425,31 @@
         // Cargar y mostrar publicaciones en tiempo real
         function fetchAndRenderPosts() {
             if (!db) return;
-            const postsCollectionRef = collection(db, `artifacts/${appId}/public/posts`);
-            const q = query(postsCollectionRef, orderBy('timestamp', 'desc'));
+            const postsCollectionRef = collection(db, `artifacts/${appId}/public/data/posts`);
+            const q = query(postsCollectionRef);
 
             onSnapshot(q, (snapshot) => {
-                postsFeed.innerHTML = '';
+                const posts = [];
                 snapshot.forEach((doc) => {
-                    const post = doc.data();
-                    const postId = doc.id;
-                    const postElement = createPostCard(post, postId);
+                    posts.push({ id: doc.id, ...doc.data() });
+                });
+
+                // Ordenar las publicaciones en el lado del cliente (navegador)
+                posts.sort((a, b) => {
+                    const dateA = a.timestamp ? a.timestamp.toDate() : new Date(0);
+                    const dateB = b.timestamp ? b.timestamp.toDate() : new Date(0);
+                    return dateB - dateA;
+                });
+
+                postsFeed.innerHTML = '';
+                posts.forEach(post => {
+                    const postElement = createPostCard(post, post.id);
                     postsFeed.appendChild(postElement);
                 });
+
+            }, (error) => {
+                console.error("Error al obtener las publicaciones:", error);
+                showConfirmationModal("Error al cargar las publicaciones. Por favor, revisa las reglas de seguridad de Firestore.");
             });
         }
 
@@ -1453,13 +1468,13 @@
             
             card.innerHTML = `
                 <div class="card-user-info-and-avatar">
-                    <img src="${post.avatarUrl || 'https://placehold.co/55x55/7d3490/ffffff?text=U'}" alt="Avatar" class="card-user-avatar">
+                    <img src="${post.avatarUrl || 'https://placehold.co/55x55/7d3490/ffffff?text=U'}" alt="Avatar" class="card-user-avatar" onerror="this.onerror=null;this.src='https://placehold.co/55x55/7d3490/ffffff?text=U';">
                     <div class="card-user-details">
                         <span class="card-username">${post.username || 'Anónimo'}</span>
                         <span class="card-user-handle">${timestamp}</span>
                     </div>
                 </div>
-                ${post.imageUrl ? `<div class="card-image-wrapper"><img src="${post.imageUrl}" alt="Imagen de la publicación"></div>` : ''}
+                ${post.imageUrl ? `<div class="card-image-wrapper"><img src="${post.imageUrl}" alt="Imagen de la publicación" onerror="this.onerror=null;this.style.display='none';"></div>` : ''}
                 <p class="card-long-text">${post.text || ''}</p>
                 <div class="post-tags" style="margin-top: 10px;">
                     ${post.keywords ? post.keywords.map(tag => `<span style="background: var(--light-red); color: white; padding: 4px 8px; border-radius: 15px; font-size: 0.8em; margin-right: 5px;">#${tag}</span>`).join('') : ''}
@@ -1526,7 +1541,7 @@
             }
             showLoadingOverlay();
             try {
-                const networkCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/network`);
+                const networkCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/data/network`);
                 await setDoc(doc(networkCollectionRef, postData.postId), postData, { merge: true });
                 showConfirmationModal(`¡Publicación de "${postData.username}" añadida a tu red!`);
             } catch (error) {
@@ -1543,7 +1558,7 @@
                 newPostModal.classList.remove('hidden');
                 newPostTextInput.value = '';
                 newPostImageUploadInput.value = '';
-                newPostImagePreview.innerHTML = '<p style="color: #bbb; font-size: 0.9em;">No se ha seleccionado ninguna imagen</p>';
+                newPostImagePreview.innerHTML = '<p style="color: #bbb; font-size: 0.9em;">Ninguna imagen seleccionada</p>';
                 newPostKeywordsInput.value = '';
             });
         }
@@ -1578,33 +1593,48 @@
                 }
 
                 showLoadingOverlay();
+                let imageUrl = '';
+                let imageUploadFailed = false;
 
-                try {
-                    let imageUrl = '';
-                    if (postImageFile) {
+                // Intenta subir la imagen primero
+                if (postImageFile) {
+                    try {
                         const storageRef = ref(storage, `posts/${currentUser.uid}/${Date.now()}-${postImageFile.name}`);
                         await uploadBytes(storageRef, postImageFile);
                         imageUrl = await getDownloadURL(storageRef);
+                    } catch (error) {
+                        console.error("Error al subir la imagen:", error);
+                        imageUploadFailed = true;
                     }
+                }
 
+                // Procede a crear el post, incluso si la imagen falló
+                try {
                     const newPost = {
                         userId: currentUser.uid,
                         username: currentUser.displayName || "Anónimo",
                         avatarUrl: currentUser.photoURL || "https://placehold.co/40x40/FF3058/ffffff?text=U",
                         text: postText,
-                        imageUrl: imageUrl,
+                        imageUrl: imageUrl, // Estará vacío si falló la subida
                         keywords: postKeywords,
                         timestamp: serverTimestamp(),
                     };
 
-                    const postsCollectionRef = collection(db, `artifacts/${appId}/public/posts`);
-                    await addDoc(postsCollectionRef, newPost);
+                    const publicPostsCollectionRef = collection(db, `artifacts/${appId}/public/data/posts`);
+                    const publicPostDocRef = await addDoc(publicPostsCollectionRef, newPost);
+
+                    const userPostsCollectionRef = collection(db, `artifacts/${appId}/users/${currentUser.uid}/data/posts`);
+                    await setDoc(doc(userPostsCollectionRef, publicPostDocRef.id), newPost);
                     
-                    showConfirmationModal("¡Publicación creada exitosamente!");
+                    if (imageUploadFailed) {
+                        showConfirmationModal("Publicación creada sin imagen. Revisa la guía para solucionar el problema de subida de imágenes.");
+                    } else {
+                        showConfirmationModal("¡Publicación creada exitosamente!");
+                    }
                     newPostModal.classList.add('hidden');
                 } catch (error) {
-                    console.error("Error al crear la publicación:", error);
-                    showConfirmationModal(`Error al crear la publicación: ${error.message}`);
+                    console.error("Error al crear la publicación en Firestore:", error);
+                    showConfirmationModal(`Error al guardar la publicación: ${error.message}`);
                 } finally {
                     hideLoadingOverlay();
                 }
@@ -1647,7 +1677,7 @@
             });
         }
 
-        // --- Funciones de utilidad ---
+        // --- Funciones de Utilidad ---
         function showLoadingOverlay() {
             loadingOverlay.classList.remove('hidden');
         }
@@ -1665,22 +1695,25 @@
             previewContainer.innerHTML = '';
             const files = Array.from(event.target.files).slice(0, maxFiles);
             if (files.length === 0) {
-                previewContainer.innerHTML = '<p style="color: #bbb; font-size: 0.9em;">No se ha seleccionado ninguna imagen</p>';
+                previewContainer.innerHTML = '<p style="color: #bbb; font-size: 0.9em;">Ninguna imagen seleccionada</p>';
                 return;
             }
             const file = files[0];
             const reader = new FileReader();
             reader.onload = (e) => {
                 const imgUrl = e.target.result;
+                const previewItem = document.createElement('div');
+                previewItem.classList.add('preview-item');
                 const img = document.createElement('img');
                 img.src = imgUrl;
                 img.alt = 'Preview';
-                previewContainer.appendChild(img);
+                previewItem.appendChild(img);
+                previewContainer.appendChild(previewItem);
             };
             reader.readAsDataURL(file);
         }
 
-        // Eventos del footer y la cabecera
+        // --- Eventos del Footer y Cabecera ---
         if (homeLogoButton) {
             homeLogoButton.addEventListener('click', () => window.location.href = 'home.html');
         }
@@ -1708,55 +1741,26 @@
         });
         confirmOkButton.addEventListener('click', () => confirmationModal.classList.add('hidden'));
 
-        // --- Lógica de Menús Laterales y Navegación de Footer ---
+        // --- Lógica de Menús Laterales y Navegación del Footer ---
         const navMenuButton = document.getElementById('navMenu');
         const sideMenu = document.getElementById('sideMenu');
         const closeSideMenuBtn = document.getElementById('closeSideMenuBtn');
         const navRewardsButton = document.getElementById('navRewards');
         const rewardsSideMenu = document.getElementById('rewardsSideMenu');
         const closeRewardsSideMenuBtn = document.getElementById('closeRewardsSideMenuBtn');
-        const sideMenuNavContent = document.getElementById('sideMenuNavContent');
-        const sideMenuMainTitle = document.getElementById('sideMenuMainTitle');
 
-        // Modales de información
         const infoModal = document.getElementById('infoModal');
         const infoModalTitle = document.getElementById('infoModalTitle');
         const infoModalIntroText = document.getElementById('infoModalIntroText');
         const infoModalBodyContent = document.getElementById('infoModalBodyContent');
         const closeInfoModalBtn = document.getElementById('closeInfoModalBtn');
 
-        // Funciones para abrir/cerrar menús laterales
-        if (navMenuButton) {
-            navMenuButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                sideMenu.classList.add('open');
-            });
-        }
-        if (closeSideMenuBtn) {
-            closeSideMenuBtn.addEventListener('click', () => {
-                sideMenu.classList.remove('open');
-                // Restaurar el menú principal si se estaba viendo otra cosa
-                sideMenuNavContent.classList.remove('hidden');
-                sideMenuMainTitle.textContent = 'Menú Principal';
-                if (document.getElementById('sideMenuBackButton')) {
-                    document.getElementById('sideMenuBackButton').remove();
-                }
-                infoModalBodyContent.innerHTML = ''; // Limpiar contenido del modal de info
-            });
-        }
-        if (navRewardsButton) {
-            navRewardsButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                rewardsSideMenu.classList.add('open');
-            });
-        }
-        if (closeRewardsSideMenuBtn) {
-            closeRewardsSideMenuBtn.addEventListener('click', () => {
-                rewardsSideMenu.classList.remove('open');
-            });
-        }
+        if (navMenuButton) navMenuButton.addEventListener('click', (e) => { e.preventDefault(); sideMenu.classList.add('open'); });
+        if (closeSideMenuBtn) closeSideMenuBtn.addEventListener('click', () => sideMenu.classList.remove('open'));
+        if (navRewardsButton) navRewardsButton.addEventListener('click', (e) => { e.preventDefault(); rewardsSideMenu.classList.add('open'); });
+        if (closeRewardsSideMenuBtn) closeRewardsSideMenuBtn.addEventListener('click', () => rewardsSideMenu.classList.remove('open'));
+        if (closeInfoModalBtn) closeInfoModalBtn.addEventListener('click', () => infoModal.classList.add('hidden'));
 
-        // Función para mostrar modal de información
         function showInfoModal(title, introText, bodyContent) {
             infoModalTitle.textContent = title;
             infoModalIntroText.textContent = introText;
@@ -1764,179 +1768,15 @@
             infoModal.classList.remove('hidden');
         }
 
-        if (closeInfoModalBtn) {
-            closeInfoModalBtn.addEventListener('click', () => {
-                infoModal.classList.add('hidden');
-            });
-        }
-
-        // --- Lógica para los elementos del menú lateral ---
-        const sideMenuMission = document.getElementById('sideMenuMission');
-        const sideMenuWhoAreWe = document.getElementById('sideMenuWhoAreWe');
-        const sideMenuPrices = document.getElementById('sideMenuPrices');
-        const sideMenuSupport = document.getElementById('sideMenuSupport');
-        const sideMenuDevelopers = document.getElementById('sideMenuDevelopers');
-        const sideMenuLogout = document.getElementById('sideMenuLogout');
-
-        if (sideMenuMission) {
-            sideMenuMission.addEventListener('click', (e) => {
-                e.preventDefault();
-                showInfoModal(
-                    "Nuestra Misión",
-                    "En THE RED, creemos en el poder de la creatividad y la conexión humana.",
-                    `
-                    <h3>Nuestra Visión</h3>
-                    <p>Ser la plataforma líder que conecte a creadores de contenido con audiencias globales, fomentando un ecosistema donde la creatividad florezca sin límites.</p>
-                    
-                    <h3>Nuestros Valores</h3>
-                    <ul>
-                        <li><strong>Creatividad:</strong> Valoramos y promovemos la expresión artística en todas sus formas.</li>
-                        <li><strong>Comunidad:</strong> Construimos espacios seguros donde las personas pueden conectar auténticamente.</li>
-                        <li><strong>Innovación:</strong> Utilizamos tecnología de vanguardia para mejorar la experiencia del usuario.</li>
-                        <li><strong>Inclusión:</strong> Celebramos la diversidad y damos la bienvenida a todas las voces.</li>
-                    </ul>
-                    
-                    <p>Estamos aquí para empoderar a los creadores, conectar a las personas y construir un futuro digital más brillante.</p>
-                    `
-                );
-                sideMenu.classList.remove('open');
-            });
-        }
-
-        if (sideMenuWhoAreWe) {
-            sideMenuWhoAreWe.addEventListener('click', (e) => {
-                e.preventDefault();
-                showInfoModal(
-                    "Quiénes Somos",
-                    "THE RED es más que una plataforma; somos una comunidad apasionada de creadores, innovadores y soñadores.",
-                    `
-                    <h3>Nuestro Equipo</h3>
-                    <p>Somos un equipo diverso de desarrolladores, diseñadores, creadores de contenido y visionarios tecnológicos unidos por una pasión común: crear la mejor plataforma para la expresión creativa.</p>
-                    
-                    <h3>Nuestra Historia</h3>
-                    <p>Comenzamos como un pequeño proyecto con grandes sueños, y gracias al apoyo de nuestra creciente comunidad, hemos evolucionado hasta convertirnos en lo que somos hoy. Cada paso que damos está impulsado por el deseo de ofrecer la mejor experiencia posible a nuestros usuarios.</p>
-                    `
-                );
-                sideMenu.classList.remove('open');
-            });
-        }
-
-        if (sideMenuPrices) {
-            sideMenuPrices.addEventListener('click', (e) => {
-                e.preventDefault();
-                showInfoModal(
-                    "Planes de Suscripción",
-                    "Elige el plan que mejor se adapte a tus necesidades creativas.",
-                    `
-                    <div class="price-plan-card">
-                        <h3>Plan Básico</h3>
-                        <div class="price">Gratis</div>
-                        <ul>
-                            <li><i class="fas fa-check"></i> Hasta 5 publicaciones por mes</li>
-                            <li><i class="fas fa-check"></i> Acceso a la comunidad</li>
-                            <li><i class="fas fa-check"></i> Soporte básico</li>
-                        </ul>
-                        <button class="subscribe-button" data-plan="basic">Comenzar Gratis</button>
-                    </div>
-                    
-                    <div class="price-plan-card">
-                        <h3>Plan Pro</h3>
-                        <div class="price">$9.99 <small>/mes</small></div>
-                        <ul>
-                            <li><i class="fas fa-check"></i> Publicaciones ilimitadas</li>
-                            <li><i class="fas fa-check"></i> Análisis avanzados</li>
-                            <li><i class="fas fa-check"></i> Soporte prioritario</li>
-                            <li><i class="fas fa-check"></i> Herramientas de edición premium</li>
-                        </ul>
-                        <button class="subscribe-button" data-plan="pro">Suscribirse</button>
-                    </div>
-                    `
-                );
-                sideMenu.classList.remove('open');
-
-                // Añadir listeners a los botones de suscripción
-                document.querySelectorAll('.subscribe-button').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const plan = this.getAttribute('data-plan');
-                        showConfirmationModal(`Suscripción al plan ${plan} en desarrollo.`);
-                    });
-                });
-            });
-        }
-
-        if (sideMenuSupport) {
-            sideMenuSupport.addEventListener('click', (e) => {
-                e.preventDefault();
-                showInfoModal(
-                    "Soporte y Ayuda",
-                    "Estamos aquí para ayudarte. Encuentra respuestas a tus preguntas o contacta con nuestro equipo de soporte.",
-                    `
-                    <h3>Preguntas Frecuentes</h3>
-                    <h4>¿Cómo puedo crear una cuenta?</h4>
-                    <p>Simplemente haz clic en "Registrarse" y sigue las instrucciones.</p>
-                    
-                    <h4>¿Puedo cambiar mi plan en cualquier momento?</h4>
-                    <p>Sí, puedes actualizar o degradar tu plan desde la configuración de tu cuenta.</p>
-                    
-                    <h3>Contacto</h3>
-                    <p>Si necesitas ayuda adicional, puedes contactarnos en: <strong>soporte@thered.com</strong></p>
-                    <p>Nos esforzamos por responder a todas las consultas en un plazo de 24 horas.</p>
-                    `
-                );
-                sideMenu.classList.remove('open');
-            });
-        }
-
-        if (sideMenuDevelopers) {
-            sideMenuDevelopers.addEventListener('click', (e) => {
-                e.preventDefault();
-                showInfoModal(
-                    "Para Desarrolladores",
-                    "Únete a nuestra comunidad de desarrolladores y ayuda a construir el futuro de THE RED.",
-                    `
-                    <h3>API de THE RED</h3>
-                    <p>Accede a nuestra API RESTful para integrar THE RED en tus aplicaciones.</p>
-                    
-                    <h3>SDK y Herramientas</h3>
-                    <p>Descarga nuestros SDKs para JavaScript, Python, y más.</p>
-                    
-                    <h3>Documentación</h3>
-                    <p>Encuentra guías completas, ejemplos de código y referencias de API en nuestro portal de desarrolladores.</p>
-                    
-                    <p>¡Esperamos ver las increíbles creaciones que construirás con The Red!</p>
-                    `
-                );
-                sideMenu.classList.remove('open');
-            });
-        }
-
-        if (sideMenuLogout) {
-            sideMenuLogout.addEventListener('click', async (e) => {
-                e.preventDefault();
-                try {
-                    showConfirmationModal("Cerrando sesión...");
-                    // Aquí iría la lógica de cerrar sesión con Firebase
-                    setTimeout(() => {
-                        window.location.href = 'index.html';
-                    }, 1500);
-                } catch (error) {
-                    console.error("Error al cerrar sesión:", error);
-                    showConfirmationModal("Error al cerrar sesión.");
-                }
-                sideMenu.classList.remove('open');
-            });
-        }
-
-        // Controladores para los íconos del footer
-        navItems.forEach(item => {
-            item.addEventListener('click', (e) => {
-                if (item.id === 'navRewards') {
-                    e.preventDefault();
-                    rewardsSideMenu.classList.add('open');
-                }
-            });
-        });
+        // --- Lógica de los Items del Menú Lateral ---
+        document.getElementById('sideMenuMission').addEventListener('click', (e) => { e.preventDefault(); showInfoModal("Nuestra Misión", "En THE RED, creemos en el poder de la creatividad y la conexión humana.", `...`); sideMenu.classList.remove('open'); });
+        document.getElementById('sideMenuWhoAreWe').addEventListener('click', (e) => { e.preventDefault(); showInfoModal("Quiénes Somos", "THE RED es más que una plataforma; somos una comunidad apasionada...", `...`); sideMenu.classList.remove('open'); });
+        document.getElementById('sideMenuPrices').addEventListener('click', (e) => { e.preventDefault(); showInfoModal("Planes de Suscripción", "Elige el plan que mejor se adapte a tus necesidades creativas.", `...`); sideMenu.classList.remove('open'); });
+        document.getElementById('sideMenuSupport').addEventListener('click', (e) => { e.preventDefault(); showInfoModal("Soporte y Ayuda", "Estamos aquí para ayudarte. Encuentra respuestas a tus preguntas...", `...`); sideMenu.classList.remove('open'); });
+        document.getElementById('sideMenuDevelopers').addEventListener('click', (e) => { e.preventDefault(); showInfoModal("Para Desarrolladores", "Únete a nuestra comunidad de desarrolladores y ayuda a construir el futuro de THE RED.", `...`); sideMenu.classList.remove('open'); });
+        document.getElementById('sideMenuLogout').addEventListener('click', async (e) => { e.preventDefault(); /* Lógica para cerrar sesión */ });
 
     </script>
 </body>
 </html>
+

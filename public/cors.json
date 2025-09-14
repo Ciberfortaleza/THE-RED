@@ -1,11 +1,8 @@
 [
-{
-    "origin": [
-        "https://www.thered.network",
-        "https://the-red-loggin.web.app"
-],
-    "method": ["GET", "HEAD"],
-    "responseHeader": ["Content-Type"],
+  {
+    "origin": ["[https://www.thered.network](https://www.thered.network)", "http://localhost:8080"],
+    "method": ["GET", "POST", "PUT"],
+    "responseHeader": ["Content-Type", "Authorization"],
     "maxAgeSeconds": 3600
-}
+  }
 ]
