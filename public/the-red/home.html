@@ -73,15 +73,14 @@
         }
 
         body {
-            background-image: url('background.png');
-            color: #fff;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow-x: hidden;
-            overflow-y: hidden;
-            position: relative;
-        }
+    background-image: url('background.png');
+    background-size: cover; /* Asegura que la imagen cubra todo el fondo */
+    background-position: center; /* Centra la imagen */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+    background-attachment: fixed; /* Mantiene la imagen fija al hacer scroll */
+    color: #fff;
+    /* ... otros estilos ... */
+}
 
         .app-container {
             display: flex;
@@ -108,71 +107,7 @@
         }
 
         .blob {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(120px);
-            opacity: 0.6;
-            animation: blob-move 20s infinite alternate ease-in-out, blob-pulse 12s infinite alternate;
-            pointer-events: none;
-        }
-
-        .blob-purple {
-            background: radial-gradient(circle, var(--light-purple), var(--medium-purple));
-            width: 450px;
-            height: 450px;
-            top: 10%;
-            left: -15%;
-            animation-delay: 0s;
-        }
-
-        .blob-red {
-            background: radial-gradient(circle, var(--light-red), var(--medium-red));
-            width: 550px;
-            height: 550px;
-            bottom: -5%;
-            right: -20%;
-            animation-delay: 4s;
-        }
-
-        .blob-blue {
-            background: radial-gradient(circle, #00bfff, #007bff);
-            width: 400px;
-            height: 400px;
-            top: 25%;
-            left: 15%;
-            animation-delay: 8s;
-        }
-
-        .blob-green {
-            background: radial-gradient(circle, #00ff80, #00b359);
-            width: 300px;
-            height: 300px;
-            bottom: 15%;
-            left: -10%;
-            animation-delay: 12s;
-        }
-
-        .blob-yellow {
-            background: radial-gradient(circle, #ffd700, #ff8c00);
-            width: 380px;
-            height: 380px;
-            top: -15%;
-            right: 10%;
-            animation-delay: 16s;
-        }
-
-        @keyframes blob-pulse {
-            0% { transform: scale(1); opacity: 0.6; }
-            50% { transform: scale(1.08); opacity: 0.7; }
-            100% { transform: scale(1); opacity: 0.6; }
-        }
-
-        @keyframes blob-move {
-            0% { transform: translate(0, 0); }
-            25% { transform: translate(30px, -40px); }
-            50% { transform: translate(-20px, 50px); }
-            75% { transform: translate(40px, -30px); }
-            100% { transform: translate(0, 0); }
+           display: none; /* Se eliminan los blobs de colores */
         }
 
         /* --- Cabecera Principal --- */
@@ -816,12 +751,10 @@
             z-index: 1;
         }
 
-        @media (min-width: 768px) {
-            .profile-card {
-                flex-direction: row;
-                text-align: left;
-                align-items: flex-start;
-            }
+        /* Centrado para todas las pantallas */
+        .profile-card {
+            align-items: center;
+            text-align: center;
         }
 
         .profile-card:hover {
@@ -841,14 +774,6 @@
             z-index: 10;
         }
 
-        @media (min-width: 768px) {
-            .profile-left-section {
-                width: auto;
-                margin-right: 2.5rem;
-                margin-bottom: 0;
-            }
-        }
-
         .profile-card .profile-avatar {
             width: 120px;
             height: 120px;
@@ -863,24 +788,13 @@
             flex: 1;
             display: flex;
             flex-direction: column;
+            align-items: center; /* Centrar contenido */
             width: 100%;
-        }
-
-        @media (min-width: 768px) {
-            .profile-right-section {
-                width: auto;
-            }
         }
 
         .name-container {
             margin-top: 1rem;
             text-align: center;
-        }
-
-        @media (min-width: 768px) {
-            .name-container {
-                text-align: left;
-            }
         }
 
         .profile-card .profile-username {
@@ -903,13 +817,7 @@
             margin-top: 1rem;
             position: relative;
             z-index: 3;
-        }
-
-        @media (min-width: 768px) {
-            .profile-card .profile-bio {
-                text-align: left;
-                margin-top: 0;
-            }
+            text-align: center; /* Asegurar centrado */
         }
 
         /* Estilos para el carrusel de imágenes del perfil */
@@ -928,19 +836,13 @@
         .profile-tags-container {
             display: flex;
             flex-wrap: wrap;
-            justify-content: center;
+            justify-content: center; /* Centrar tags */
             gap: 0.5rem;
             margin-top: 1rem;
             position: relative;
             z-index: 2;
         }
-
-        @media (min-width: 768px) {
-            .profile-tags-container {
-                justify-content: flex-start;
-            }
-        }
-
+        
         .tag {
             background-color: #3b0764;
             color: #d8c0d8;
@@ -1784,6 +1686,24 @@
             .discover-carousel-container {
                 padding: 15px 10px;
             }
+            
+            .hero-text h1 {
+                font-size: 4rem;
+            }
+
+            .hero-text p {
+                font-size: 1.2rem;
+            }
+
+            .hero-images {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .hero-images img {
+                width: 80%;
+                max-width: none;
+            }
         }
 
         @media (max-width: 480px) {
@@ -1831,7 +1751,6 @@
         /* CSS Específico de la Página de Inicio (de home.css) */
         /* Estilos específicos de la página de inicio */
 
-        /* Estilos para el logo en el cuerpo */
         .fade-in-up {
             opacity: 0;
             transform: translateY(30px);
@@ -1843,43 +1762,66 @@
             transform: translateY(0);
         }
 
-        .main-logo-container {
+        /* --- Nueva sección Hero --- */
+        .hero-section {
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+        }
+
+        .hero-images {
             display: flex;
-            align-items: flex-start; /* Alinea el logo y el texto por arriba */
-            justify-content: flex-start;
-            gap: 40px; /* Espacio entre logo y texto */
-            margin-left: 90px;
-            padding: 20px; /* Añadido padding para mejor espaciado en general */
-            background-color: rgba(30, 5, 37, 0.6); /* Fondo semi-transparente */
-            backdrop-filter: blur(10px); /* Efecto de cristal líquido */
-            border-radius: 20px;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .hero-images img {
+            width: 100%;
+            max-width: 350px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 15px;
             box-shadow: var(--shadow);
-            border: 1px solid rgba(125, 52, 144, 0.7);
+            border: 2px solid rgba(125, 52, 144, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .logo-img {
-            width: 350px;
-            height: auto;
-            margin-bottom: 15px;
-            filter: drop-shadow(0 0 10px rgba(255, 48, 88, 0.8));
+        .hero-images img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8), var(--glow-purple);
         }
 
-        /* Estilo para misión y visión */
-        .mission-vision-text {
-            max-width: 600px;
+        .hero-text h1 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 5rem;
+            color: var(--medium-red);
+            font-weight: 800;
+            text-shadow: var(--glow-red);
+            margin-bottom: 10px;
+            animation: text-flicker 3s linear infinite;
         }
 
-        .mission-vision-text h2 {
-            font-size: 2em;
-            color: #ff3058;
-            margin-bottom: 5px;
+        @keyframes text-flicker {
+            0% { opacity: 0.8; text-shadow: 0 0 10px var(--medium-red); }
+            5% { opacity: 1; text-shadow: 0 0 15px var(--glow-red); }
+            10% { opacity: 0.7; }
+            15% { opacity: 1; }
+            25% { opacity: 0.8; text-shadow: 0 0 12px var(--medium-red); }
+            30% { opacity: 1; }
+            50% { opacity: 0.9; text-shadow: 0 0 18px var(--glow-red); }
+            55% { opacity: 1; }
+            70% { opacity: 0.8; }
+            75% { opacity: 1; text-shadow: 0 0 10px var(--glow-red); }
+            100% { opacity: 0.9; }
         }
 
-        .mission-vision-text p {
-            font-size: 1.1em;
-            color: #ffffff;
-            margin-bottom: 20px;
-            line-height: 1.6;
+        .hero-text p {
+            font-size: 1.5rem;
+            color: #eee;
+            font-weight: 500;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
         }
 
         /* --- Sección de Carrusel (Página de Inicio) --- */
@@ -1887,7 +1829,7 @@
             position: relative;
             width: 100%;
             max-width: 900px;
-            margin: 0 auto;
+            margin: 0 auto 40px; /* Added margin-bottom */
             overflow: hidden;
             border-radius: 20px;
             box-shadow: var(--shadow);
@@ -1900,35 +1842,26 @@
         .carousel-container {
             display: flex;
             height: 400px;
+            transition: transform 0.5s ease-in-out;
         }
 
         .carousel-slide {
             min-width: 100%;
-            display: flex;
+            display: none;
             justify-content: center;
             align-items: center;
-            background-color: rgba(30, 5, 37, 0.4); /* Efecto de cristal líquido */
-            opacity: 0;
-            transition: opacity 0.6s ease-in-out;
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            pointer-events: none;
+            background-color: rgba(30, 5, 37, 0.4);
         }
 
         .carousel-slide.active {
-            opacity: 1;
-            position: relative;
-            pointer-events: auto;
+            display: flex;
         }
 
         .carousel-image {
             width: 100%;
-            height: auto;
+            height: 100%;
             display: block;
             object-fit: cover;
-            border-radius: 20px;
         }
 
         .carousel-dots {
@@ -2100,7 +2033,7 @@
             box-shadow: 0 6px 20px rgba(255, 48, 88, 0.4);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            align-self: flex-start;
+            align-self: center; /* Centrar botón */
             z-index: 15;
             position: relative;
             outline: none;
@@ -2535,11 +2468,6 @@
     <div class="app-container">
         <!-- Fondo de galaxia simulado con gradientes y pseudoelementos -->
         <div class="background-elements">
-            <div class="blob blob-purple"></div>
-            <div class="blob blob-red"></div>
-            <div class="blob blob-blue"></div>
-            <div class="blob blob-green"></div>
-            <div class="blob blob-yellow"></div>
         </div>
 
         <!-- Cabecera -->
@@ -2579,41 +2507,40 @@
         <main class="main-content">
             <!-- Contenido de la Página de Inicio -->
             <section id="home-page-content" class="page-section">
-                <!-- Nuevo contenedor para el logo grande en el body -->
-                <div class="main-logo-container fade-in-up">
-                    <!-- Reemplazado el SVG por la imagen del logo -->
-                    <img src="logo.png" alt="The Red Logo" class="logo-img">
-                    <div class="mission-vision-text">
-                    <h2>Misión</h2>
-                    <p>Nuestra misión es ofrecer productos de calidad que impacten positivamente la vida de las personas.</p>
-
-                    <h2>Visión</h2>
-                    <p>Ser líderes en innovación y confianza en nuestro sector a nivel internacional.</p>
-                    </div>
-                    <span class="logo-text"></span>
-                </div>
-
-                <!-- Sección de carrusel de fotos -->
-                <section class="carousel-section">
-                    <div class="carousel-container">
-                        <div class="carousel-slide active">
-                            <img src="https://placehold.co/900x400/FF0000/FFFFFF?text=Bienvenida+a+The+Red" alt="Bienvenida a The Red" class="carousel-image">
+                <!-- Nueva sección Hero -->
+                 <section class="hero-section">
+                    <!-- Sección de carrusel de fotos -->
+                    <section class="carousel-section">
+                        <div class="carousel-container" style="position: relative; overflow: hidden;">
+                            <div class="carousel-slide active">
+                                <img src="rubi1.jpg" alt="Aerial Silk Performer" class="carousel-image">
+                            </div>
+                            <div class="carousel-slide">
+                                <img src="raza1.jpg" alt="Collage Art" class="carousel-image">
+                            </div>
+                            <div class="carousel-slide">
+                                <img src="tyre1.jpg" alt="Space Technology" class="carousel-image">
+                            </div>
+                            <div class="carousel-slide">
+                                <img src="nube1.jpg" alt="Beachwear Fashion" class="carousel-image">
+                            </div>
+                            <div class="carousel-slide">
+                                <img src="maca1.jpg" alt="Traditional Mexican Musician" class="carousel-image">
+                            </div>
                         </div>
-                        <div class="carousel-slide">
-                            <img src="https://placehold.co/900x400/8B0000/FFFFFF?text=Descubre+Nuevas+Conexiones" alt="Descubre Nuevas Conexiones" class="carousel-image">
+                        <div class="carousel-dots">
+                            <span class="dot active" data-slide-index="0"></span>
+                            <span class="dot" data-slide-index="1"></span>
+                            <span class="dot" data-slide-index="2"></span>
+                            <span class="dot" data-slide-index="3"></span>
+                            <span class="dot" data-slide-index="4"></span>
                         </div>
-                        <div class="carousel-slide">
-                            <img src="https://placehold.co/900x400/A00000/FFFFFF?text=Comparte+Tus+Historias" alt="Comparte Tus Historias" class="carousel-image">
-                        </div>
-                        <div class="carousel-slide">
-                            <img src="https://placehold.co/900x400/C00000/FFFFFF?text=Explora+El+Universo" alt="Explora El Universo" class="carousel-image">
-                        </div>
-                    </div>
-                    <div class="carousel-dots">
-                        <span class="dot active" data-slide-index="0"></span>
-                        <span class="dot" data-slide-index="1"></span>
-                        <span class="dot" data-slide-index="2"></span>
-                        <span class="dot" data-slide-index="3"></span>
+                    </section>
+                
+                    <div class="hero-text">
+                        <img src="logo.png" alt="THE RED Logo" style="width: 100%; max-width: 450px; margin-bottom: 20px; filter: drop-shadow(0 0 15px rgba(255, 48, 88, 0.8));">
+                        <p>Merging Paths, Fusing Connections </p>
+                        <p> Uniendo Caminos, Fusionando Conexiones</p>
                     </div>
                 </section>
 
@@ -2660,7 +2587,7 @@
                                 </div>
 
                                 <p class="profile-bio profile-bio-collapsed">
-                                    Contenido de entretenimiento creando peformans, historias, shows y llevarte a un mundo donde todos podemos volar a través de la danza...
+                                    Danza aérea, performance y shows para volar con la imaginación.
                                 </p>
                                 <p class="profile-bio-full" style="display: none;">
                                     Contenido de entretenimiento creando peformans, historias, shows y llevarte a un mundo donde todos podemos volar a través de la danza. Realizando un espectaculo circense en danza aérea, en áreas públicas ○ eventos privados. Todo el mundo tiene derecho a disfrutar de esta hermosa arte y las maravillas de volar, no importa de que parte del mundo seas, todos merecemos ser parte de la danza aérea, ya sea participando dentro de un numero de danza aérea, apoyando a los artistas, dando a conocer esta hermosa arte y con lo mas hermoso los apluasos de nuestro público. Haciendo que este mismo siempre regrese feliz a su hogar y comparta esta experiencia de una manera grata y feliz. La danza aérea es más que solo subir a la tela, es el talento de poder volar más haya de los límites humanos, en ella encuentras ese sentido de poder maravillar, no solo a ti, también a un gran sector del público, haciendo un momento inolvidable y mágico.
@@ -2691,7 +2618,7 @@ Contacto: Rubí Luna Tel. 55 70 87 02 32 Gmail.rubiolvera21@gmail.com Insta.rubi
                                 </div>
                                 <div class="profile-tags-container"></div>
                                 <p class="profile-bio profile-bio-collapsed">
-                                    Rubén Adrián Zamora Alva es conocido como RAZA en el mundo del collage. Sus obras están hechas a mano con recortes encontrados al azar...
+                                    Collage surrealista hecho a mano con recortes para hackear mentes.
                                 </p>
                                 <p class="profile-bio-full" style="display: none;">
                                     Rubén Adrián Zamora Alva es conocido como RAZA en el mundo del collage. Sus obras están hechas a mano con recortes encontrados al azar en distintas partes del mundo. RAZA juega muy seriamente con ideas surrealistas y tiene la convicción de que obedecer el lenguaje de los sueños nos despierta a un mundo mejor. Para RAZA la palabra "Arte" Ileva mayúscula y no la usa muy a menudo, por lo mismo no se preocupa de si lamarse artista o no. Por lo mientras, toma la herramienta de corte como una caña de pescar y avienta la carnada hacia las profundidades del inconsiente colectivo, esperando traer a la superficie algo de magia suficientemente potente para compartirla y hackear mentes
@@ -2728,7 +2655,7 @@ Su Telegram: @lamezcladetodo Mastodon: @lamezcladetodo@mastodon social
                                 </div>
 
                                 <p class="profile-bio profile-bio-collapsed">
-                                    Innovador en tecnología espacial y robótica, dedicado a crear soluciones que impulsen la humanidad hacia el futuro...
+                                    Tecnología espacial y robótica para expandir los límites de lo posible.
                                 </p>
                                 <p class="profile-bio-full" style="display: none;">
                                     Innovador en tecnología espacial y robótica, dedicado a crear soluciones que impulsen la humanidad hacia el futuro. Especializado en programación avanzada y desarrollo de sistemas autónomos para exploración espacial. Mi pasión es desarrollar tecnologías que nos permitan expandir los límites de lo posible y llevar a la humanidad a las estrellas.
@@ -2763,7 +2690,7 @@ Su Telegram: @lamezcladetodo Mastodon: @lamezcladetodo@mastodon social
                                 </div>
 
                                 <p class="profile-bio profile-bio-collapsed">
-                                    Marca de moda playera que diseña trajes de baño únicos y elegantes para mujeres que aman el mar y el sol...
+                                    Trajes de baño únicos inspirados en la libertad del océano y la belleza de México.
                                 </p>
                                 <p class="profile-bio-full" style="display: none;">
                                     Marca de moda playera que diseña trajes de baño únicos y elegantes para mujeres que aman el mar y el sol. Nuestras piezas combinan comodidad, estilo y calidad premium. Cada diseño está inspirado en la libertad del océano y la belleza natural de las playas mexicanas. Creamos bikinis, trajes de baño completos y ropa de playa que realzan la confianza y belleza de cada mujer.
@@ -2798,7 +2725,7 @@ Su Telegram: @lamezcladetodo Mastodon: @lamezcladetodo@mastodon social
                                 </div>
 
                                 <p class="profile-bio profile-bio-collapsed">
-                                    Músico y compositor especializado en música tradicional mexicana, preservando y renovando el folklore de nuestro país...
+                                    Músico y compositor que preserva y renueva el folklore tradicional de México.
                                 </p>
                                 <p class="profile-bio-full" style="display: none;">
                                     Músico y compositor especializado en música tradicional mexicana, preservando y renovando el folklore de nuestro país. Con más de 20 años de experiencia, he dedicado mi vida a mantener vivas las tradiciones musicales de México, desde el mariachi hasta los sones regionales. Mi misión es transmitir a las nuevas generaciones la riqueza cultural de nuestra música ancestral, fusionándola con elementos contemporáneos sin perder su esencia.
@@ -2827,48 +2754,6 @@ Su Telegram: @lamezcladetodo Mastodon: @lamezcladetodo@mastodon social
                     </div>
                 </div>
 
-                <!-- Sección de "Feeds" o publicaciones (Aquí ya no se alojarán las nuevas publicaciones) -->
-                <section class="feeds-section" id="postsFeed" style="margin-top: 100px; clear: both; position: relative; z-index: 3;">
-                    <!-- Las publicaciones se cargarán dinámicamente aquí (ahora solo contenido estático o publicaciones antiguas) -->
-                    <!-- Publicación con texto largo y botón "Ver más" y hashtags (ejemplo estático, se mezclará con dinámicos) -->
-                    <div class="long-text-card" data-keywords="exploracion,gamma-7,biodiversidad,rocas,flora,bioluminiscente,viaje,intergalactico,fotografia,expedicion,universo"
-                         data-post-id="static-post-1" data-username="@JaneDoe_Explorer" data-avatar-url="https://placehold.co/40x40/FF3058/ffffff?text=JD"
-                         data-image-url="https://placehold.co/600x350/550000/FFFFFF?text=Imagen+de+la+Publicación+1" data-userId="demo-user-1">
-                        <div class="card-header-top">
-                            <div class="card-image-wrapper">
-                                <img src="https://placehold.co/600x350/550000/FFFFFF?text=Imagen+de+la+Publicación+1" alt="Image from Gamma-7 Exploration" class="card-image">
-                            </div>
-                            <div class="card-user-info-and-avatar">
-                                <img src="https://placehold.co/40x40/FF3058/ffffff?text=JD" alt="Avatar de Usuario" class="card-user-avatar">
-                                <div class="card-user-details">
-                                    <span class="card-username">@JaneDoe_Explorer</span>
-                                    <span class="card-user-handle">Hace 1 min</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-tags-container">
-                            <!-- Los Hashtags se insertarán aquí por JavaScript -->
-                        </div>
-                        <p class="card-long-text">
-                            ¡Qué día tan increíble he tenido explorando los confines del Sector Gamma-7!
-                            La biodiversidad es asombrosa, con formaciones rocosas que desafían la gravedad y flora bioluminiscente que ilumina los cañones al caer la noche.
-                            Definitivamente, este es un lugar que todo explorador intergaláctico debe visitar al menos una vez en la vida.
-                            La atmósfera, aunque un poco densa, es respirable para humanos con un filtro básico, y la fauna local, aunque curiosa, parece ser inofensiva.
-                            He tomado cientos de fotografías que espero compartir pronto en una galería completa. Este viaje ha superado todas mis expectativas y me ha recordado la belleza infinita y los misterios que aún aguardan ser descubiertos en nuestro vasto universo.
-                            Estoy planeando una segunda expedición con un equipo más grande para un estudio más profundo.
-                            Manténganse sintonizados para más actualizaciones y, ¡quizás, un livestream desde el campo!
-                            Esta es la esencia de la exploración, la pasión por lo desconocido que nos impulsa a ir más allá.
-                            Cada planeta, cada luna, cada asteroide tiene una historia que contar, y mi misión es escuchar cada una de ellas y compartirlas con la comunidad de The Red.
-                            No puedo esperar para ver qué nuevas maravillas nos depara el próximo destino. ¡La aventura nunca termina!
-                            <span class="read-more-toggle"></span>
-                        </p>
-                        <div class="card-actions">
-                            <button class="action-button save-to-network-btn"><i class="fas fa-users"></i> Mi Red</button>
-                            <button class="action-button view-profile-btn"><i class="fas fa-user-circle"></i> Ver Perfil</button>
-                            <button class="action-button"><i class="fas fa-share"></i> Compartir</button>
-                        </div>
-                    </div>
-                </section>
             </section> <!-- Fin Contenido de la Página de Inicio -->
 
         </main>
@@ -4230,67 +4115,58 @@ Su Telegram: @lamezcladetodo Mastodon: @lamezcladetodo@mastodon social
             }
 
             // --- Lógica del Carrusel Principal ---
-            const carouselContainer = document.querySelector('.carousel-container');
-            const carouselSlides = document.querySelectorAll('.carousel-slide');
-            const carouselDots = document.querySelectorAll('.carousel-dots .dot');
+            const carouselContainer = document.querySelector('.carousel-section .carousel-container');
+            const carouselSlides = document.querySelectorAll('.carousel-section .carousel-slide');
+            const carouselDots = document.querySelectorAll('.carousel-section .dot');
             let currentSlide = 0;
             let carouselInterval;
 
-            /**
-             * Muestra la diapositiva actual del carrusel.
-             */
-            function showSlide() {
-                carouselSlides.forEach((slide, index) => {
+            function showSlide(index) {
+                carouselSlides.forEach((slide, i) => {
                     slide.classList.remove('active');
-                    carouselDots[index].classList.remove('active');
-                    if (index === currentSlide) {
+                    if (i === index) {
                         slide.classList.add('active');
-                        carouselDots[index].classList.add('active');
+                    }
+                });
+                carouselDots.forEach((dot, i) => {
+                    dot.classList.remove('active');
+                    if (i === index) {
+                        dot.classList.add('active');
                     }
                 });
             }
 
-            /**
-             * Avanza a la siguiente diapositiva.
-             */
             function nextSlide() {
                 currentSlide = (currentSlide + 1) % carouselSlides.length;
-                showSlide();
+                showSlide(currentSlide);
             }
 
-            /**
-             * Inicia el carrusel automático.
-             */
             function startCarousel() {
-                carouselInterval = setInterval(nextSlide, 5000); // Cambia cada 5 segundos
+                stopCarousel();
+                carouselInterval = setInterval(nextSlide, 5000); 
             }
 
-            /**
-             * Detiene el carrusel automático.
-             */
             function stopCarousel() {
                 clearInterval(carouselInterval);
             }
 
-            // Inicializar carrusel
             if (carouselSlides.length > 0) {
-                showSlide();
+                showSlide(currentSlide);
                 startCarousel();
 
-                // Pausar carrusel al pasar el ratón por encima (o tocar)
                 carouselContainer.addEventListener('mouseenter', stopCarousel);
                 carouselContainer.addEventListener('mouseleave', startCarousel);
 
-                // Control por puntos
                 carouselDots.forEach(dot => {
                     dot.addEventListener('click', (e) => {
                         stopCarousel();
                         currentSlide = parseInt(e.target.dataset.slideIndex);
-                        showSlide();
+                        showSlide(currentSlide);
                         startCarousel();
                     });
                 });
             }
+
 
             // --- Lógica de Carrusel de Perfiles Destacados (ahora en Home) ---
             const featuredProfilesCarousel = document.getElementById('featuredProfilesCarousel');
@@ -4510,3 +4386,4 @@ Su Telegram: @lamezcladetodo Mastodon: @lamezcladetodo@mastodon social
     <script src="global-menu.js"></script>
 </body>
 </html>
+

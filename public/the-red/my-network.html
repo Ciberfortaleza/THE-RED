@@ -74,6 +74,10 @@
 
         body {
             background-image: url('background.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
             color: #fff;
             min-height: 100vh;
             display: flex;
@@ -97,70 +101,7 @@
 
         /* Estilos para los "blobs" de fondo */
         .blob {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(120px);
-            opacity: 0.6;
-            animation: blob-move 20s infinite alternate ease-in-out, blob-pulse 12s infinite alternate;
-        }
-
-        .blob-purple {
-            background: radial-gradient(circle, var(--light-purple), var(--medium-purple));
-            width: 450px;
-            height: 450px;
-            top: 10%;
-            left: -15%;
-            animation-delay: 0s;
-        }
-
-        .blob-red {
-            background: radial-gradient(circle, var(--light-red), var(--medium-red));
-            width: 550px;
-            height: 550px;
-            bottom: -5%;
-            right: -20%;
-            animation-delay: 4s;
-        }
-
-        .blob-blue {
-            background: radial-gradient(circle, #00bfff, #007bff);
-            width: 400px;
-            height: 400px;
-            top: 25%;
-            left: 15%;
-            animation-delay: 8s;
-        }
-
-        .blob-green {
-            background: radial-gradient(circle, #00ff80, #00b359);
-            width: 300px;
-            height: 300px;
-            bottom: 15%;
-            left: -10%;
-            animation-delay: 12s;
-        }
-
-        .blob-yellow {
-            background: radial-gradient(circle, #ffd700, #ff8c00);
-            width: 380px;
-            height: 380px;
-            top: -15%;
-            right: 10%;
-            animation-delay: 16s;
-        }
-
-        @keyframes blob-pulse {
-            0% { transform: scale(1); opacity: 0.6; }
-            50% { transform: scale(1.08); opacity: 0.7; }
-            100% { transform: scale(1); opacity: 0.6; }
-        }
-
-        @keyframes blob-move {
-            0% { transform: translate(0, 0); }
-            25% { transform: translate(30px, -40px); }
-            50% { transform: translate(-20px, 50px); }
-            75% { transform: translate(40px, -30px); }
-            100% { transform: translate(0, 0); }
+           display: none;
         }
 
         /* --- Cabecera Principal --- */
@@ -1717,11 +1658,6 @@
     <div class="app-container">
         <!-- Fondo de galaxia simulado con gradientes y pseudoelementos -->
         <div class="background-elements">
-            <div class="blob blob-purple"></div>
-            <div class="blob blob-red"></div>
-            <div class="blob blob-blue"></div>
-            <div class="blob blob-green"></div>
-            <div class="blob blob-yellow"></div>
         </div>
 
         <!-- Cabecera -->
@@ -3127,7 +3063,7 @@
                     textElement.innerHTML = truncatedText + '<span class="read-more-toggle" style="color: var(--light-red); cursor: pointer; font-weight: bold;">Ver más</span>';
 
                     const readMoreToggle = textElement.querySelector('.read-more-toggle');
-                    readMoreToggle.addEventListener('click', () => {
+                    readMoreToggle.addEventListener('click', function() {
                         if (textElement.classList.contains('expanded')) {
                             textElement.innerHTML = fullText + ' <span class="read-more-toggle" style="color: var(--light-red); cursor: pointer; font-weight: bold;">Ver menos</span>';
                             textElement.classList.remove('expanded');
@@ -3135,7 +3071,6 @@
                             textElement.innerHTML = fullText + ' <span class="read-more-toggle" style="color: var(--light-red); cursor: pointer; font-weight: bold;">Ver menos</span>';
                             textElement.classList.add('expanded');
                         }
-                        // Re-attach event listener for the new toggle element
                         textElement.querySelector('.read-more-toggle').addEventListener('click', arguments.callee);
                     });
                 }

@@ -67,13 +67,16 @@
             font-family: 'Inter', sans-serif;
         }
 
-        /* Asegurar que el HTML no tenga desbordamiento horizontal */
         html {
             overflow-x: hidden;
         }
 
         body {
-            background: linear-gradient(135deg, #1e0525, #2d0a35);
+            background-image: url('background.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
             color: #fff;
             min-height: 100vh;
             display: flex;
@@ -94,46 +97,9 @@
             z-index: 1;
             padding-bottom: 70px; /* Espacio para el footer fijo */
         }
-
-        /* Estilos para los "blobs" de fondo */
+        
         .blob {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(120px);
-            opacity: 0.6;
-            animation: blob-move 20s infinite alternate ease-in-out, blob-pulse 12s infinite alternate;
-        }
-
-        .blob-purple {
-            background: radial-gradient(circle, var(--light-purple), var(--medium-purple));
-            width: 450px;
-            height: 450px;
-            top: 10%;
-            left: -15%;
-            animation-delay: 0s;
-        }
-
-        .blob-red {
-            background: radial-gradient(circle, var(--light-red), var(--medium-red));
-            width: 550px;
-            height: 550px;
-            bottom: -5%;
-            right: -20%;
-            animation-delay: 4s;
-        }
-
-        @keyframes blob-pulse {
-            0% { transform: scale(1); opacity: 0.6; }
-            50% { transform: scale(1.08); opacity: 0.7; }
-            100% { transform: scale(1); opacity: 0.6; }
-        }
-
-        @keyframes blob-move {
-            0% { transform: translate(0, 0); }
-            25% { transform: translate(30px, -40px); }
-            50% { transform: translate(-20px, 50px); }
-            75% { transform: translate(40px, -30px); }
-            100% { transform: translate(0, 0); }
+           display: none;
         }
 
         /* --- Cabecera Principal --- */
@@ -243,27 +209,26 @@
             position: relative;
         }
 
-        .page-section {
-            width: 100%;
+        .page-title {
+            text-align: center;
+            font-size: 2.5em;
+            color: var(--light-red);
+            text-shadow: var(--glow-red);
+            margin-bottom: 20px;
+        }
+        
+        .discover-layout {
             display: flex;
-            flex-direction: column;
             gap: 30px;
-            opacity: 1;
-            visibility: visible;
-            height: auto;
-            transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out, height 0.4s ease-in-out;
+            width: 100%;
         }
 
-        .page-section.hidden {
-            opacity: 0;
-            visibility: hidden;
-            height: 0;
-            overflow: hidden;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            pointer-events: none;
+        .discover-sidebar {
+            flex: 0 0 240px; /* Reduced width */
+        }
+
+        .discover-main-content {
+            flex: 1;
         }
 
         /* --- Pie de Página (main-footer) --- */
@@ -436,19 +401,11 @@
             box-shadow: 0 0 15px rgba(255, 48, 88, 0.8);
         }
 
-        /* Animaciones */
         @keyframes fadeInScale {
-            from {
-                opacity: 0;
-                transform: scale(0.85);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
+            from { opacity: 0; transform: scale(0.85); }
+            to { opacity: 1; transform: scale(1); }
         }
 
-        /* Indicador de carga */
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -465,9 +422,7 @@
             font-size: 1.3em;
         }
 
-        .loading-overlay.hidden {
-            display: none;
-        }
+        .loading-overlay.hidden { display: none; }
 
         .spinner {
             border: 10px solid rgba(255, 255, 255, 0.4);
@@ -484,7 +439,6 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* --- Estilos para el modal de nueva publicación --- */
         .profile-edit-form-group {
             text-align: left;
             margin-bottom: 20px;
@@ -543,98 +497,47 @@
         /* --- CSS Específico de la Página de Descubrir --- */
         .discover-filters {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 30px;
+            flex-direction: column;
+            gap: 20px;
             background-color: rgba(30, 5, 37, 0.6);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border-radius: 20px;
-            padding: 20px;
+            padding: 25px;
             box-shadow: var(--shadow);
             border: 1px solid rgba(125, 52, 144, 0.7);
         }
 
         .filter-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            align-items: center;
+            width: 100%;
+            text-align: left;
         }
 
         .filter-group label {
             font-size: 1.1em;
             color: var(--light-red);
             font-weight: 700;
+            margin-bottom: 10px;
+            display: block;
         }
 
-        .filter-buttons-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            justify-content: center;
-        }
-
-        .filter-button {
-            background-color: rgba(74, 26, 85, 0.6);
-            color: #fff;
-            border: 1px solid var(--light-purple);
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 0.9em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .filter-button:hover {
-            background-color: var(--light-purple);
-            transform: translateY(-2px);
-        }
-
-        .filter-button.active {
-            background: var(--gradient-red-light);
-            border-color: var(--light-red);
-        }
-
-        .discover-search-controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
+        .filter-group input, .filter-group select {
             width: 100%;
-            max-width: 700px;
-            margin: 0 auto 30px auto;
-            background-color: rgba(30, 5, 37, 0.6);
-            backdrop-filter: blur(10px);
+            padding: 10px;
             border-radius: 20px;
-            padding: 20px;
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(125, 52, 144, 0.7);
-            align-items: center;
-        }
-
-        .discover-search-controls input[type="text"] {
-            flex-grow: 1;
-            background-color: rgba(51, 20, 64, 0.8);
-            border: 1px solid rgba(74, 26, 85, 0.6);
-            border-radius: 25px;
-            padding: 12px 20px;
-            color: #fff;
+            border: 1px solid var(--medium-purple);
+            background-color: rgba(0,0,0,0.4);
+            color: white;
             font-size: 1em;
         }
 
-        .discover-search-controls button {
-            background: var(--gradient-red-light);
-            color: #fff;
-            border: none;
-            border-radius: 25px;
-            padding: 12px 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .discover-search-controls button:hover {
-            transform: translateY(-2px);
+        .filter-group select {
+            appearance: none;
+            padding-right: 30px;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.7rem center;
+            background-size: 1em;
         }
 
         .discover-posts-grid {
@@ -644,7 +547,7 @@
         }
         
         .long-text-card {
-            background-color: rgba(74, 26, 85, 0.4);
+            background-color: rgba(30, 5, 37, 0.8);
             backdrop-filter: blur(15px);
             border: 1px solid rgba(125, 52, 144, 0.6);
             box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5);
@@ -742,7 +645,6 @@
             box-shadow: 0 0 10px rgba(255, 48, 88, 0.5);
         }
 
-        /* Nuevos estilos para el modal de publicación */
         .new-post-modal-content {
             max-width: 600px;
             width: 90%;
@@ -774,101 +676,11 @@
             background: linear-gradient(45deg, #ef4444, #dc2626) !important;
         }
         
-        /* Media Queries para Responsividad */
-        @media (max-width: 768px) {
-            .main-content {
-                padding: 10px;
-            }
-
-            .main-header {
-                flex-wrap: wrap;
-                padding: 10px;
-                gap: 10px;
-            }
-            .left-header-section {
-                order: 1;
-                width: 100%;
-                justify-content: space-between;
-            }
-            .new-post-button {
-                order: 2;
-                width: 100%;
-                text-align: center;
-            }
-            .right-icons {
-                order: 3;
-                width: 100%;
-                justify-content: space-around;
-                margin-top: 10px;
-            }
-
-            .discover-posts-grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-
-            .long-text-card {
-                padding: 15px;
-            }
-
-            .discover-filters, .discover-search-controls {
-                padding: 15px;
-            }
-
-            .footer-nav .nav-item span {
-                font-size: 0.75em;
-            }
-
-            .modal-content {
-                width: 95%;
-                padding: 20px;
-            }
-
-            .modal-content h2 {
-                font-size: 1.5em;
-            }
-
-            .new-post-modal-actions {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .new-post-modal-button {
-                width: 100%;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .filter-group {
-                width: 100%;
-            }
-            .filter-buttons-container {
-                justify-content: center;
-            }
-            .discover-search-controls {
-                flex-direction: column;
-            }
-            .discover-search-controls input, .discover-search-controls button {
-                width: 100%;
-            }
-            .floating-chat-button {
-                width: 55px;
-                height: 55px;
-                font-size: 1.5em;
-                bottom: 80px;
-                right: 15px;
-            }
-            .main-header .left-header-section {
-                justify-content: flex-start;
-            }
-        }
-
         .modal-content {
             position: relative;
             z-index: 2100;
         }
 
-        /* --- Estilos para Menús Laterales --- */
         .side-menu-left, .side-menu-right {
             position: fixed;
             top: 0;
@@ -886,30 +698,15 @@
             padding: 0;
         }
 
-        .side-menu-left {
-            left: 0;
-            border-right: 1px solid rgba(125, 52, 144, 0.7);
-        }
-
-        .side-menu-right {
-            right: 0;
-            transform: translateX(100%);
-            border-left: 1px solid rgba(125, 52, 144, 0.7);
-        }
-
-        .side-menu-left.open {
-            transform: translateX(0);
-        }
-
-        .side-menu-right.open {
-            transform: translateX(0);
-        }
+        .side-menu-left { left: 0; border-right: 1px solid rgba(125, 52, 144, 0.7); }
+        .side-menu-right { right: 0; transform: translateX(100%); border-left: 1px solid rgba(125, 52, 144, 0.7); }
+        .side-menu-left.open, .side-menu-right.open { transform: translateX(0); }
 
         .side-menu-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 20px 20px 20px;
+            padding: 20px;
             border-bottom: 1px solid rgba(125, 52, 144, 0.6);
             background: linear-gradient(135deg, rgba(74, 26, 85, 0.8), rgba(30, 5, 37, 0.8));
             position: sticky;
@@ -917,263 +714,45 @@
             z-index: 10;
         }
 
-        .side-menu-title {
-            font-size: 1.4em;
-            font-weight: 800;
-            color: var(--light-red);
-            text-shadow: 0 0 10px rgba(255, 48, 88, 0.7);
-        }
+        .side-menu-title { font-size: 1.4em; font-weight: 800; color: var(--light-red); text-shadow: 0 0 10px rgba(255, 48, 88, 0.7); }
+        .side-menu-close-btn { background: none; border: none; color: #fff; font-size: 2em; cursor: pointer; transition: all 0.3s ease; padding: 5px 10px; border-radius: 8px; }
+        .side-menu-close-btn:hover { color: var(--medium-red); background-color: rgba(255, 48, 88, 0.2); transform: scale(1.1) rotate(90deg); }
 
-        .side-menu-close-btn {
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 2em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            padding: 5px 10px;
-            border-radius: 8px;
-        }
+        .side-menu-nav { padding: 20px 0; display: flex; flex-direction: column; gap: 5px; }
+        .side-menu-item { display: flex; align-items: center; gap: 15px; padding: 15px 20px; color: #e0e0e0; text-decoration: none; font-size: 1.1em; font-weight: 600; transition: all 0.3s ease; border-left: 4px solid transparent; position: relative; overflow: hidden; }
+        .side-menu-item::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%; background: linear-gradient(90deg, rgba(255, 48, 88, 0.2), rgba(125, 52, 144, 0.2)); transition: width 0.3s ease; z-index: -1; }
+        .side-menu-item:hover::before { width: 100%; }
+        .side-menu-item:hover { color: #fff; border-left-color: var(--light-red); background-color: rgba(255, 48, 88, 0.1); transform: translateX(8px); text-shadow: 0 0 8px rgba(255, 255, 255, 0.7); }
+        .side-menu-item i { font-size: 1.2em; color: var(--light-red); transition: all 0.3s ease; }
+        .side-menu-item:hover i { color: #fff; transform: scale(1.1); }
 
-        .side-menu-close-btn:hover {
-            color: var(--medium-red);
-            background-color: rgba(255, 48, 88, 0.2);
-            transform: scale(1.1) rotate(90deg);
+        .info-modal-content { background-color: rgba(30, 5, 37, 0.95); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); padding: 35px; border-radius: 20px; box-shadow: var(--shadow); max-width: 800px; width: 90%; border: 1px solid rgba(125, 52, 144, 0.8); position: relative; animation: fadeInScale 0.4s ease-out forwards; display: flex; flex-direction: column; max-height: 90vh; overflow-y: auto; }
+        .info-modal-content .close-button { position: absolute; top: 15px; right: 20px; background: none; border: none; color: #fff; font-size: 2em; cursor: pointer; transition: all 0.3s ease; text-shadow: 0 0 5px rgba(0, 0, 0, 0.3); }
+        .info-modal-content .close-button:hover { color: var(--medium-red); transform: scale(1.1) rotate(90deg); }
+        .info-modal-content h2 { color: var(--light-red); margin-bottom: 20px; font-size: 2.2em; text-shadow: 0 0 10px rgba(255, 48, 88, 0.7); text-align: center; }
+        .info-modal-content .modal-intro-text { font-size: 1.2em; color: #d0d0d0; margin-bottom: 25px; text-align: center; line-height: 1.6; }
+        .info-modal-content .modal-body-content { color: #e0e0e0; line-height: 1.7; font-size: 1.05em; }
+        
+        .language-option { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; cursor: pointer; padding: 10px 15px; border-radius: 10px; background-color: rgba(74, 26, 85, 0.4); border: 1px solid rgba(125, 52, 144, 0.6); transition: all 0.3s ease; }
+        .language-option:hover { background-color: rgba(125, 52, 144, 0.4); transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); }
+        .language-option input[type="radio"] { transform: scale(1.5); accent-color: var(--light-red); margin-right: 10px; }
+        .language-option label { font-size: 1.1em; color: #e0e0e0; cursor: pointer; flex-grow: 1; }
+        
+        @media (max-width: 992px) {
+            .discover-layout {
+                flex-direction: column;
+            }
+            .discover-sidebar {
+                flex: 0 0 auto;
+                max-width: 100%;
+            }
         }
-
-        .side-menu-nav {
-            padding: 20px 0;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .side-menu-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px 20px;
-            color: #e0e0e0;
-            text-decoration: none;
-            font-size: 1.1em;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border-left: 4px solid transparent;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .side-menu-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 0;
-            height: 100%;
-            background: linear-gradient(90deg, rgba(255, 48, 88, 0.2), rgba(125, 52, 144, 0.2));
-            transition: width 0.3s ease;
-            z-index: -1;
-        }
-
-        .side-menu-item:hover::before {
-            width: 100%;
-        }
-
-        .side-menu-item:hover {
-            color: #fff;
-            border-left-color: var(--light-red);
-            background-color: rgba(255, 48, 88, 0.1);
-            transform: translateX(8px);
-            text-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
-        }
-
-        .side-menu-item i {
-            font-size: 1.2em;
-            color: var(--light-red);
-            transition: all 0.3s ease;
-        }
-
-        .side-menu-item:hover i {
-            color: #fff;
-            transform: scale(1.1);
-        }
-
-        /* Estilos para el Modal de Información */
-        .info-modal-content {
-            background-color: rgba(30, 5, 37, 0.95);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            padding: 35px;
-            border-radius: 20px;
-            box-shadow: var(--shadow);
-            max-width: 800px;
-            width: 90%;
-            border: 1px solid rgba(125, 52, 144, 0.8);
-            position: relative;
-            animation: fadeInScale 0.4s ease-out forwards;
-            display: flex;
-            flex-direction: column;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .info-modal-content .close-button {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 2em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-        }
-
-        .info-modal-content .close-button:hover {
-            color: var(--medium-red);
-            transform: scale(1.1) rotate(90deg);
-        }
-
-        .info-modal-content h2 {
-            color: var(--light-red);
-            margin-bottom: 20px;
-            font-size: 2.2em;
-            text-shadow: 0 0 10px rgba(255, 48, 88, 0.7);
-            text-align: center;
-        }
-
-        .info-modal-content .modal-intro-text {
-            font-size: 1.2em;
-            color: #d0d0d0;
-            margin-bottom: 25px;
-            text-align: center;
-            line-height: 1.6;
-        }
-
-        .info-modal-content .modal-body-content {
-            color: #e0e0e0;
-            line-height: 1.7;
-            font-size: 1.05em;
-        }
-
-        .info-modal-content .modal-body-content h3 {
-            font-size: 1.4em;
-            color: var(--light-red);
-            margin-top: 20px;
-            margin-bottom: 10px;
-            text-shadow: 0 0 5px rgba(255, 48, 88, 0.4);
-        }
-
-        .info-modal-content .modal-body-content h4 {
-            font-size: 1.2em;
-            color: var(--light-purple);
-            margin-top: 15px;
-            margin-bottom: 8px;
-        }
-
-        .info-modal-content .modal-body-content p,
-        .info-modal-content .modal-body-content ul,
-        .info-modal-content .modal-body-content ol {
-            margin-bottom: 15px;
-        }
-
-        .info-modal-content .modal-body-content ul,
-        .info-modal-content .modal-body-content ol {
-            padding-left: 25px;
-        }
-        .info-modal-content .modal-body-content li {
-            margin-bottom: 8px;
-        }
-
-        /* Estilos para la Sección de Precios */
-        .price-plan-card {
-            background-color: rgba(74, 26, 85, 0.5);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 20px;
-            border: 1px solid var(--light-purple);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-
-        .price-plan-card:hover {
-            transform: translateY(-5px) scale(1.01);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6), var(--glow-purple);
-            border-color: var(--light-red);
-        }
-
-        .price-plan-card h3 {
-            color: var(--light-red);
-            font-size: 1.8em;
-            margin-bottom: 10px;
-            text-shadow: 0 0 10px rgba(255, 48, 88, 0.6);
-        }
-
-        .price-plan-card .price {
-            font-size: 2.5em;
-            font-weight: 800;
-            color: var(--light-purple);
-            margin-bottom: 15px;
-            text-shadow: 0 0 10px rgba(125, 52, 144, 0.6);
-        }
-
-        .price-plan-card .price small {
-            font-size: 0.5em;
-            font-weight: 400;
-            color: #ccc;
-        }
-
-        .price-plan-card ul {
-            list-style: none;
-            padding: 0;
-            margin-bottom: 20px;
-            text-align: left;
-            color: #e0e0e0;
-        }
-
-        .price-plan-card ul li {
-            margin-bottom: 8px;
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-        }
-
-        .price-plan-card ul li i {
-            color: var(--light-red);
-            margin-top: 4px;
-        }
-
-        .price-plan-card .subscribe-button {
-            background: var(--gradient-red-light);
-            color: #fff;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 25px;
-            font-size: 1.1em;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-        }
-
-        .price-plan-card .subscribe-button:hover {
-            background-color: var(--medium-red);
-            transform: translateY(-3px);
-            box-shadow: 0 0 20px rgba(255, 48, 88, 0.8);
-        }
-
     </style>
 </head>
 <body>
     <div class="app-container">
         <!-- Fondo -->
-        <div class="background-elements">
-            <div class="blob blob-purple"></div>
-            <div class="blob blob-red"></div>
-        </div>
+        <div class="background-elements"></div>
 
         <!-- Cabecera -->
         <header class="main-header">
@@ -1184,7 +763,7 @@
                 <button class="new-post-button" id="newPostButton">+ Nueva Publicación</button>
             </div>
             <div class="right-icons">
-                <button class="icon-button" id="settingsButton" title="Configuración">
+                <button class="icon-button" id="settingsButton" title="Configuración de Idioma">
                     <i class="fas fa-cog"></i>
                 </button>
                 <button class="icon-button" id="profileButton" title="Mi Perfil">
@@ -1195,35 +774,36 @@
 
         <!-- Contenido Principal -->
         <main class="main-content">
-            <section id="discover-page-content" class="page-section">
-                <h1 class="discover-section-header" style="text-align: center; font-size: 2.5em; color: var(--light-red); text-shadow: var(--glow-red);">Descubrir</h1>
-
-                <!-- Filtros de Descubrir -->
-                <div class="discover-filters">
-                    <div class="filter-group">
-                        <label>Tipo de Creación:</label>
-                        <div class="filter-buttons-container">
-                            <button class="filter-button" data-filter-value="fotografia">Fotografía</button>
-                            <button class="filter-button" data-filter-value="arte">Arte</button>
-                            <button class="filter-button" data-filter-value="musica">Música</button>
-                            <button class="filter-button" data-filter-value="escritura">Escritura</button>
-                            <button class="filter-button" data-filter-value="ciencia">Ciencia</button>
+            <h1 class="page-title">Descubrir</h1>
+            <div class="discover-layout">
+                <aside class="discover-sidebar">
+                     <div class="discover-filters">
+                        <div class="filter-group">
+                            <label for="countryFilter">País:</label>
+                            <input type="text" id="countryFilter" placeholder="Ej: México, Argentina...">
                         </div>
+                        <div class="filter-group">
+                            <label for="levelFilter">Nivel:</label>
+                            <select id="levelFilter">
+                                <option value="">Todos los niveles</option>
+                                <option value="principiante">Principiante</option>
+                                <option value="intermedio">Intermedio</option>
+                                <option value="avanzado">Avanzado</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="keywordFilter">Palabra Clave:</label>
+                            <input type="text" id="keywordFilter" placeholder="Ej: arte, ciencia...">
+                        </div>
+                        <button class="modal-button" id="applyFiltersButton" style="width: 100%; margin-top: 10px;">Buscar</button>
+                    </div>
+                </aside>
+                <div class="discover-main-content">
+                    <div class="discover-posts-grid" id="discover-posts-feed">
+                        <!-- Las publicaciones se cargarán aquí dinámicamente -->
                     </div>
                 </div>
-
-                <!-- Barra de Búsqueda y Botón de Mostrar Todo -->
-                <div class="discover-search-controls">
-                    <input type="text" id="discoverSearchInput" placeholder="Buscar por palabra clave...">
-                    <button id="searchDiscoverButton">Buscar</button>
-                    <button id="showAllDiscoverItemsButton">Mostrar Todo</button>
-                </div>
-
-                <!-- Cuadrícula de Publicaciones -->
-                <div class="discover-posts-grid" id="discover-posts-feed">
-                    <!-- Las publicaciones se cargarán aquí -->
-                </div>
-            </section>
+            </div>
         </main>
 
         <!-- Pie de página -->
@@ -1262,7 +842,6 @@
         <div class="modal-overlay hidden" id="newPostModal">
             <div class="modal-content new-post-modal-content">
                 <h2 style="color: var(--light-purple);">Crear Nueva Publicación</h2>
-                
                 <div class="new-post-modal-body">
                     <div class="profile-edit-form-group">
                         <label for="newPostTextInput">Texto de la Publicación:</label>
@@ -1280,35 +859,32 @@
                         <input type="text" id="newPostKeywordsInput" class="modal-input" placeholder="ej: espacio, ciencia, arte">
                     </div>
                 </div>
-                
                 <div class="new-post-modal-actions">
                     <button type="button" class="modal-button new-post-modal-button" id="submitNewPostButton">Publicar</button>
                     <button type="button" class="modal-button new-post-modal-button cancel-button" id="closeNewPostModalButton">Cancelar</button>
                 </div>
             </div>
         </div>
-
-        <!-- Modal de Vista Previa de Publicación -->
-        <div class="modal-overlay hidden" id="postPreviewModal">
+        
+        <!-- Modal de Configuración de Idioma -->
+        <div class="modal-overlay hidden" id="languageSettingsModal">
             <div class="modal-content">
-                <button class="close-button" id="closePostPreviewModalBtn">×</button>
-                <h2 id="postPreviewTitle" style="color: var(--light-purple);">Vista Previa de Publicación</h2>
-                <img id="postPreviewImage" src="" alt="Imagen de la publicación" style="width: 100%; border-radius: 10px; margin-bottom: 20px;"/>
-                <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
-                    <img id="postPreviewAuthorAvatar" src="" alt="Avatar del autor" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;"/>
-                    <div>
-                        <span style="font-weight: bold; color: var(--light-red);" id="postPreviewAuthorUsername"></span>
-                        <br>
-                        <span style="font-size: 0.9em; color: #aaa;" id="postPreviewTimestamp"></span>
-                    </div>
+                <h2>Configuración de Idioma</h2>
+                <div class="language-option">
+                    <input type="radio" id="lang-es" name="language" value="es" checked>
+                    <label for="lang-es">Español</label>
                 </div>
-                <p id="postPreviewText" style="text-align: left; margin-bottom: 20px;"></p>
-                <div id="postPreviewTags" style="display: flex; flex-wrap: wrap; gap: 8px;"></div>
+                <div class="language-option">
+                    <input type="radio" id="lang-en" name="language" value="en">
+                    <label for="lang-en">English</label>
+                </div>
                 <div class="modal-actions">
-                    <button class="modal-button" id="viewAuthorProfileBtn">Ver Perfil del Autor</button>
+                    <button class="modal-button" id="saveLanguageSettingsButton">Guardar</button>
+                    <button class="modal-button cancel-button" id="closeLanguageSettingsModalButton">Cerrar</button>
                 </div>
             </div>
         </div>
+
 
         <!-- Menú Lateral Izquierdo -->
         <div class="side-menu-left" id="sideMenu">
@@ -1354,13 +930,11 @@
     </div>
 
     <script type="module">
-        // Importaciones de Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, onAuthStateChanged, signInAnonymously, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, serverTimestamp, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
 
-        // Configuración de Firebase
         const firebaseConfig = {
           apiKey: "AIzaSyApU8UbfqfzBH1UPU3a1CQGf1p995Rf0y4",
           authDomain: "the-red-loggin.firebaseapp.com",
@@ -1370,44 +944,32 @@
           appId: "1:40265573777:web:1651cb4119969010ea2630"
         };
         
-        // Inicialización de los servicios de Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
         const storage = getStorage(app);
         
-        // Variables globales
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const appId = 'default-app-id';
         let userId;
+        let allPosts = [];
 
-        // Elementos del DOM
+        // --- DOM Elements ---
+        const postsFeed = document.getElementById('discover-posts-feed');
         const newPostButton = document.getElementById('newPostButton');
         const newPostModal = document.getElementById('newPostModal');
         const closeNewPostModalButton = document.getElementById('closeNewPostModalButton');
         const submitNewPostButton = document.getElementById('submitNewPostButton');
-        const newPostTextInput = document.getElementById('newPostTextInput');
-        const newPostImageUploadInput = document.getElementById('newPostImageUploadInput');
-        const newPostImagePreview = document.getElementById('newPostImagePreview');
-        const newPostKeywordsInput = document.getElementById('newPostKeywordsInput');
-        const postsFeed = document.getElementById('discover-posts-feed');
         const loadingOverlay = document.getElementById('loadingOverlay');
         const confirmationModal = document.getElementById('confirmationModal');
         const confirmationMessage = document.getElementById('confirmationMessage');
         const confirmOkButton = document.getElementById('confirmOkButton');
-        const postPreviewModal = document.getElementById('postPreviewModal');
-        const closePostPreviewModalBtn = document.getElementById('closePostPreviewModalBtn');
-        const postPreviewTitle = document.getElementById('postPreviewTitle');
-        const postPreviewImage = document.getElementById('postPreviewImage');
-        const postPreviewAuthorAvatar = document.getElementById('postPreviewAuthorAvatar');
-        const postPreviewAuthorUsername = document.getElementById('postPreviewAuthorUsername');
-        const postPreviewTimestamp = document.getElementById('postPreviewTimestamp');
-        const postPreviewText = document.getElementById('postPreviewText');
-        const postPreviewTags = document.getElementById('postPreviewTags');
-        const viewAuthorProfileBtn = document.getElementById('viewAuthorProfileBtn');
-        const homeLogoButton = document.getElementById('homeLogoButton');
-        const navItems = document.querySelectorAll('.footer-nav .nav-item');
+        const settingsButton = document.getElementById('settingsButton');
+        const languageSettingsModal = document.getElementById('languageSettingsModal');
+        const closeLanguageSettingsModalButton = document.getElementById('closeLanguageSettingsModalButton');
+        const saveLanguageSettingsButton = document.getElementById('saveLanguageSettingsButton');
+        const applyFiltersButton = document.getElementById('applyFiltersButton');
 
-        // --- Autenticación y Carga de Datos ---
+        // --- Authentication ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 userId = user.uid;
@@ -1416,365 +978,198 @@
                 try {
                     await signInAnonymously(auth);
                 } catch (error) {
-                    console.error("Error al iniciar sesión anónimamente:", error);
-                    showConfirmationModal("Error al iniciar sesión anónimamente.");
+                    showConfirmationModal("Error de autenticación.");
                 }
             }
         });
         
-        // Cargar y mostrar publicaciones en tiempo real
+        // --- Post Fetching and Rendering ---
         function fetchAndRenderPosts() {
             if (!db) return;
             const postsCollectionRef = collection(db, `artifacts/${appId}/public/data/posts`);
             const q = query(postsCollectionRef);
 
             onSnapshot(q, (snapshot) => {
-                const posts = [];
+                allPosts = [];
                 snapshot.forEach((doc) => {
-                    posts.push({ id: doc.id, ...doc.data() });
+                    allPosts.push({ id: doc.id, ...doc.data() });
                 });
-
-                // Ordenar las publicaciones en el lado del cliente (navegador)
-                posts.sort((a, b) => {
-                    const dateA = a.timestamp ? a.timestamp.toDate() : new Date(0);
-                    const dateB = b.timestamp ? b.timestamp.toDate() : new Date(0);
-                    return dateB - dateA;
-                });
-
-                postsFeed.innerHTML = '';
-                posts.forEach(post => {
-                    const postElement = createPostCard(post, post.id);
-                    postsFeed.appendChild(postElement);
-                });
-
+                renderPosts(allPosts);
             }, (error) => {
-                console.error("Error al obtener las publicaciones:", error);
-                showConfirmationModal("Error al cargar las publicaciones. Por favor, revisa las reglas de seguridad de Firestore.");
+                showConfirmationModal("Error al cargar publicaciones.");
             });
         }
 
-        // Crear una tarjeta de publicación HTML
-        function createPostCard(post, postId) {
+        function renderPosts(posts) {
+            posts.sort((a, b) => (b.timestamp?.toDate() || 0) - (a.timestamp?.toDate() || 0));
+            postsFeed.innerHTML = '';
+            posts.forEach(post => {
+                const postElement = createPostCard(post);
+                postsFeed.appendChild(postElement);
+            });
+        }
+
+        function createPostCard(post) {
             const card = document.createElement('div');
             card.classList.add('long-text-card');
-            card.dataset.postId = postId;
-            card.dataset.userId = post.userId;
-            card.dataset.username = post.username;
-            card.dataset.avatarUrl = post.avatarUrl;
-            card.dataset.imageUrl = post.imageUrl || '';
-            card.dataset.keywords = post.keywords ? post.keywords.join(',') : '';
-
             const timestamp = post.timestamp ? new Date(post.timestamp.toDate()).toLocaleString() : 'Fecha desconocida';
             
             card.innerHTML = `
                 <div class="card-user-info-and-avatar">
-                    <img src="${post.avatarUrl || 'https://placehold.co/55x55/7d3490/ffffff?text=U'}" alt="Avatar" class="card-user-avatar" onerror="this.onerror=null;this.src='https://placehold.co/55x55/7d3490/ffffff?text=U';">
+                    <img src="${post.avatarUrl || 'https://placehold.co/55x55/7d3490/ffffff?text=U'}" alt="Avatar" class="card-user-avatar">
                     <div class="card-user-details">
                         <span class="card-username">${post.username || 'Anónimo'}</span>
                         <span class="card-user-handle">${timestamp}</span>
                     </div>
                 </div>
-                ${post.imageUrl ? `<div class="card-image-wrapper"><img src="${post.imageUrl}" alt="Imagen de la publicación" onerror="this.onerror=null;this.style.display='none';"></div>` : ''}
+                ${post.imageUrl ? `<div class="card-image-wrapper"><img src="${post.imageUrl}" alt="Imagen de la publicación"></div>` : ''}
                 <p class="card-long-text">${post.text || ''}</p>
-                <div class="post-tags" style="margin-top: 10px;">
-                    ${post.keywords ? post.keywords.map(tag => `<span style="background: var(--light-red); color: white; padding: 4px 8px; border-radius: 15px; font-size: 0.8em; margin-right: 5px;">#${tag}</span>`).join('') : ''}
-                </div>
                 <div class="post-actions">
-                    <button class="action-button save-to-network-btn"><i class="fas fa-users"></i> Mi Red</button>
-                    <button class="action-button view-profile-btn"><i class="fas fa-user-circle"></i> Ver Perfil</button>
-                    <button class="action-button"><i class="fas fa-share"></i> Compartir</button>
+                    <button class="action-button save-to-network-btn" data-post-id="${post.id}"><i class="fas fa-users"></i> Mi Red</button>
+                    <button class="action-button view-profile-btn" data-user-id="${post.userId}"><i class="fas fa-user-circle"></i> Ver Perfil</button>
+                    <button class="action-button share-btn"><i class="fas fa-share"></i> Compartir</button>
                 </div>
             `;
-
             return card;
         }
 
-        // --- Lógica de la funcionalidad de publicaciones ---
-        if (postsFeed) {
-            postsFeed.addEventListener('click', async (event) => {
-                const targetButton = event.target.closest('.action-button');
-                if (targetButton) {
-                    const card = targetButton.closest('.long-text-card');
-                    if (!card) return;
+        // --- Event Listeners ---
+        applyFiltersButton.addEventListener('click', () => {
+            const country = document.getElementById('countryFilter').value.toLowerCase();
+            const level = document.getElementById('levelFilter').value.toLowerCase();
+            const keyword = document.getElementById('keywordFilter').value.toLowerCase();
 
-                    const postId = card.dataset.postId;
-                    const postData = {
-                        postId: postId,
-                        userId: card.dataset.userId,
-                        username: card.dataset.username,
-                        avatarUrl: card.dataset.avatarUrl,
-                        imageUrl: card.dataset.imageUrl,
-                        text: card.querySelector('.card-long-text').textContent.replace(/Ver más|Ver menos/g, '').trim(),
-                        keywords: card.dataset.keywords ? card.dataset.keywords.split(',').map(k => k.trim()) : [],
-                        timestamp: new Date().toISOString()
-                    };
-                    
-                    if (targetButton.classList.contains('save-to-network-btn')) {
-                        await savePostToMyNetwork(postData);
-                    } else if (targetButton.classList.contains('view-profile-btn')) {
-                        window.location.href = `my-profile.html?uid=${postData.userId}`;
-                    } else if (targetButton.textContent.includes('Compartir')) {
-                        showConfirmationModal("Compartiendo publicación... (Función en desarrollo)");
-                    }
-                } else if (event.target.closest('.card-image-wrapper img')) {
-                    const card = event.target.closest('.long-text-card');
-                    if (card) {
-                        const postData = {
-                            title: 'Publicación de ' + card.dataset.username,
-                            imageUrl: card.dataset.imageUrl,
-                            avatarUrl: card.dataset.avatarUrl,
-                            username: card.dataset.username,
-                            timestamp: new Date(card.dataset.timestamp).toLocaleString(),
-                            text: card.querySelector('.card-long-text').textContent.replace(/Ver más|Ver menos/g, '').trim(),
-                            keywords: card.dataset.keywords ? card.dataset.keywords.split(',').map(k => k.trim()) : []
-                        };
-                        openPostPreviewModal(postData);
-                    }
-                }
+            const filteredPosts = allPosts.filter(post => {
+                const postKeywords = (post.keywords || []).join(' ').toLowerCase();
+                
+                const countryMatch = !country || (post.country && post.country.toLowerCase().includes(country));
+                const levelMatch = !level || (post.level && post.level.toLowerCase() === level);
+                const keywordMatch = !keyword || post.text.toLowerCase().includes(keyword) || postKeywords.includes(keyword);
+
+                return countryMatch && levelMatch && keywordMatch;
             });
-        }
-        
+            renderPosts(filteredPosts);
+        });
+
+        postsFeed.addEventListener('click', async (event) => {
+            const button = event.target.closest('.action-button');
+            if (!button) return;
+
+            const card = button.closest('.long-text-card');
+            const postId = button.dataset.postId;
+            const postUserId = button.dataset.userId;
+            
+            if (button.classList.contains('save-to-network-btn')) {
+                const postToSave = allPosts.find(p => p.id === postId);
+                if (postToSave) await savePostToMyNetwork(postToSave);
+            } else if (button.classList.contains('view-profile-btn')) {
+                window.location.href = `my-profile.html?uid=${postUserId}`;
+            } else if (button.classList.contains('share-btn')) {
+                showConfirmationModal("Función de compartir en desarrollo.");
+            }
+        });
+
         async function savePostToMyNetwork(postData) {
-            if (!db || !userId) {
-                showConfirmationModal("Error: Debes iniciar sesión para añadir publicaciones a tu red.");
+            if (!userId) {
+                showConfirmationModal("Debes iniciar sesión para guardar publicaciones.");
                 return;
             }
             showLoadingOverlay();
             try {
-                const networkCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/data/network`);
-                await setDoc(doc(networkCollectionRef, postData.postId), postData, { merge: true });
-                showConfirmationModal(`¡Publicación de "${postData.username}" añadida a tu red!`);
+                const networkDocRef = doc(db, `artifacts/${appId}/users/${userId}/data/network`, postData.id);
+                await setDoc(networkDocRef, postData);
+                showConfirmationModal("Publicación guardada en 'Mi Red'.");
             } catch (error) {
-                console.error("Error al añadir a Mi Red:", error);
-                showConfirmationModal(`Error al añadir a Mi Red: ${error.message}`);
+                showConfirmationModal(`Error al guardar: ${error.message}`);
             } finally {
                 hideLoadingOverlay();
             }
         }
+        
+        // --- Language Modal ---
+        settingsButton.addEventListener('click', () => languageSettingsModal.classList.remove('hidden'));
+        closeLanguageSettingsModalButton.addEventListener('click', () => languageSettingsModal.classList.add('hidden'));
+        saveLanguageSettingsButton.addEventListener('click', () => {
+            const selectedLang = document.querySelector('input[name="language"]:checked').value;
+            localStorage.setItem('userLanguage', selectedLang);
+            showConfirmationModal(`Idioma cambiado a ${selectedLang === 'es' ? 'Español' : 'English'}.`);
+            languageSettingsModal.classList.add('hidden');
+        });
 
-        // --- Lógica del modal de crear publicación ---
-        if (newPostButton) {
-            newPostButton.addEventListener('click', () => {
-                newPostModal.classList.remove('hidden');
-                newPostTextInput.value = '';
-                newPostImageUploadInput.value = '';
-                newPostImagePreview.innerHTML = '<p style="color: #bbb; font-size: 0.9em;">Ninguna imagen seleccionada</p>';
-                newPostKeywordsInput.value = '';
-            });
-        }
+        // --- New Post Modal ---
+        newPostButton.addEventListener('click', () => newPostModal.classList.remove('hidden'));
+        closeNewPostModalButton.addEventListener('click', () => newPostModal.classList.add('hidden'));
+        submitNewPostButton.addEventListener('click', async () => {
+            const text = document.getElementById('newPostTextInput').value.trim();
+            const imageFile = document.getElementById('newPostImageUploadInput').files[0];
+            const keywords = document.getElementById('newPostKeywordsInput').value.split(',').map(k => k.trim()).filter(Boolean);
 
-        if (closeNewPostModalButton) {
-            closeNewPostModalButton.addEventListener('click', () => {
-                newPostModal.classList.add('hidden');
-            });
-        }
-
-        if (newPostImageUploadInput) {
-            newPostImageUploadInput.addEventListener('change', (event) => {
-                handleImageUploadPreview(event, newPostImagePreview, 1);
-            });
-        }
-
-        if (submitNewPostButton) {
-            submitNewPostButton.addEventListener('click', async () => {
-                const postText = newPostTextInput.value.trim();
-                const postImageFile = newPostImageUploadInput.files[0];
-                const postKeywords = newPostKeywordsInput.value.split(',').map(k => k.trim()).filter(k => k !== '');
-                const currentUser = auth.currentUser;
-
-                if (!postText && !postImageFile) {
-                    showConfirmationModal("Por favor, escribe algo o sube una imagen para tu publicación.");
-                    return;
-                }
-
-                if (!currentUser) {
-                    showConfirmationModal("Debes iniciar sesión para publicar.");
-                    return;
-                }
-
-                showLoadingOverlay();
-                let imageUrl = '';
-                let imageUploadFailed = false;
-
-                // Intenta subir la imagen primero
-                if (postImageFile) {
-                    try {
-                        const storageRef = ref(storage, `posts/${currentUser.uid}/${Date.now()}-${postImageFile.name}`);
-                        await uploadBytes(storageRef, postImageFile);
-                        imageUrl = await getDownloadURL(storageRef);
-                    } catch (error) {
-                        console.error("Error al subir la imagen:", error);
-                        imageUploadFailed = true;
-                    }
-                }
-
-                // Procede a crear el post, incluso si la imagen falló
-                try {
-                    const newPost = {
-                        userId: currentUser.uid,
-                        username: currentUser.displayName || "Anónimo",
-                        avatarUrl: currentUser.photoURL || "https://placehold.co/40x40/FF3058/ffffff?text=U",
-                        text: postText,
-                        imageUrl: imageUrl, // Estará vacío si falló la subida
-                        keywords: postKeywords,
-                        timestamp: serverTimestamp(),
-                    };
-
-                    const publicPostsCollectionRef = collection(db, `artifacts/${appId}/public/data/posts`);
-                    const publicPostDocRef = await addDoc(publicPostsCollectionRef, newPost);
-
-                    const userPostsCollectionRef = collection(db, `artifacts/${appId}/users/${currentUser.uid}/data/posts`);
-                    await setDoc(doc(userPostsCollectionRef, publicPostDocRef.id), newPost);
-                    
-                    if (imageUploadFailed) {
-                        showConfirmationModal("Publicación creada sin imagen. Revisa la guía para solucionar el problema de subida de imágenes.");
-                    } else {
-                        showConfirmationModal("¡Publicación creada exitosamente!");
-                    }
-                    newPostModal.classList.add('hidden');
-                } catch (error) {
-                    console.error("Error al crear la publicación en Firestore:", error);
-                    showConfirmationModal(`Error al guardar la publicación: ${error.message}`);
-                } finally {
-                    hideLoadingOverlay();
-                }
-            });
-        }
-
-        // --- Lógica del modal de vista previa ---
-        function openPostPreviewModal(postData) {
-            postPreviewTitle.textContent = postData.title;
-            postPreviewImage.src = postData.imageUrl;
-            postPreviewAuthorAvatar.src = postData.avatarUrl;
-            postPreviewAuthorUsername.textContent = postData.username;
-            postPreviewTimestamp.textContent = postData.timestamp;
-            postPreviewText.textContent = postData.text;
-            postPreviewTags.innerHTML = '';
-            if (postData.keywords && postData.keywords.length > 0) {
-                postData.keywords.forEach(tag => {
-                    const tagSpan = document.createElement('span');
-                    tagSpan.classList.add('post-tag');
-                    tagSpan.textContent = `#${tag}`;
-                    postPreviewTags.appendChild(tagSpan);
-                });
+            if (!text && !imageFile) {
+                showConfirmationModal("Escribe algo o sube una imagen.");
+                return;
             }
-            postPreviewModal.classList.remove('hidden');
-        }
+            if (!userId) {
+                showConfirmationModal("Error de autenticación.");
+                return;
+            }
 
-        if (closePostPreviewModalBtn) {
-            closePostPreviewModalBtn.addEventListener('click', () => {
-                postPreviewModal.classList.add('hidden');
-            });
-        }
+            showLoadingOverlay();
+            let imageUrl = '';
+            if (imageFile) {
+                const storageRef = ref(storage, `posts/${userId}/${Date.now()}_${imageFile.name}`);
+                await uploadBytes(storageRef, imageFile);
+                imageUrl = await getDownloadURL(storageRef);
+            }
+            
+            const userDoc = await getDoc(doc(db, "users", userId));
+            const userData = userDoc.data() || {};
 
-        if (viewAuthorProfileBtn) {
-            viewAuthorProfileBtn.addEventListener('click', () => {
-                const card = document.querySelector('.long-text-card[data-post-id="' + document.getElementById('postPreviewModal').dataset.postId + '"]');
-                if (card) {
-                    window.location.href = `my-profile.html?uid=${card.dataset.userId}`;
-                }
-                postPreviewModal.classList.add('hidden');
-            });
-        }
+            const newPost = {
+                userId,
+                username: userData.username || "Anónimo",
+                avatarUrl: userData.avatarUrl || 'https://placehold.co/55x55/7d3490/ffffff?text=U',
+                text,
+                imageUrl,
+                keywords,
+                country: userData.country || '', // Add user data to post for filtering
+                level: userData.level || '', // Add user data to post for filtering
+                timestamp: serverTimestamp(),
+            };
 
-        // --- Funciones de Utilidad ---
-        function showLoadingOverlay() {
-            loadingOverlay.classList.remove('hidden');
-        }
+            await addDoc(collection(db, `artifacts/${appId}/public/data/posts`), newPost);
+            hideLoadingOverlay();
+            newPostModal.classList.add('hidden');
+            showConfirmationModal("Publicación creada.");
+        });
 
-        function hideLoadingOverlay() {
-            loadingOverlay.classList.add('hidden');
-        }
-
+        // --- Utility Functions ---
         function showConfirmationModal(message) {
             confirmationMessage.textContent = message;
             confirmationModal.classList.remove('hidden');
         }
-
-        function handleImageUploadPreview(event, previewContainer, maxFiles = 1) {
-            previewContainer.innerHTML = '';
-            const files = Array.from(event.target.files).slice(0, maxFiles);
-            if (files.length === 0) {
-                previewContainer.innerHTML = '<p style="color: #bbb; font-size: 0.9em;">Ninguna imagen seleccionada</p>';
-                return;
-            }
-            const file = files[0];
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const imgUrl = e.target.result;
-                const previewItem = document.createElement('div');
-                previewItem.classList.add('preview-item');
-                const img = document.createElement('img');
-                img.src = imgUrl;
-                img.alt = 'Preview';
-                previewItem.appendChild(img);
-                previewContainer.appendChild(previewItem);
-            };
-            reader.readAsDataURL(file);
-        }
-
-        // --- Eventos del Footer y Cabecera ---
-        if (homeLogoButton) {
-            homeLogoButton.addEventListener('click', () => window.location.href = 'home.html');
-        }
-        
-        document.getElementById('settingsButton').addEventListener('click', () => showConfirmationModal('Configuración en desarrollo. Próximamente disponible.'));
-        document.getElementById('profileButton').addEventListener('click', () => window.location.href = 'my-profile.html');
-        document.getElementById('chatButton').addEventListener('click', () => showConfirmationModal('Chat en desarrollo. Próximamente disponible.'));
-        document.getElementById('searchDiscoverButton').addEventListener('click', () => {
-            const searchTerm = document.getElementById('discoverSearchInput').value;
-            if (searchTerm) {
-                showConfirmationModal(`Buscando: ${searchTerm}`);
-            }
-        });
-        document.getElementById('showAllDiscoverItemsButton').addEventListener('click', () => {
-            document.getElementById('discoverSearchInput').value = '';
-            showConfirmationModal('Mostrando todas las publicaciones');
-        });
-        document.querySelectorAll('.filter-button').forEach(button => {
-            button.addEventListener('click', function() {
-                document.querySelectorAll('.filter-button').forEach(btn => btn.classList.remove('active'));
-                this.classList.add('active');
-                const filterValue = this.getAttribute('data-filter-value');
-                showConfirmationModal(`Filtrando por: ${filterValue}`);
-            });
-        });
         confirmOkButton.addEventListener('click', () => confirmationModal.classList.add('hidden'));
+        function showLoadingOverlay() { loadingOverlay.classList.remove('hidden'); }
+        function hideLoadingOverlay() { loadingOverlay.classList.add('hidden'); }
 
-        // --- Lógica de Menús Laterales y Navegación del Footer ---
+        // --- Menus and Navigation ---
+        document.getElementById('homeLogoButton').addEventListener('click', () => window.location.href = 'home.html');
+        document.getElementById('profileButton').addEventListener('click', () => window.location.href = 'my-profile.html');
+        
         const navMenuButton = document.getElementById('navMenu');
         const sideMenu = document.getElementById('sideMenu');
         const closeSideMenuBtn = document.getElementById('closeSideMenuBtn');
-        const navRewardsButton = document.getElementById('navRewards');
-        const rewardsSideMenu = document.getElementById('rewardsSideMenu');
-        const closeRewardsSideMenuBtn = document.getElementById('closeRewardsSideMenuBtn');
-
-        const infoModal = document.getElementById('infoModal');
-        const infoModalTitle = document.getElementById('infoModalTitle');
-        const infoModalIntroText = document.getElementById('infoModalIntroText');
-        const infoModalBodyContent = document.getElementById('infoModalBodyContent');
-        const closeInfoModalBtn = document.getElementById('closeInfoModalBtn');
-
         if (navMenuButton) navMenuButton.addEventListener('click', (e) => { e.preventDefault(); sideMenu.classList.add('open'); });
         if (closeSideMenuBtn) closeSideMenuBtn.addEventListener('click', () => sideMenu.classList.remove('open'));
-        if (navRewardsButton) navRewardsButton.addEventListener('click', (e) => { e.preventDefault(); rewardsSideMenu.classList.add('open'); });
-        if (closeRewardsSideMenuBtn) closeRewardsSideMenuBtn.addEventListener('click', () => rewardsSideMenu.classList.remove('open'));
-        if (closeInfoModalBtn) closeInfoModalBtn.addEventListener('click', () => infoModal.classList.add('hidden'));
-
-        function showInfoModal(title, introText, bodyContent) {
-            infoModalTitle.textContent = title;
-            infoModalIntroText.textContent = introText;
-            infoModalBodyContent.innerHTML = bodyContent;
-            infoModal.classList.remove('hidden');
-        }
-
-        // --- Lógica de los Items del Menú Lateral ---
-        document.getElementById('sideMenuMission').addEventListener('click', (e) => { e.preventDefault(); showInfoModal("Nuestra Misión", "En THE RED, creemos en el poder de la creatividad y la conexión humana.", `...`); sideMenu.classList.remove('open'); });
-        document.getElementById('sideMenuWhoAreWe').addEventListener('click', (e) => { e.preventDefault(); showInfoModal("Quiénes Somos", "THE RED es más que una plataforma; somos una comunidad apasionada...", `...`); sideMenu.classList.remove('open'); });
-        document.getElementById('sideMenuPrices').addEventListener('click', (e) => { e.preventDefault(); showInfoModal("Planes de Suscripción", "Elige el plan que mejor se adapte a tus necesidades creativas.", `...`); sideMenu.classList.remove('open'); });
-        document.getElementById('sideMenuSupport').addEventListener('click', (e) => { e.preventDefault(); showInfoModal("Soporte y Ayuda", "Estamos aquí para ayudarte. Encuentra respuestas a tus preguntas...", `...`); sideMenu.classList.remove('open'); });
-        document.getElementById('sideMenuDevelopers').addEventListener('click', (e) => { e.preventDefault(); showInfoModal("Para Desarrolladores", "Únete a nuestra comunidad de desarrolladores y ayuda a construir el futuro de THE RED.", `...`); sideMenu.classList.remove('open'); });
-        document.getElementById('sideMenuLogout').addEventListener('click', async (e) => { e.preventDefault(); /* Lógica para cerrar sesión */ });
+        
+        document.getElementById('sideMenuLogout').addEventListener('click', async (e) => { 
+            e.preventDefault();
+            try {
+                await signOut(auth);
+                window.location.href = '../login.html';
+            } catch (error) {
+                showConfirmationModal("Error al cerrar sesión.");
+            }
+        });
 
     </script>
 </body>

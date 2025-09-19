@@ -40,11 +40,11 @@
         :root {
             --dark-purple: #1e0525;
             --medium-purple: #4a1a55;
-            --light-purple: #7d3490;
+            
             --dark-red: #a0001a;
             --medium-red: #e01030;
             --light-red: #ff3058;
-            --glow-purple: 0 0 20px rgba(125, 52, 144, 0.9);
+            
             --glow-red: 0 0 20px rgba(255, 48, 88, 0.9);
             --shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
             --side-menu-width: 280px;
@@ -80,6 +80,9 @@
 
         body {
             background-image: url('background.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             color: #fff;
             min-height: 100vh;
             display: flex;
@@ -128,32 +131,10 @@
             animation-delay: 4s;
         }
 
-        .blob-blue {
-            background: radial-gradient(circle, #00bfff, #007bff);
-            width: 400px;
-            height: 400px;
-            top: 25%;
-            left: 15%;
-            animation-delay: 8s;
-        }
+        
 
-        .blob-green {
-            background: radial-gradient(circle, #00ff80, #00b359);
-            width: 300px;
-            height: 300px;
-            bottom: 15%;
-            left: -10%;
-            animation-delay: 12s;
-        }
-
-        .blob-yellow {
-            background: radial-gradient(circle, #ffd700, #ff8c00);
-            width: 380px;
-            height: 380px;
-            top: -15%;
-            right: 10%;
-            animation-delay: 16s;
-        }
+        
+        
 
         @keyframes blob-pulse {
             0% { transform: scale(1); opacity: 0.6; }
@@ -172,7 +153,7 @@
         /* --- Cabecera Principal --- */
         .main-header {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end; /* MODIFICADO para alinear los íconos a la derecha */
             align-items: center;
             padding: 15px 20px;
             background: rgba(30, 5, 37, 0.7); /* Efecto de cristal líquido */
@@ -1752,14 +1733,6 @@
                 gap: 12px;
             }
 
-            .new-post-button {
-                order: 3;
-                width: 100%;
-                margin-top: 12px;
-                font-size: 0.95em;
-                padding: 10px 20px;
-            }
-
             .right-icons {
                 flex-grow: 1;
                 justify-content: center;
@@ -1805,11 +1778,6 @@
                 padding: 10px;
             }
 
-            .new-post-button {
-                font-size: 0.85em;
-                padding: 8px 15px;
-            }
-
             .icon-button {
                 font-size: 1.1em;
                 padding: 5px;
@@ -1845,22 +1813,21 @@
         .profile-view-container {
             width: 100%;
             max-width: 900px;
-            margin: 20px auto;
-            background-image: url('background.png'); /* Ruta corregida */
-            background-size: cover;
-            background-position: center;
+            margin: 20px; /* MODIFICADO: No más 'auto' para centrar */
+            background-color: rgba(30, 5, 37, 0.7); /* AÑADIDO: un fondo sutil para que el contenido sea legible */
+            backdrop-filter: blur(10px); /* AÑADIDO: efecto cristal */
+            -webkit-backdrop-filter: blur(10px); /* AÑADIDO: efecto cristal */
             border-radius: 25px;
             padding: 30px;
             box-shadow: var(--shadow);
-            border: 2px solid var(--border-color); /* Usar variable de color de borde */
             transition: all 0.3s ease;
             position: relative;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            text-align: center;
+            align-items: flex-start;
             min-height: 500px;
         }
+
 
         .profile-view-container:hover {
             box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8), var(--glow-purple);
@@ -1898,7 +1865,7 @@
             flex-wrap: wrap;
             gap: 30px;
             width: 100%;
-            justify-content: center;
+            justify-content: flex-start; /* MODIFICADO: Alinear al inicio */
             align-items: flex-start;
             margin-top: 20px;
         }
@@ -1917,6 +1884,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            text-align: center; /* AÑADIDO: Centrar texto en esta columna */
             gap: 15px;
         }
 
@@ -1999,6 +1967,7 @@
             background-color: rgba(0, 0, 0, 0.3);
             border: 1px solid var(--border-color); /* Usar variable de color de borde */
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            cursor: pointer; /* AÑADIDO: cursor pointer */
         }
 
         .profile-photo-placeholder img {
@@ -2011,7 +1980,7 @@
             transition: transform 0.3s ease;
         }
 
-        .profile-photo-placeholder img:hover {
+        .profile-photo-placeholder:hover img {
             transform: scale(1.1);
         }
 
@@ -2338,10 +2307,6 @@
 
         <!-- Cabecera -->
         <header class="main-header">
-            <button class="new-post-button" id="newPostButton">
-                + Nueva Publicación
-            </button>
-
             <div class="right-icons">
                 <button class="icon-button" id="settingsButton" title="Cambiar idioma, país, moneda">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-globe">
@@ -2372,7 +2337,7 @@
         <main class="main-content">
             <!-- Contenido de la Página Mi Perfil -->
             <section id="my-profile-page-content" class="page-section">
-                <h1 class="discover-section-header">
+                <h1 class="discover-section-header" style="text-align: left; width: 100%; max-width: 900px; margin: 0 20px;">
                     <span class="section-title">Mi Perfil</span>
                 </h1>
 
@@ -2390,14 +2355,23 @@
                             <div class="profile-contact-section">
                                 <!-- Enlaces de contacto se cargarán aquí -->
                             </div>
+                        </div>
+                        <div class="profile-right-column">
                             <div id="myPhotosSectionContainer" class="profile-preview-section">
                                 <h3 class="profile-section-title-purple">Mis Fotos</h3>
                                 <div class="profile-photo-grid">
-                                    <!-- Fotos se cargarán aquí -->
+                                    <!-- Las fotos se cargarán aquí y al hacer clic se mostrarán -->
+                                    <div class="profile-photo-placeholder">
+                                         <img src="https://placehold.co/100x100/e01030/ffffff?text=Foto1" alt="Foto de perfil 1">
+                                    </div>
+                                    <div class="profile-photo-placeholder">
+                                         <img src="https://placehold.co/100x100/e01030/ffffff?text=Foto2" alt="Foto de perfil 2">
+                                    </div>
+                                    <div class="profile-photo-placeholder">
+                                         <img src="https://placehold.co/100x100/e01030/ffffff?text=Foto3" alt="Foto de perfil 3">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="profile-right-column">
                             <div id="aboutMeSectionContainer" class="profile-preview-section">
                                 <h3>Acerca de Mí</h3>
                                 <p>¡Hola! Soy un usuario de The Red. Me encanta explorar el universo y conectar con mentes creativas.</p>
@@ -3158,8 +3132,8 @@
             const photoGrid = profileView.querySelector('.profile-photo-grid');
             if (photoGrid && userData.photos && userData.photos.length > 0) {
                 const photosHTML = userData.photos.map(photo => 
-                    `<div class="profile-photo-item">
-                        <img src="${photo}" alt="Foto del perfil" loading="lazy" onclick="showImageModal('${photo}', '${userData.username}')">
+                    `<div class="profile-photo-placeholder" onclick="showImageModal('${photo}', '${userData.username}')">
+                        <img src="${photo}" alt="Foto del perfil" loading="lazy">
                     </div>`
                 ).join('');
                 photoGrid.innerHTML = photosHTML;
@@ -3388,11 +3362,6 @@
             setInputValue('profileUsernameInput', userData.username);
             setInputValue('aboutMeContentInput', userData.aboutMe);
             setInputValue('interestsContentInput', userData.interests);
-            setInputValue('locationContentInput', userData.location);
-            setInputValue('websiteContentInput', userData.website);
-            setInputValue('twitterContentInput', userData.twitter);
-            setInputValue('instagramContentInput', userData.instagram);
-            setInputValue('linkedinContentInput', userData.linkedin);
             setInputValue('customContentInput', userData.customContent);
 
             // Checkboxes de visibilidad
@@ -3405,7 +3374,7 @@
             // Colores personalizados
             setInputValue('profilePrimaryTextColorInput', userData.primaryTextColor || '#ff3058');
             setInputValue('profileSecondaryTextColorInput', userData.secondaryTextColor || '#7d3490');
-            setInputValue('profileCardBackgroundColorInput', userData.cardBackgroundColor || '#4a1a55');
+            setInputValue('profileCardBackgroundColorInput', userData.cardBackgroundColor || 'rgba(74, 26, 85, 0.4)');
             setInputValue('profileBorderColorInput', userData.borderColor || '#ff3058');
 
             // Enlaces de música y redes sociales
@@ -3445,10 +3414,38 @@
         const saveProfileSettingsButton = document.getElementById('saveProfileSettingsButton');
         const resetProfileSettingsButton = document.getElementById('resetProfileSettingsButton');
 
-        openProfileEditModalButton.addEventListener('click', () => {
+        // Función específica para cargar datos en el modal, para no recargar toda la UI
+        async function cargarDatosEnModalEdicionDesdeFirestore(uid) {
+            const cacheKey = `profile_${uid}`;
+            let userData = profileCache.get(cacheKey);
+
+            if (!userData) {
+                console.log("Cache miss for modal, fetching from Firestore");
+                try {
+                    const userDocRef = doc(db, 'users', uid);
+                    const docSnap = await getDoc(userDocRef);
+                    if (docSnap.exists()) {
+                        userData = docSnap.data();
+                        profileCache.set(cacheKey, userData); // Update cache
+                    }
+                } catch (error) {
+                    console.error("Error fetching profile for modal:", error);
+                    showConfirmationModal("No se pudieron cargar los datos para editar.");
+                    return; // Abort if data can't be loaded
+                }
+            }
+            
+            if(userData) {
+                cargarDatosEnModalEdicion(userData);
+            }
+        }
+
+        openProfileEditModalButton.addEventListener('click', async () => {
             const user = auth.currentUser;
             if (user) {
-                cargarYMostrarDatosPerfil(user.uid);
+                // Primero se cargan los datos por si el modal los necesita
+                await cargarDatosEnModalEdicionDesdeFirestore(user.uid);
+                // Luego se muestra el modal
                 document.getElementById('profileEditModal').classList.remove('hidden');
             }
         });
@@ -3510,11 +3507,6 @@
                     username: document.getElementById('profileUsernameInput')?.value.trim() || '',
                     aboutMe: document.getElementById('aboutMeContentInput')?.value.trim() || '',
                     interests: document.getElementById('interestsContentInput')?.value.trim() || '',
-                    location: document.getElementById('locationContentInput')?.value.trim() || '',
-                    website: document.getElementById('websiteContentInput')?.value.trim() || '',
-                    twitter: document.getElementById('twitterContentInput')?.value.trim() || '',
-                    instagram: document.getElementById('instagramContentInput')?.value.trim() || '',
-                    linkedin: document.getElementById('linkedinContentInput')?.value.trim() || '',
                     customContent: document.getElementById('customContentInput')?.value.trim() || '',
                     
                     // Configuraciones de visibilidad
@@ -3527,7 +3519,7 @@
                     // Colores personalizados
                     primaryTextColor: document.getElementById('profilePrimaryTextColorInput')?.value || '#ff3058',
                     secondaryTextColor: document.getElementById('profileSecondaryTextColorInput')?.value || '#7d3490',
-                    cardBackgroundColor: document.getElementById('profileCardBackgroundColorInput')?.value || '#4a1a55',
+                    cardBackgroundColor: document.getElementById('profileCardBackgroundColorInput')?.value || 'rgba(74, 26, 85, 0.4)',
                     borderColor: document.getElementById('profileBorderColorInput')?.value || '#ff3058',
                     
                     // Enlaces de música y redes sociales
@@ -3560,7 +3552,6 @@
                 
                 // Recargar el perfil con datos frescos
                 await cargarYMostrarDatosPerfil(user.uid, true);
-                await cargarPublicacionesUsuario(user.uid, true);
                 
             } catch (error) {
                 console.error('Error al guardar el perfil:', error);
@@ -3824,12 +3815,17 @@
             });
         });
 
-        // Función showImageModal faltante
+        // Función showImageModal faltante pero necesaria para la funcionalidad
         function showImageModal(imageUrl, username) {
+            // Eliminar modales existentes para no apilarlos
+            document.querySelectorAll('.modal-overlay.image-modal').forEach(modal => modal.remove());
+
             const modal = document.createElement('div');
-            modal.className = 'modal-overlay';
+            modal.className = 'modal-overlay image-modal'; // Añadir clase para identificarlo
+            modal.style.display = 'flex'; // Asegurarse que es visible
             modal.innerHTML = `
-                <div class="modal-content" style="max-width: 90vw; max-height: 90vh; padding: 20px;">
+                <div class="modal-content" style="max-width: 90vw; max-height: 90vh; padding: 20px; animation: fadeInScale 0.3s ease-out;">
+                    <button style="position: absolute; top: 10px; right: 15px; font-size: 2em; background: none; border: none; color: white; cursor: pointer;" onclick="this.closest('.modal-overlay').remove()">×</button>
                     <h3 style="color: var(--light-purple); margin-bottom: 15px;">Foto de ${username}</h3>
                     <img src="${imageUrl}" alt="Imagen expandida" style="max-width: 100%; max-height: 70vh; object-fit: contain; border-radius: 10px;">
                     <div class="modal-actions" style="margin-top: 20px;">
@@ -3839,7 +3835,7 @@
             `;
             document.body.appendChild(modal);
             
-            // Cerrar con click fuera del modal
+            // Cerrar con click fuera del contenido del modal
             modal.addEventListener('click', (e) => {
                 if (e.target === modal) {
                     modal.remove();
@@ -3864,3 +3860,4 @@
     </script>
 </body>
 </html>
+
